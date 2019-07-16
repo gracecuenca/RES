@@ -1,12 +1,11 @@
 package com.example.fbu_res.models;
 
-import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-@ParseClassName("User")
-public class User extends ParseUser {
-    public static final String KEY_DESCRIPTION = "";
+public class Address extends ParseObject {
+    public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
     public static final String KEY_TIMESTAMP = "createdAt";
@@ -48,9 +47,4 @@ public class User extends ParseUser {
     public void setKeyTimestamp(String timestamp) {
         put(KEY_TIMESTAMP, timestamp);
     }
-
-    private static int lastPostId = 0;
-
-
-
 }
