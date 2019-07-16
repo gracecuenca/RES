@@ -13,7 +13,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Consumer extends ParseObject {
+public class Consumer extends ParseUser {
     public static final String KEY_DISPLAYNAME = "displayName";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_INTERESTS = "interests";
@@ -23,6 +23,9 @@ public class Consumer extends ParseObject {
         return getString(KEY_DISPLAYNAME);
     }
 
+    public void setKeyDisplayname(String name) {
+        put(KEY_DISPLAYNAME, name);
+    }
 
     public void setKeyEmail(String email) {
         put(KEY_EMAIL, email);
