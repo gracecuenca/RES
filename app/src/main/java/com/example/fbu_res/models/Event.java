@@ -1,82 +1,68 @@
 package com.example.fbu_res.models;
 
+import com.parse.Parse;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Event extends ParseObject {
-    public static final String KEY_DESCRIPTION = "description";
-    public static final String KEY_IMAGE = "image";
-    public static final String KEY_USER = "user";
-    public static final String KEY_TIMESTAMP = "createdAt";
-    public static final String KEY_OBJECT_ID = "objectId";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_LOCATION = "location";
+    public static final String KEY_DATE = "date";
+    public static final String KEY_RADIUS = "radius";
+    public static final String KEY_TYPE = "type";
 
-    public String getKeyDescription() {
-        return getString(KEY_DESCRIPTION);
+    public String getKeyName() {
+        return getString(KEY_NAME);
     }
 
-
-    public String getKeyObjectId() {
-        return getObjectId();
+    public void setKeyName(String description) {
+        put(KEY_NAME, description);
     }
 
-    public void setKeyDescription(String description) {
-        put(KEY_DESCRIPTION, description);
+    public ParseObject getKeyLocation() {
+        return (Address) getParseObject(KEY_LOCATION);
+    }
+    public void setKeyLocation(Address address) {
+        put(KEY_LOCATION, address);
     }
 
-    public ParseFile getKeyImage() {
-        return getParseFile(KEY_IMAGE);
-    }
-
-    public void setKeyImage(ParseFile image) {
-        put(KEY_IMAGE, image);
-    }
-
-    public ParseUser getKeyUser() {
-        return getParseUser(KEY_USER);
+    public Date getKeyDate() {
+        return getDate(KEY_DATE);
     }
 
     public void setKeyUser(ParseUser user) {
-        put(KEY_USER, user);
+        put(KEY_DATE, user);
     }
 
-    public String getKeyTimestamp() {
-        return getString(KEY_TIMESTAMP);
+    public String getKeyRadius() {
+        return getString(KEY_RADIUS);
     }
 
-    public void setKeyTimestamp(String timestamp) {
-        put(KEY_TIMESTAMP, timestamp);
+    public void setKeyRadius(String timestamp) {
+        put(KEY_RADIUS, timestamp);
     }
 
-    public static class Query extends ParseQuery<Event> {
-
-        public Query() {
-            super(Event.class);
-        }
-        public Query getTop() {
-            setLimit(20);
-            return this;
-        }
-
-        public Query withUser() {
-            include("user");
-            return this;
-        }
+    public String getKeyType() {
+        return getString(KEY_TYPE);
     }
 
-    private static int lastPostId = 0;
+    public void setKeyType(String type) {
+        put(KEY_TYPE, type);
+    }
 
 
-    public static ArrayList<Event> createPostsList(int numPosts) {
-        ArrayList<Event> posts = new ArrayList<Event>();
+    public static ArrayList<Event> createEventsList(int numPosts) {
+        ArrayList<Event> events = new ArrayList<Event>();
 
         for (int i = 1; i <= numPosts; i++) {
-            posts.add(new Event());
+            events.add(new Event());
         }
 
-        return posts;
+        return events;
     }
 }
