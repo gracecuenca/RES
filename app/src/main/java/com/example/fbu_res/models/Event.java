@@ -17,6 +17,8 @@ public class Event extends ParseObject {
     public static final String KEY_DATE = "date";
     public static final String KEY_RADIUS = "radius";
     public static final String KEY_TYPE = "type";
+    public static final String KEY_DES = "Description";
+    public static final String KEY_LOC = "location";
 
     public String getKeyName() {
         return getString(KEY_NAME);
@@ -52,6 +54,10 @@ public class Event extends ParseObject {
     public String getKeyType() {
         return getString(KEY_TYPE);
     }
+
+    public ParseFile getKeyImage(){return getParseFile("eventImage");}
+
+    public String getLocation(){return getString(KEY_LOC);}
 
     public void setKeyType(String type) {
         put(KEY_TYPE, type);
