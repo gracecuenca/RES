@@ -67,7 +67,7 @@ public class Event extends ParseObject {
 
     public ParseFile getImage(){return getParseFile("eventImage");}
 
-    public String getLocation(){return getString(KEY_LOC);}
+
 
 
 
