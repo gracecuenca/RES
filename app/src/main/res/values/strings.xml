@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">FBU_RES</string>
-    <string name="PUBNUB_PUBLISH_KEY"></string>
-    <string name="PUBNUB_SUBSCRIBE_KEY"></string>
+    <string name="PUBNUB_PUBLISH_KEY">pub-c-af6a71df-4c48-4689-8fdc-c1570ff8ba40</string>
+    <string name="PUBNUB_SUBSCRIBE_KEY">sub-c-3636d2c4-a8bd-11e9-9764-faf49bb54dbb</string>
 </resources>

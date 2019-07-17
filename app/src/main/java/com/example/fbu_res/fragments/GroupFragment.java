@@ -11,10 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.fbu_res.R;
-import com.example.fbu_res.models.GroupFragmentPagerAdapter;
+import com.example.fbu_res.adapters.GroupFragmentPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
+import com.pubnub.api.PubNub;
 
 public class GroupFragment extends Fragment {
+
+    PubNub mPubnub_DataStream;
 
     @Nullable
     @Override
@@ -33,6 +36,7 @@ public class GroupFragment extends Fragment {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
 
     }
 
