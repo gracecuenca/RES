@@ -9,7 +9,9 @@
 
 2019-07-16
 --------------------------------------------------------------
-Aastha :: 
+Aastha :: Created some sample mockups, created some dummy data 
+for testing purposes in Parse, and worked on created the 
+RecyclerView for the search tab. 
 Ayo :: Created java objects for Consumer, Address, and Events.
 Made user Consumer sign up page and initialized parse.
 Grace :: Created login page, homepage, navbar, fragment 
