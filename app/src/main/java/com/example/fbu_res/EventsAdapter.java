@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.fbu_res.models.Event;
+import com.parse.ParseFile;
 
 import java.util.List;
 
@@ -56,7 +58,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             tvDate = itemView.findViewById(R.id.tvDate);
             tvLocation = itemView.findViewById(R.id.tvLocation);
 
-            // TODO set up on click listener for each post in the timeline, redirects to detailed view
+            // TODO set up on click listener for each post in the timeline to redirect to detailed view
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -66,10 +68,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
         }
 
         public void bind(Event event){
-            // set up only text views for now
-            tvDescription.setText(event.getKeyName());
-            tvDate.setText(event.getKeyDate().toString());
-            // TODO tvLocation.setText(event.getKeyLocation().toString());
+            ParseFile image = event.getImage();
+            if(image != null){
+                Glide.with(context).load(image.getUrl()).into(ivEventImage);
+            }
+            tvDescription.setText(event.getName());
+            tvDate.setText(event.getDate().toString());
+            tvLocation.setText(event.getLocationString());
         }
 
     }

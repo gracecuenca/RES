@@ -26,31 +26,31 @@ public class Consumer extends ParseUser {
         return getString(KEY_DISPLAYNAME);
     }
 
-    public void setKeyDisplayname(String name) {
+    public void setDisplayname(String name) {
         put(KEY_DISPLAYNAME, name);
     }
 
-    public void setKeyEmail(String email) {
+    public void setEmail(String email) {
         put(KEY_EMAIL, email);
     }
 
-    public String getKeyEmail() {
+    public String getEmail() {
         return getString(KEY_EMAIL);
     }
 
-    public void setKeyPhonenumber(String phoneNumber) {
+    public void setPhonenumber(String phoneNumber) {
         put(KEY_PHONENUMBER, phoneNumber);
     }
 
-    public String getKeyPhonenumber() {
+    public String getPhonenumber() {
         return getString(KEY_PHONENUMBER);
     }
 
-    public void setKeyInterests(ParseFile image) {
+    public void setInterests(ParseFile image) {
         put(KEY_INTERESTS, image);
     }
 
-    public ArrayList<String> getKeyInterests() {
+    public ArrayList<String> getInterests() {
         JSONArray arr = new JSONArray();
         ArrayList<String> list = new ArrayList<String>();
         try {
@@ -66,11 +66,11 @@ public class Consumer extends ParseUser {
     public Consumer() {
     }
 
-    public ParseObject getKeyAddress() {
+    public ParseObject getAddress() {
         return getParseObject(KEY_ADDRESS);
     }
 
-    public void setKeyAddress(String timestamp) {
+    public void setAddress(String timestamp) {
         put(KEY_ADDRESS, timestamp);
     }
 
