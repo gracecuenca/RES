@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".A">
+    tools:context=".LoginActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout2"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
+        android:layout_width="314dp"
+        android:layout_height="54dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
+        app:boxBackgroundColor="@color/yellow"
+        app:boxStrokeColor="@color/yellow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivLogo">
@@ -23,7 +25,8 @@
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="username" />
+            android:hint="username"
+            android:backgroundTint="@color/yellow"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
@@ -42,8 +45,8 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout3"
-        android:layout_width="395dp"
-        android:layout_height="wrap_content"
+        android:layout_width="314dp"
+        android:layout_height="54dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="20dp"
@@ -57,7 +60,8 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="password" />
+            android:hint="password"
+            android:backgroundTint="@color/yellow"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -69,6 +73,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@color/turquoise"
         android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
