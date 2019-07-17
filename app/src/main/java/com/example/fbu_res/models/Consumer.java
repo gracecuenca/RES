@@ -20,6 +20,7 @@ public class Consumer extends ParseUser {
     public static final String KEY_EMAIL = "email";
     public static final String KEY_INTERESTS = "interests";
     public static final String KEY_ADDRESS = "address";
+    public static final String KEY_PHONENUMBER = "phoneNumber";
 
     public String getKeyDisplayname() {
         return getString(KEY_DISPLAYNAME);
@@ -35,6 +36,14 @@ public class Consumer extends ParseUser {
 
     public String getKeyEmail() {
         return getString(KEY_EMAIL);
+    }
+
+    public void setKeyPhonenumber(String phoneNumber) {
+        put(KEY_EMAIL, phoneNumber);
+    }
+
+    public String getKeyPhonenumber() {
+        return getString(KEY_PHONENUMBER);
     }
 
     public void setKeyInterests(ParseFile image) {

@@ -28,7 +28,7 @@ public class ConsumerSignUp extends AppCompatActivity {
         final EditText etUsername = findViewById(R.id.etUsername);
         final EditText etPassword = findViewById(R.id.etPassword);
         final EditText etEmail = findViewById(R.id.etEmail);
-        EditText etPhoneNum = findViewById(R.id.etPassword);
+        final EditText etPhoneNum = findViewById(R.id.etPassword);
 
 
 
@@ -38,17 +38,19 @@ public class ConsumerSignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signUp(etName.getText().toString(), etUsername.getText().toString(),
-                        etPassword.getText().toString(), etEmail.getText().toString());
+                        etPassword.getText().toString(), etEmail.getText().toString()
+                , etPhoneNum.getText().toString());
             }
         });
     }
 
-    private void signUp(String name, String username, String password, String email) {
+    private void signUp(String name, String username, String password, String email, String phoneNum) {
         Consumer user = new Consumer();
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
         user.setKeyDisplayname(name);
+        user.setKeyPhonenumber(phoneNum);
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
