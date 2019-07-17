@@ -1,6 +1,7 @@
 package com.example.fbu_res.models;
 
 import com.parse.Parse;
+import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -9,6 +10,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.Date;
 
+@ParseClassName("Event")
 public class Event extends ParseObject {
     public static final String KEY_NAME = "name";
     public static final String KEY_LOCATION = "location";

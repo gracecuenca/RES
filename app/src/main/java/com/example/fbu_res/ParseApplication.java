@@ -3,6 +3,7 @@ package com.example.fbu_res;
 import android.app.Application;
 
 import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.Event;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -28,6 +29,7 @@ public class ParseApplication extends Application {
         builder.networkInterceptors().add(httpLoggingInterceptor);
 
         ParseUser.registerSubclass(Consumer.class);
+        ParseUser.registerSubclass(Event.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("resApp") // should correspond to APP_ID env variable
