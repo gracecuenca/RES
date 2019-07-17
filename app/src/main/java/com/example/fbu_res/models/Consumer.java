@@ -3,6 +3,7 @@ package com.example.fbu_res.models;
 import android.util.Log;
 
 import com.parse.Parse;
+import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -13,16 +14,21 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Consumer extends ParseObject {
+@ParseClassName("_User")
+public class Consumer extends ParseUser {
     public static final String KEY_DISPLAYNAME = "displayName";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_INTERESTS = "interests";
     public static final String KEY_ADDRESS = "address";
+    public static final String KEY_PHONENUMBER = "phoneNumber";
 
     public String getKeyDisplayname() {
         return getString(KEY_DISPLAYNAME);
     }
 
+    public void setKeyDisplayname(String name) {
+        put(KEY_DISPLAYNAME, name);
+    }
 
     public void setKeyEmail(String email) {
         put(KEY_EMAIL, email);
@@ -30,6 +36,14 @@ public class Consumer extends ParseObject {
 
     public String getKeyEmail() {
         return getString(KEY_EMAIL);
+    }
+
+    public void setKeyPhonenumber(String phoneNumber) {
+        put(KEY_PHONENUMBER, phoneNumber);
+    }
+
+    public String getKeyPhonenumber() {
+        return getString(KEY_PHONENUMBER);
     }
 
     public void setKeyInterests(ParseFile image) {
@@ -47,6 +61,9 @@ public class Consumer extends ParseObject {
             Log.d("Consumer Intrests", "Couldn't retrieve list of interests");
         }
         return list;
+    }
+
+    public Consumer() {
     }
 
     public ParseObject getKeyAddress() {

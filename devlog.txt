@@ -1,0 +1,24 @@
+ ______   ______   __   __   __       ______   _______     
+/_____/\ /_____/\ /_/\ /_/\ /_/\     /_____/\ /______/\    
+\:::_ \ \\::::_\/_\:\ \\ \ \\:\ \    \:::_ \ \\::::__\/__  
+ \:\ \ \ \\:\/___/\\:\ \\ \ \\:\ \    \:\ \ \ \\:\ /____/\ 
+  \:\ \ \ \\::___\/_\:\_/.:\ \\:\ \____\:\ \ \ \\:\\_  _\/ 
+   \:\/.:| |\:\____/\\ ..::/ / \:\/___/\\:\_\ \ \\:\_\ \ \ 
+    \____/_/ \_____\/ \___/_(   \_____\/ \_____\/ \_____\/ 
+==============================================================
+
+2019-07-16
+--------------------------------------------------------------
+Aastha :: Created some sample mockups, created some dummy data for testing purposes in Parse, and worked on created the RecyclerView for the search tab. 
+Ayo :: Created java objects for Consumer, Address, and Events.
+Made user Consumer sign up page and initialized parse.
+Grace :: Created login page, homepage, navbar, fragment 
+skeletons, and setup parse server and classes
+==============================================================
+
+2019-07-17
+--------------------------------------------------------------
+Aastha :: 
+Ayo :: 
+Grace :: 
+==============================================================
