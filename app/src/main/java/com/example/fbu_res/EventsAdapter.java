@@ -1,6 +1,7 @@
 package com.example.fbu_res;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,10 @@ import com.bumptech.glide.Glide;
 import com.example.fbu_res.models.Event;
 import com.parse.ParseFile;
 
+import org.parceler.Parcels;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
@@ -62,7 +67,19 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    // gets item position
+                    int position = getAdapterPosition();
+                    // make sure the position is valid, i.e. actually exists in the view
+                    if (position != RecyclerView.NO_POSITION) {
+                        // get the movie at the position, this won't work if the class is static
+                        Event post = events.get(position);
+                        // create intent for the new activity
+                        Intent intent = new Intent(context, EventDetailsActivity.class);
+                        // serialize the movie using parceler, use its short name as a key
+                        intent.putExtra(Event.class.getSimpleName(), Parcels.wrap(post));
+                        // show the activity
+                        context.startActivity(intent);
+                    }
                 }
             });
         }
@@ -73,7 +90,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 Glide.with(context).load(image.getUrl()).into(ivEventImage);
             }
             tvDescription.setText(event.getName());
-            tvDate.setText(event.getDate().toString());
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            tvDate.setText(dateFormat.format(event.getDate()));
             tvLocation.setText(event.getLocationString());
         }
 

@@ -39,6 +39,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         final Event event = events.get(position);
         holder.location.setText(event.getLocationString());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        holder.date.setText(dateFormat.format(event.getDate()));
+        holder.title.setText(event.getName());
         // holder.date.setText(dateFormat.format(event.getDate()));
         holder.title.setText(event.getName());
         if(event.getImage()!=null){
