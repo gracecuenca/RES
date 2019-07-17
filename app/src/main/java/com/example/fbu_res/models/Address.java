@@ -15,59 +15,59 @@ public class Address extends ParseObject {
     public static final String KEY_PIN = "pin";
 
 
-    public String getKeyAddressline1() {
+    public String getAddressline1() {
         return getString(KEY_ADDRESSLINE1);
     }
 
-    public void setKeyAddressline1(String address) {
+    public void setAddressline1(String address) {
         put(KEY_ADDRESSLINE1, address);
     }
 
-    public String getKeyAddressline2() {
+    public String getAddressline2() {
         return getString(KEY_ADDRESSLINE2);
     }
 
-    public void setKeyAddressline2(String address) {
+    public void setAddressline2(String address) {
         put(KEY_ADDRESSLINE2, address);
     }
 
-    public String getKeyCity() {
+    public String getCity() {
         return getString(KEY_CITY);
     }
 
-    public void setKeyCity(String city) {
+    public void setCity(String city) {
         put(KEY_CITY, city);
     }
 
-    public String getKeyState() {
+    public String getState() {
         return getString(KEY_STATE);
     }
 
-    public void setKeyState(String state) {
+    public void setState(String state) {
         put(KEY_STATE, state);
     }
 
-    public int getKeyZipcode() {
+    public int getZipcode() {
         return getNumber(KEY_ZIPCODE).intValue();
     }
 
-    public void setKeyZipcode(String address) {
+    public void setZipcode(String address) {
         put(KEY_ZIPCODE, address);
     }
 
-    public String getKeyCountry() {
+    public String getCountry() {
         return getString(KEY_COUNTRY);
     }
 
-    public void setKeyCountry(String country) {
+    public void setCountry(String country) {
         put(KEY_COUNTRY, country);
     }
 
-    public ParseGeoPoint getKeyPin() {
+    public ParseGeoPoint getPin() {
         return getParseGeoPoint(KEY_PIN);
     }
 
-    public void setKeyPin(ParseGeoPoint pin) {
+    public void setPin(ParseGeoPoint pin) {
         put(KEY_PIN, pin);
     }
 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.EventsAdapter;
 import com.example.fbu_res.R;
 import com.example.fbu_res.models.Event;
@@ -31,7 +32,10 @@ public class HomeFragment extends Fragment {
     private EventsAdapter adapter;
     protected List<Event> mEvents;
 
-    // TODO -- infinite pagination
+    // TODO -- swipe to refresh
+
+    // needed for infinite pagination
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,11 +61,26 @@ public class HomeFragment extends Fragment {
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvEvents.setLayoutManager(staggeredGridLayoutManager);
 
-        loadEvents();
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadEvents(true);
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rvEvents.addOnScrollListener(scrollListener);
+
+        loadEvents(false);
     }
 
-    public void loadEvents(){
+    // currently loads the dummy events we added to the Parse server
+    // TODO -- sort events by: location (radius), currently being done by date
+    public void loadEvents(final boolean isNotRefresh){
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
+        // loads more events -- for infinite pagination
+        if(isNotRefresh) eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size()-1).getCreatedAt());
+        // eventsQuery.include(Event.KEY_USER);
         eventsQuery.addDescendingOrder(Event.KEY_DATE);
         eventsQuery.findInBackground(new FindCallback<Event>() {
             @Override

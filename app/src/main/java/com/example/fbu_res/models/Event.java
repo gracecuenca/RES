@@ -20,57 +20,45 @@ public class Event extends ParseObject {
     public static final String KEY_DES = "Description";
     public static final String KEY_LOC = "location";
 
-    public String getKeyName() {
+    public String getName() {
         return getString(KEY_NAME);
     }
 
-    public void setKeyName(String description) {
-        put(KEY_NAME, description);
-    }
+    public void setName(String description) { put(KEY_NAME, description); }
 
-    public ParseObject getKeyLocation() {
-        return (Address) getParseObject(KEY_LOCATION);
-    }
-    public void setKeyLocation(Address address) {
+    public ParseObject getLocation() { return (Address) getParseObject(KEY_LOCATION); }
+
+    public void setLocation(Address address) {
         put(KEY_LOCATION, address);
     }
 
-    public Date getKeyDate() {
+    public Date getDate() {
         return getDate(KEY_DATE);
     }
 
-    public void setKeyUser(ParseUser user) {
+    public void setUser(ParseUser user) {
         put(KEY_DATE, user);
     }
 
-    public String getKeyRadius() {
+    public String getRadius() {
         return getString(KEY_RADIUS);
     }
 
-    public void setKeyRadius(String timestamp) {
+    public void setRadius(String timestamp) {
         put(KEY_RADIUS, timestamp);
     }
 
-    public String getKeyType() {
-        return getString(KEY_TYPE);
-    }
-
-    public ParseFile getKeyImage(){return getParseFile("eventImage");}
-
-    public String getLocation(){return getString(KEY_LOC);}
-
-    public void setKeyType(String type) {
-        put(KEY_TYPE, type);
-    }
-
-    public String getKeyDescription(){return getString(KEY_DES);}
+    public String geType() { return getString(KEY_TYPE); }
 
     public ParseFile getImage(){return getParseFile("eventImage");}
 
+    public String getLocationString(){return getString(KEY_LOC);}
 
+    public void setType(String type) {
+        put(KEY_TYPE, type);
+    }
 
-
-
+    public String getDescription(){return getString(KEY_DES);}
 
     public static ArrayList<Event> createEventsList(int numPosts) {
         ArrayList<Event> events = new ArrayList<Event>();

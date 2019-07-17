@@ -14,8 +14,6 @@ import com.bumptech.glide.Glide;
 import com.example.fbu_res.R;
 import com.example.fbu_res.models.Event;
 
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,10 +37,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Event event = events.get(position);
-        holder.location.setText(event.getLocation());
+        holder.location.setText(event.getLocationString());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        holder.date.setText(dateFormat.format(event.getKeyDate()));
-        holder.title.setText(event.getKeyName());
+<<<<<<< HEAD
+        holder.date.setText(dateFormat.format(event.getDate()));
+        holder.title.setText(event.getName());
+=======
+        // holder.date.setText(dateFormat.format(event.getDate()));
+        holder.title.setText(event.getName());
+>>>>>>> 0ad4ae7fae7833220560f8ce4af9a5fb564edeff
         if(event.getImage()!=null){
             Glide.with(context).load(event.getImage().getUrl()).into(holder.eventImage);
         }

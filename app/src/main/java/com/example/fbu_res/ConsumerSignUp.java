@@ -10,11 +10,8 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.fbu_res.models.Address;
 import com.example.fbu_res.models.Consumer;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 public class ConsumerSignUp extends AppCompatActivity {
@@ -29,9 +26,6 @@ public class ConsumerSignUp extends AppCompatActivity {
         final EditText etPassword = findViewById(R.id.etPassword);
         final EditText etEmail = findViewById(R.id.etEmail);
         final EditText etPhoneNum = findViewById(R.id.etPhoneNum);
-
-
-
 
         final Button signupBtn = findViewById(R.id.btnSignUp);
         signupBtn.setOnClickListener(new View.OnClickListener() {
@@ -49,8 +43,8 @@ public class ConsumerSignUp extends AppCompatActivity {
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
-        user.setKeyDisplayname(name);
-        user.setKeyPhonenumber(phoneNum);
+        user.setDisplayname(name);
+        user.setPhonenumber(phoneNum);
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
