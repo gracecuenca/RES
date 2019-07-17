@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.fbu_res.models.Address;
 import com.example.fbu_res.models.Consumer;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -43,7 +44,7 @@ public class ConsumerSignUp extends AppCompatActivity {
     }
 
     private void signUp(String name, String username, String password, String email) {
-        final Consumer user = new Consumer();
+        Consumer user = new Consumer();
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);

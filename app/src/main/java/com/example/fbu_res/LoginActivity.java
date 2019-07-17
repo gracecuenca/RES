@@ -55,9 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // final String username = etUsername.getText().toString();
-                // final String password = etPassword.getText().toString();
-                // signUp(username, password);
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }
         });
     }
