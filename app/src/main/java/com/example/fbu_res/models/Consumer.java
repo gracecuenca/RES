@@ -39,7 +39,7 @@ public class Consumer extends ParseUser {
     }
 
     public void setKeyPhonenumber(String phoneNumber) {
-        put(KEY_EMAIL, phoneNumber);
+        put(KEY_PHONENUMBER, phoneNumber);
     }
 
     public String getKeyPhonenumber() {

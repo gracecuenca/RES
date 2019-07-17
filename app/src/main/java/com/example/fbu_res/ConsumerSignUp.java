@@ -28,7 +28,7 @@ public class ConsumerSignUp extends AppCompatActivity {
         final EditText etUsername = findViewById(R.id.etUsername);
         final EditText etPassword = findViewById(R.id.etPassword);
         final EditText etEmail = findViewById(R.id.etEmail);
-        final EditText etPhoneNum = findViewById(R.id.etPassword);
+        final EditText etPhoneNum = findViewById(R.id.etPhoneNum);
 
 
 
@@ -48,7 +48,6 @@ public class ConsumerSignUp extends AppCompatActivity {
         Consumer user = new Consumer();
         user.setUsername(username);
         user.setPassword(password);
-        user.setEmail(email);
         user.setKeyDisplayname(name);
         user.setKeyPhonenumber(phoneNum);
         user.signUpInBackground(new SignUpCallback() {
