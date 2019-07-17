@@ -16,6 +16,8 @@ import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
@@ -88,7 +90,8 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder
                 Glide.with(context).load(image.getUrl()).into(ivEventImage);
             }
             tvDescription.setText(event.getName());
-            tvDate.setText(event.getDate().toString());
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            tvDate.setText(dateFormat.format(event.getDate()));
             tvLocation.setText(event.getLocationString());
         }
 
