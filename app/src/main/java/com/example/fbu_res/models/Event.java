@@ -67,11 +67,6 @@ public class Event extends ParseObject {
 
     public ParseFile getImage(){return getParseFile("eventImage");}
 
-
-
-
-
-
     public static ArrayList<Event> createEventsList(int numPosts) {
         ArrayList<Event> events = new ArrayList<Event>();
 
