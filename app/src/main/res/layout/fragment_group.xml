@@ -10,9 +10,9 @@
         android:id="@+id/sliding_tabs"
         android:layout_width="409dp"
         android:layout_height="55dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.022"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tabMode="fixed"></com.google.android.material.tabs.TabLayout>
