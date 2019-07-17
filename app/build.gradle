@@ -36,4 +36,8 @@ dependencies {
     implementation "com.android.support:appcompat-v7:28"
     implementation "com.android.support:design:28"
     implementation "com.android.support:recyclerview-v7:28"
+    implementation group: 'com.pubnub', name: 'pubnub-gson', version: '4.25.0'
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    implementation "com.android.support:design:${supportLibVersion}"
+    implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
 }
