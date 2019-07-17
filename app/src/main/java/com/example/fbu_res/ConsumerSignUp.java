@@ -67,6 +67,4 @@ public class ConsumerSignUp extends AppCompatActivity {
         });
     }
 
-
-
 }

@@ -10,7 +10,8 @@
 2019-07-16
 --------------------------------------------------------------
 Aastha :: 
-Ayo :: 
+Ayo :: Created java objects for Consumer, Address, and Events.
+Made user Consumer sign up page and initialized parse.
 Grace :: Created login page, homepage, navbar, fragment 
 skeletons, and setup parse server and classes
 ==============================================================
