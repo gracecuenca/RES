@@ -42,7 +42,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
             Glide.with(context).load(group.getKeyImage().getUrl()).into(holder.groupImage);
         }
         holder.groupType.setText(group.getKeyType());
-        holder.numMembers.setText(group.getKeyNumMembs());
+        holder.numMembers.setText(String.valueOf(group.getKeyNumMembs()));
     }
 
     @Override
