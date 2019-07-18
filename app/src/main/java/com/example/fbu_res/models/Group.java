@@ -20,7 +20,7 @@ public class Group extends ParseObject {
         put(KEY_NAME, name);
     }
 
-    public ParseFile getKeyImage() {
+    public ParseFile getImage() {
         return getParseFile(KEY_IMAGE);
     }
 

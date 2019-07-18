@@ -17,8 +17,9 @@
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity android:name=".SignUpActivity"></activity>
         <activity android:name=".ConsumerSignUp"></activity>
+        <activity android:name=".GroupMessagesActivity"></activity>
         <activity android:name=".HomeActivity" />
-        <activity android:name=".EventDetailsActivity"/>
+        <activity android:name=".EventDetailsActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
