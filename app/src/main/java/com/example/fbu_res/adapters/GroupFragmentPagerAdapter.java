@@ -1,4 +1,4 @@
-package com.example.fbu_res.models;
+package com.example.fbu_res.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

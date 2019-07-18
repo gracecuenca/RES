@@ -15,6 +15,8 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.pubnub.api.PNConfiguration;
+import com.pubnub.api.PubNub;
 
 public class LoginActivity extends AppCompatActivity {
 
