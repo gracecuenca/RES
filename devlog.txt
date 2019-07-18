@@ -21,8 +21,15 @@ skeletons, and setup parse server and classes
 2019-07-17
 --------------------------------------------------------------
 Aastha :: 
+<<<<<<< HEAD
 Ayo :: 
 Grace :: Created home events page with dummy data, added
 endless scrolling feature to home page, started detail view
 of events.
+=======
+Ayo :: Working on using PubNub as an api for sending group
+messages. Created basic group tab with tabs for "My groups",
+"Interest groups" and "Event groups"
+Grace :: 
+>>>>>>> ayyo
 ==============================================================
