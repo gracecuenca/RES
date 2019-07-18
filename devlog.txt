@@ -22,5 +22,7 @@ skeletons, and setup parse server and classes
 --------------------------------------------------------------
 Aastha :: 
 Ayo :: 
-Grace :: 
+Grace :: Created home events page with dummy data, added
+endless scrolling feature to home page, started detail view
+of events.
 ==============================================================
