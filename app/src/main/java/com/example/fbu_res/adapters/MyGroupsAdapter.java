@@ -37,12 +37,12 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Group group = groups.get(position);
 
-        holder.groupName.setText(group.getKeyName());
+        holder.groupName.setText(group.getName());
         if(group.getKeyImage()!=null){
             Glide.with(context).load(group.getKeyImage().getUrl()).into(holder.groupImage);
         }
-        holder.groupType.setText(group.getKeyType());
-        holder.numMembers.setText(group.getKeyNumMembs());
+        holder.groupType.setText(group.getType());
+        holder.numMembers.setText(String.valueOf(group.getNumMembs()));
     }
 
     @Override
