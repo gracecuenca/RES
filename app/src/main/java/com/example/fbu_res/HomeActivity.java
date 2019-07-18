@@ -15,7 +15,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
 
-    // bottom navigation bar setup
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -48,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
-        // Set default selection
+        // Set default selection to home
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
     }
