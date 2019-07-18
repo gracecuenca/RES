@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.EventsAdapter;
 import com.example.fbu_res.R;
+import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Event;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -29,8 +30,8 @@ public class HomeFragment extends Fragment {
 
     public final String APP_TAG = "HomeFragment";
     private RecyclerView rvEvents;
-    private EventsAdapter adapter;
-    protected List<Event> mEvents;
+    private EventAdapter adapter;
+    protected ArrayList<Event> mEvents;
 
     // TODO -- swipe to refresh
 
@@ -53,7 +54,7 @@ public class HomeFragment extends Fragment {
         // create the data source
         mEvents = new ArrayList<>();
         // create the adapter
-        adapter = new EventsAdapter(getContext(), mEvents);
+        adapter = new EventAdapter(mEvents);
         // set the adapter on the recycler view
         rvEvents.setAdapter(adapter);
         // set the layout manager on the recycler view
