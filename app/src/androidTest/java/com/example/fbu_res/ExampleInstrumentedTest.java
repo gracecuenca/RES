@@ -22,6 +22,11 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
+        System.out.println("Hello1");
+        System.out.println("Hello2");
+        System.out.println("Hello3");
+        System.out.println("Hello4");
+
         assertEquals("com.example.fbu_res", appContext.getPackageName());
     }
 }
