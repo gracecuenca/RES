@@ -14,10 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".ConsumerSignUp"></activity>
+        <activity android:name=".GroupMessagesActivity"></activity>
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".ConsumerSignUp" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".EventDetailsActivity"/>
+        <activity android:name=".EventDetailsActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
