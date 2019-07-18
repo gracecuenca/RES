@@ -28,7 +28,13 @@ public class ExampleTest {
     @Test
     public void testDefaultApp() {
         System.out.println("Hello there");
+        System.out.println("Blah blah blah blah");
+        
         Context appContext = InstrumentationRegistry.getTargetContext();
+        appContext instanceof app ? ((app) appContext) : null;
+
+        Log.d("Okay", "test");
         Log.d("Log statement", "Okay");
+        Log.d("Pizza", "Cheese pizza is great. blah blah blah");
     }
 }
