@@ -13,8 +13,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.GroupFragmentPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
+import com.parse.ParseClassName;
 import com.pubnub.api.PubNub;
 
+@ParseClassName("Group")
 public class GroupFragment extends Fragment {
 
     PubNub mPubnub_DataStream;
