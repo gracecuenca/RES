@@ -1,6 +1,7 @@
 package com.example.fbu_res;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
