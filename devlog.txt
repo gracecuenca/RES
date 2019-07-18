@@ -21,6 +21,8 @@ skeletons, and setup parse server and classes
 2019-07-17
 --------------------------------------------------------------
 Aastha :: 
-Ayo :: 
+Ayo :: Working on using PubNub as an api for sending group
+messages. Created basic group tab with tabs for "My groups",
+"Interest groups" and "Event groups"
 Grace :: 
 ==============================================================
