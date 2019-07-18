@@ -1,6 +1,7 @@
 package com.example.fbu_res;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
@@ -33,7 +34,9 @@ public class ExampleTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         appContext instanceof app ? ((app) appContext) : null;
 
-        Log.d("Okay", "test");
+        Log.d("Goodbye world.");
+        System.out.println("we are praying for a merge conflict.");
+
         Log.d("Log statement", "Okay");
         Log.d("Pizza", "Cheese pizza is great. blah blah blah");
     }
