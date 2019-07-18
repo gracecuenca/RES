@@ -22,6 +22,13 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
+        System.out.println("Hello, hello");
+
+        appContext instanceof true ? ((true) appContext) : null;
+        Log.d("Pizza", "this is a log");
+
+        Log.d("Hello hello", "yes");
+
         assertEquals("com.example.fbu_res", appContext.getPackageName());
     }
 }
