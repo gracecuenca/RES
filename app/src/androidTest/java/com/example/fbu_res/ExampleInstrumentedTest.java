@@ -1,6 +1,7 @@
 package com.example.fbu_res;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.test.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
@@ -22,6 +23,7 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
+        
         assertEquals("com.example.fbu_res", appContext.getPackageName());
     }
 }
