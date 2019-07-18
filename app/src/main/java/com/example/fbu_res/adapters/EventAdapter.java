@@ -39,13 +39,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         final Event event = events.get(position);
         holder.location.setText(event.getLocationString());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-<<<<<<< HEAD
         holder.date.setText(dateFormat.format(event.getDate()));
         holder.title.setText(event.getName());
-=======
         // holder.date.setText(dateFormat.format(event.getDate()));
         holder.title.setText(event.getName());
->>>>>>> 0ad4ae7fae7833220560f8ce4af9a5fb564edeff
         if(event.getImage()!=null){
             Glide.with(context).load(event.getImage().getUrl()).into(holder.eventImage);
         }
