@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort_arrays">
+        <item>Date</item>
+        <item>Distance</item>
+        <item>Interest</item>
+    </string-array>
+</resources>
