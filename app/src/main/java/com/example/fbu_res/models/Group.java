@@ -1,8 +1,10 @@
 package com.example.fbu_res.models;
 
+import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
+@ParseClassName("Group")
 public class Group extends ParseObject {
     public static final String KEY_NAME = "name";
     public static final String KEY_IMAGE = "image";
