@@ -20,7 +20,9 @@ skeletons, and setup parse server and classes
 
 2019-07-17
 --------------------------------------------------------------
-Aastha :: 
+Aastha :: Created the search first screen with a recyclerView.
+Implemented CardViews for the events. Began working on the
+Search feature for filtering events. 
 Ayo :: 
 Grace :: Created home events page with dummy data, added
 endless scrolling feature to home page, started detail view
