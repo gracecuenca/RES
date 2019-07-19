@@ -19,6 +19,8 @@ import com.example.fbu_res.models.Group;
 
 import java.util.ArrayList;
 
+import retrofit2.http.HEAD;
+
 public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHolder> {
 
     public ArrayList<Group> groups;
@@ -54,17 +56,13 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(holder.itemView.getContext(), GroupMessagesActivity.class);
-<<<<<<< HEAD
                 holder.itemView.getContext().startActivity(intent);
             }
         });
-=======
                 intent.putExtra("channel_name", group.getChannelName());
                 holder.itemView.getContext().startActivity(intent);
             }
-        });
 
->>>>>>> master
     }
 
     @Override

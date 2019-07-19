@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
@@ -141,6 +143,11 @@ public class SearchFragment extends Fragment{
                 }
             }
         });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
     }
 
     /*
