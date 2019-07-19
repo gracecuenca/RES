@@ -38,8 +38,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     // needed for swipe to refresh
     private SwipeRefreshLayout swipeContainer;
 
+    // global variable options needed for user-inputted filters
+    private String option;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // default search query is Date
+        option = "Date";
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -66,7 +71,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadEvents(false, true, "other");
+                loadEvents(false, true, option);
             }
         };
 
@@ -77,7 +82,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadEvents(true, false, "other");
+                loadEvents(true, false, option);
             }
         });
 
@@ -104,6 +109,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
         eventsQuery.setLimit(10);
 
+        // if(option.equals("Date")) Log.d(APP_TAG, "we're in bois");
+
         // sorting events based on spinner input
         eventsQuery.addDescendingOrder(Event.KEY_DATE);
 
@@ -112,7 +119,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             swipeContainer.setRefreshing(false); // signal refresh is completed
         }
         if(isPaginating){
-            Log.d(APP_TAG, mEvents.get(mEvents.size()-1).getName());
             // if(option.equals("Date")){
                 eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size()-1).getDate());
             //}
@@ -134,7 +140,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     // this is where we will implement the sorting functionality of the spinner
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String option = parent.getItemAtPosition(position).toString();
+        option = parent.getItemAtPosition(position).toString();
         loadEvents(false, false, option);
     }
 
