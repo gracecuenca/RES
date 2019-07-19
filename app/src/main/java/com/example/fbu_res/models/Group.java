@@ -10,6 +10,7 @@ public class Group extends ParseObject {
     public static final String KEY_IMAGE = "image";
     public static final String KEY_NUM_MEMBS = "num_members";
     public static final String KEY_TYPE = "type";
+    public static final String KEY_CHANNEL_NAME = "channel_name";
 
 
     public String getName() {
@@ -42,5 +43,13 @@ public class Group extends ParseObject {
 
     public void setType(String type) {
         put(KEY_NAME, type);
+    }
+
+    public String getChannelName() {
+        return getString(KEY_CHANNEL_NAME);
+    }
+
+    public void setChannelName(String type) {
+        put(KEY_CHANNEL_NAME, type);
     }
 }
