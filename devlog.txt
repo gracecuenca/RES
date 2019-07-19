@@ -33,7 +33,8 @@ of events.
 
 2019-07-18
 --------------------------------------------------------------
-Aastha :: 
+Aastha :: Laid out the main UI for the searchView and implemented
+a mapView to display locations.Researched how the searchView operates. 
 Ayo :: 
 Grace :: Implemented a rudimentary detailed view of events 
 and started working on drop down filtering of events for home
