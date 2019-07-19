@@ -5,14 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.R;
@@ -70,6 +68,10 @@ public class HomeFragment extends Fragment {
         };
         // Adds the scroll listener to RecyclerView
         rvEvents.addOnScrollListener(scrollListener);
+
+        // setting up sorting by spinner input here
+        Spinner spinner = view.findViewById(R.id.spinnerSort);
+        // spinner.setAdapter(adapter);
 
         loadEvents(false);
     }
