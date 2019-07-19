@@ -5,12 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.R;
@@ -23,17 +25,18 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     public final String APP_TAG = "HomeFragment";
     private RecyclerView rvEvents;
     private EventAdapter adapter;
     protected ArrayList<Event> mEvents;
 
-    // TODO -- swipe to refresh
-
     // needed for infinite pagination
     private EndlessRecyclerViewScrollListener scrollListener;
+
+    // needed for swipe to refresh
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,7 +50,6 @@ public class HomeFragment extends Fragment {
         // TODO -- customized toolbar color and logo
 
         rvEvents = (RecyclerView) view.findViewById(R.id.rvEvents);
-
         // create the data source
         mEvents = new ArrayList<>();
         // create the adapter
@@ -63,38 +65,93 @@ public class HomeFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadEvents(true);
+                loadEvents(false, true, "other");
             }
         };
+
         // Adds the scroll listener to RecyclerView
         rvEvents.addOnScrollListener(scrollListener);
 
-        // setting up sorting by spinner input here
-        Spinner spinner = view.findViewById(R.id.spinnerSort);
-        // spinner.setAdapter(adapter);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadEvents(true, false, "other");
+                swipeContainer.setRefreshing(false); // signal refresh is completed
+            }
+        });
 
-        loadEvents(false);
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        // setting up sorting by spinner input here
+        Spinner spinner = (Spinner) view.findViewById(R.id.spinnerSort);
+
+        // creating adapter for the spinner
+        ArrayAdapter<CharSequence> spinnerAdapter =
+                ArrayAdapter.createFromResource(getContext(), R.array.sort_arrays, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+
+        spinner.setOnItemSelectedListener(this);
     }
 
     // currently loads the dummy events we added to the Parse server
     // TODO -- sort events by: location (radius), currently being done by date
-    public void loadEvents(final boolean isNotRefresh){
+    public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option){
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
-        // loads more events -- for infinite pagination
-        if(isNotRefresh) eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size()-1).getCreatedAt());
-        // eventsQuery.include(Event.KEY_USER);
-        eventsQuery.addDescendingOrder(Event.KEY_DATE);
+        eventsQuery.setLimit(10);
+
+        // sorting events based on spinner input
+        if(option.equals("Date")) eventsQuery.addDescendingOrder(Event.KEY_DATE);
+
+        if(isRefresh) {
+            clear();
+        }
+        else if(isPaginating){
+            Log.d(APP_TAG, Integer.toString(mEvents.size()));
+            // if(option.equals("Date")){
+                eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size()-1).getDate());
+            //}
+            //else if(option.equals("Distance")){
+                // TODO -- insert distance functionality
+            //}
+        }
         eventsQuery.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> events, ParseException e) {
-                if(e != null){ // there was an error
-                    Log.e(APP_TAG, "Error with query");
+                if(e != null){
                     e.printStackTrace();
                     return;
                 }
-                mEvents.addAll(events);
-                adapter.notifyDataSetChanged();
+                addAll(events);
             }
         });
     }
+
+    // this is where we will implement the sorting functionality of the spinner
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String option = parent.getItemAtPosition(position).toString();
+        loadEvents(false, false, option);
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // spinner always has a default item selected: Date
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        mEvents.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(List<Event> list) {
+        mEvents.addAll(list);
+        adapter.notifyDataSetChanged();
+    }
+
 }
