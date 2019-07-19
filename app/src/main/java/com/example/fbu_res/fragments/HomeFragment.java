@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         super.onViewCreated(view, savedInstanceState);
 
         // TODO -- customized toolbar color and logo
+        // TODO -- make recycler view go to top upon refreshing
 
         rvEvents = (RecyclerView) view.findViewById(R.id.rvEvents);
         // create the data source
@@ -77,7 +78,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onRefresh() {
                 loadEvents(true, false, "other");
-                swipeContainer.setRefreshing(false); // signal refresh is completed
             }
         });
 
@@ -99,20 +99,20 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         spinner.setOnItemSelectedListener(this);
     }
 
-    // currently loads the dummy events we added to the Parse server
     // TODO -- sort events by: location (radius), currently being done by date
     public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option){
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
         eventsQuery.setLimit(10);
 
         // sorting events based on spinner input
-        if(option.equals("Date")) eventsQuery.addDescendingOrder(Event.KEY_DATE);
+        eventsQuery.addDescendingOrder(Event.KEY_DATE);
 
         if(isRefresh) {
             clear();
+            swipeContainer.setRefreshing(false); // signal refresh is completed
         }
-        else if(isPaginating){
-            Log.d(APP_TAG, Integer.toString(mEvents.size()));
+        if(isPaginating){
+            Log.d(APP_TAG, mEvents.get(mEvents.size()-1).getName());
             // if(option.equals("Date")){
                 eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size()-1).getDate());
             //}
