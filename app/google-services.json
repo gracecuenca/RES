@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "337712342667",
+    "firebase_url": "https://resfbuapp.firebaseio.com",
+    "project_id": "resfbuapp",
+    "storage_bucket": "resfbuapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337712342667:android:839f37a4800116b6",
+        "android_client_info": {
+          "package_name": "com.example.fbu_res"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337712342667-ndlasut923j0ghf5vf9daiom00p3jo3u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fbu_res",
+            "certificate_hash": "a0104c40053e07e277493b847843c33866e05120"
+          }
+        },
+        {
+          "client_id": "337712342667-c9utb6uttpje99g5vetbo5brqo57lu1g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZqTHZL-XDhD-GyIKvfAUuKFtBkMC1b2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337712342667-c9utb6uttpje99g5vetbo5brqo57lu1g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

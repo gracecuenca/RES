@@ -2,6 +2,7 @@ package com.example.fbu_res;
 
 import android.app.Application;
 
+import com.example.fbu_res.models.Categories;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
@@ -29,6 +30,7 @@ public class ParseApplication extends Application {
         ParseUser.registerSubclass(Consumer.class);
         ParseUser.registerSubclass(Event.class);
         ParseUser.registerSubclass(Group.class);
+        ParseUser.registerSubclass(Categories.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("resApp") // should correspond to APP_ID env variable

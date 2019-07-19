@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +24,9 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
     public ArrayList<Group> groups;
     Context context;
 
-    public MyGroupsAdapter(ArrayList<Group> groups){this.groups = groups;}
+    public MyGroupsAdapter(ArrayList<Group> groups){
+        this.groups = groups;
+    }
 
     @NonNull
     @Override
@@ -51,9 +54,17 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(holder.itemView.getContext(), GroupMessagesActivity.class);
+<<<<<<< HEAD
                 holder.itemView.getContext().startActivity(intent);
             }
         });
+=======
+                intent.putExtra("channel_name", group.getChannelName());
+                holder.itemView.getContext().startActivity(intent);
+            }
+        });
+
+>>>>>>> master
     }
 
     @Override
