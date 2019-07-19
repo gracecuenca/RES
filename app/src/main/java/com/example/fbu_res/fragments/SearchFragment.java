@@ -1,46 +1,68 @@
 package com.example.fbu_res.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.fbu_res.R;
+import com.example.fbu_res.adapters.CategoriesAdapter;
 import com.example.fbu_res.adapters.EventAdapter;
+import com.example.fbu_res.models.Categories;
+import com.example.fbu_res.models.Categories;
 import com.example.fbu_res.models.Event;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.google.android.gms.maps.SupportMapFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment implements OnMapReadyCallback {
+public class SearchFragment extends Fragment{
     RecyclerView eventsRv;
     ArrayList<Event> events;
     EventAdapter adapter;
-    GoogleMap mgoogleMap;
-    MapView mMapView;
+
+    CategoriesAdapter adapterCat;
+    ArrayList<Categories> categoriesArrayList;
+    RecyclerView categoriesRV;
+
+    //GoogleMap mgoogleMap;
+    //MapView mMapView;
 
     private static final String MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey";
 
@@ -50,7 +72,8 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback {
         return inflater.inflate(R.layout.search_fragment, container, false);
     }
 
-    public SearchFragment(){}
+    public SearchFragment() {
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -63,40 +86,78 @@ public class SearchFragment extends Fragment implements OnMapReadyCallback {
         StaggeredGridLayoutManager staggeredGridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         eventsRv.setLayoutManager(staggeredGridLayoutManager);
+        categoriesRV = view.findViewById(R.id.categoriesrv);
+        categoriesArrayList = new ArrayList<>();
+        adapterCat = new CategoriesAdapter(categoriesArrayList);
+        categoriesRV.setAdapter(adapterCat);
+        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        categoriesRV.setLayoutManager(manager);
+
         queryEvents();
+        queryCategories();
+        /*
         mMapView = view.findViewById(R.id.mapView2);
-        if(mMapView != null){
+        if (mMapView != null) {
             mMapView.onCreate(null);
             mMapView.onResume();
-            mMapView.getMapAsync(this);
-        }
+            //mMapView.getMapAsync(this);
+        }*/
     }
 
-    public void queryEvents(){
+    public void queryEvents() {
         ParseQuery<Event> query = ParseQuery.getQuery("Event");
         query.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, ParseException e) {
-                if(e==null){
-                    for(int i = 0; i< objects.size(); i++){
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
                         Event event;
                         event = objects.get(i);
                         events.add(event);
-                        Log.d("image", event.getImage().getUrl());
                         adapter.notifyDataSetChanged();
                     }
-                } else{
+                } else {
                     e.printStackTrace();
                 }
             }
         });
     }
 
+    public void queryCategories(){
 
+        ParseQuery<Categories> query = ParseQuery.getQuery("Categories");
+        query.findInBackground(new FindCallback<Categories>() {
+            @Override
+            public void done(List<Categories> objects, ParseException e) {
+                if(e==null){
+                    for(int i = 0; i < objects.size(); i++){
+                        Categories category;
+                        category = objects.get(i);
+                        categoriesArrayList.add(category);
+                        adapterCat.notifyDataSetChanged();
+                    }
+                }else{
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /*
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
         mgoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
     }
+    */
+
+
+
+
+
+
 }
