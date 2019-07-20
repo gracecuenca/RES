@@ -109,8 +109,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
         eventsQuery.setLimit(10);
 
-        // if(option.equals("Date")) Log.d(APP_TAG, "we're in bois");
-
         // sorting events based on spinner input
         eventsQuery.addDescendingOrder(Event.KEY_DATE);
 
