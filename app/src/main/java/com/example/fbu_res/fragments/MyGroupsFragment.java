@@ -20,6 +20,7 @@ import com.example.fbu_res.models.Group;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
@@ -67,7 +68,10 @@ public class MyGroupsFragment extends Fragment {
 
     public void getGroups() {
         // Define the class we would like to query
+        ParseUser user = ParseUser.getCurrentUser();
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.whereEqualTo("members", user);
+
         query.findInBackground(new FindCallback<Group>() {
             @Override
             public void done(List<Group> objects, ParseException e) {
