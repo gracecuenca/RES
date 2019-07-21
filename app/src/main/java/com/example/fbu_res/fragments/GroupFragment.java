@@ -128,6 +128,7 @@ public class GroupFragment extends Fragment {
         List<ParseUser> users = new ArrayList<>();
         users.add(ParseUser.getCurrentUser());
         newGroup.setMembers(users);
+        newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
         newGroup.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
