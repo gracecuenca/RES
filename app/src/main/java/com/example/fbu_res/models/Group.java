@@ -3,6 +3,16 @@ package com.example.fbu_res.models;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 @ParseClassName("Group")
 public class Group extends ParseObject {
@@ -11,6 +21,7 @@ public class Group extends ParseObject {
     public static final String KEY_NUM_MEMBS = "num_members";
     public static final String KEY_TYPE = "type";
     public static final String KEY_CHANNEL_NAME = "channel_name";
+    public static final String KEY_MEMBERS = "members";
 
 
     public String getName() {
@@ -51,5 +62,18 @@ public class Group extends ParseObject {
 
     public void setChannelName(String type) {
         put(KEY_CHANNEL_NAME, type);
+    }
+
+    public ParseRelation getMembers(){
+        ParseRelation jsonMembers = getRelation(KEY_MEMBERS);
+        return jsonMembers;
+    }
+
+    public void setMembers(List<ParseUser> users) {
+        ParseRelation relation = getRelation(KEY_MEMBERS);
+        for(int i = 0; i < users.size(); i++){
+            relation.add(users.get(i));
+        }
+        saveInBackground();
     }
 }
