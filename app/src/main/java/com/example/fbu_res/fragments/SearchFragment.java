@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.BounceInterpolator;
@@ -20,8 +23,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -60,6 +68,7 @@ public class SearchFragment extends Fragment{
     CategoriesAdapter adapterCat;
     ArrayList<Categories> categoriesArrayList;
     RecyclerView categoriesRV;
+    Toolbar toolbar;
 
     //GoogleMap mgoogleMap;
     //MapView mMapView;
@@ -78,6 +87,11 @@ public class SearchFragment extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        toolbar = view.findViewById(R.id.searchToolbar);
+        activity.setSupportActionBar(toolbar);
+        toolbar.setTitle("");
+        setHasOptionsMenu(true);
         Toast.makeText(getContext(), "In Search Tab", Toast.LENGTH_LONG);
         eventsRv = view.findViewById(R.id.eventsSearchrv);
         events = new ArrayList<>();
@@ -123,6 +137,24 @@ public class SearchFragment extends Fragment{
         });
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        return;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                moveToSearchFragment();
+                break;
+            default:
+                super.onOptionsItemSelected(item);
+                break;
+        }
+        return true;
+    }
     public void queryCategories(){
 
         ParseQuery<Categories> query = ParseQuery.getQuery("Categories");
@@ -141,6 +173,17 @@ public class SearchFragment extends Fragment{
                 }
             }
         });
+    }
+
+    public void moveToSearchFragment(){
+        SearchSlider fragment = new SearchSlider();
+        FragmentManager fragmentManager = ((FragmentActivity) getContext()).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.flContainer, fragment);
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     /*
