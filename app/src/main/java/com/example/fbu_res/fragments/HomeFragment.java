@@ -1,7 +1,10 @@
 package com.example.fbu_res.fragments;
 
 import android.Manifest;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -21,17 +25,35 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
+import com.example.fbu_res.GeofenceRegistrationService;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Event;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingApi;
+import com.google.android.gms.location.GeofencingEvent;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public final String APP_TAG = "HomeFragment";
     private RecyclerView rvEvents;
@@ -49,6 +71,22 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     // global variable needed for accessing permissions
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
+
+    // geofencing variables
+    protected ArrayList<Geofence> mGeofenceList;
+    protected GoogleApiClient mGoogleApiClient;
+    private com.google.android.gms.location.LocationCallback locationCallback;
+    // LocationRequest locationRequest;
+
+    // some more constants
+    public static final String GEOFENCE_ID_STAN_UNI = "STAN_UNI";
+    public static final float GEOFENCE_RADIUS_IN_METERS = 100;
+    public static final HashMap<String, LatLng> AREA_LANDMARKS = new HashMap<>();
+    static {
+        // stanford university.
+        AREA_LANDMARKS.put(GEOFENCE_ID_STAN_UNI, new LatLng(37.427476, -122.170262));
+    }
+    private PendingIntent pendingIntent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -113,7 +151,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         spinner.setOnItemSelectedListener(this);
 
         // location permissions checking
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted
@@ -132,6 +170,26 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         } else {
             // Permission has already been granted
         }
+
+        // creating instance of Google API client
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        locationCallback = new LocationCallback(){
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if(locationResult == null) return;
+                for (Location location : locationResult.getLocations()) {
+                    // Toast.makeText(getContext(), location.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+        };
+
+        // locationRequest = new LocationRequest();
     }
 
     @Override
@@ -146,7 +204,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(getContext(), "Location services disable: nearest events" +
+                    Toast.makeText(getContext(), "Location services disabled: nearest events" +
                             "cant't be found", Toast.LENGTH_LONG).show();
                 }
                 return;
@@ -155,29 +213,29 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     // TODO -- sort events by: location (radius), currently being done by date
-    public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option){
+    public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option) {
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
         eventsQuery.setLimit(10);
 
         // sorting events based on spinner input
         eventsQuery.addDescendingOrder(Event.KEY_DATE);
 
-        if(isRefresh) {
+        if (isRefresh) {
             clear();
             swipeContainer.setRefreshing(false); // signal refresh is completed
         }
-        if(isPaginating){
+        if (isPaginating) {
             // if(option.equals("Date")){
-                eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size()-1).getDate());
+            eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size() - 1).getDate());
             //}
             //else if(option.equals("Distance")){
-                // TODO -- insert distance functionality
+            // TODO -- insert distance functionality
             //}
         }
         eventsQuery.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> events, ParseException e) {
-                if(e != null){
+                if (e != null) {
                     e.printStackTrace();
                     return;
                 }
@@ -206,6 +264,132 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void addAll(List<Event> list) {
         mEvents.addAll(list);
         adapter.notifyDataSetChanged();
+    }
+
+    // override methods needed for the geofences
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        startLocationMonitor();
+        startGeofencing();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d(APP_TAG, "Google connection suspended");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(APP_TAG, "connection failed " + connectionResult.getErrorMessage());
+    }
+
+    // overrrided onstart and onstop methods
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGoogleApiClient.reconnect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    // connecting to location services and making location request
+    private void startLocationMonitor() {
+        Log.d(APP_TAG, "start location monitor");
+        LocationRequest locationRequest = LocationRequest.create()
+                .setInterval(2000)
+                .setFastestInterval(1000)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        try {
+            if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    Activity#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+                return;
+            }
+            LocationServices.getFusedLocationProviderClient(getActivity())
+                    .requestLocationUpdates(locationRequest, locationCallback, null);
+        } catch (SecurityException e){
+            Log.e(APP_TAG, e.getMessage());
+        }
+    }
+
+    protected void stopLocationUpdates(){
+        LocationServices.getFusedLocationProviderClient(getActivity())
+                .removeLocationUpdates(locationCallback);
+    }
+
+    // getting the geofence
+    @NonNull
+    private Geofence getGeofence() {
+        LatLng latLng = AREA_LANDMARKS.get(GEOFENCE_ID_STAN_UNI);
+        return new Geofence.Builder()
+                .setRequestId(GEOFENCE_ID_STAN_UNI)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setCircularRegion(latLng.latitude, latLng.longitude, GEOFENCE_RADIUS_IN_METERS)
+                .setNotificationResponsiveness(1000)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+    }
+
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofence(getGeofence());
+        return builder.build();
+    }
+
+    protected void onHandleIntent(Intent intent) {
+        GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
+        if (geofencingEvent.hasError()) {
+            Log.d(APP_TAG, "GeofencingEvent error " + geofencingEvent.getErrorCode());
+        }else{
+            int transaction = geofencingEvent.getGeofenceTransition();
+            List<Geofence> geofences = geofencingEvent.getTriggeringGeofences();
+            Geofence geofence = geofences.get(0);
+            if (transaction == Geofence.GEOFENCE_TRANSITION_ENTER && geofence.getRequestId().equals(GEOFENCE_ID_STAN_UNI)) {
+                Log.d(APP_TAG, "You are inside Stanford University");
+            } else {
+                Log.d(APP_TAG, "You are outside Stanford University");
+            }
+        }
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+        if (pendingIntent != null) {
+            return pendingIntent;
+        }
+        Intent intent = new Intent(getContext(), GeofenceRegistrationService.class);
+        return PendingIntent.getService(getContext(), 0, intent, PendingIntent.
+                FLAG_UPDATE_CURRENT);
+    }
+
+    private void startGeofencing() {
+        Log.d(APP_TAG, "Start geofencing monitoring call");
+        pendingIntent = getGeofencePendingIntent();
+        if (!mGoogleApiClient.isConnected()) {
+            Log.d(APP_TAG, "Google API client not connected");
+        } else {
+            try { LocationServices.getGeofencingClient(getContext())
+                        .addGeofences(getGeofencingRequest(), pendingIntent);
+            } catch (SecurityException e) {
+                Log.d(APP_TAG, e.getMessage());
+            }
+        }
     }
 
 }
