@@ -1,5 +1,7 @@
 package com.example.fbu_res.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -38,8 +44,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     // needed for swipe to refresh
     private SwipeRefreshLayout swipeContainer;
 
+    // global variable options needed for user-inputted filters
+    private String option;
+
+    // global variable needed for accessing permissions
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // default search query is Date
+        option = "Date";
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -48,6 +62,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         super.onViewCreated(view, savedInstanceState);
 
         // TODO -- customized toolbar color and logo
+        // TODO -- make recycler view go to top upon refreshing
 
         rvEvents = (RecyclerView) view.findViewById(R.id.rvEvents);
         // create the data source
@@ -65,7 +80,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadEvents(false, true, "other");
+                loadEvents(false, true, option);
             }
         };
 
@@ -76,8 +91,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadEvents(true, false, "other");
-                swipeContainer.setRefreshing(false); // signal refresh is completed
+                loadEvents(true, false, option);
             }
         });
 
@@ -97,22 +111,62 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         spinner.setAdapter(spinnerAdapter);
 
         spinner.setOnItemSelectedListener(this);
+
+        // location permissions checking
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
+            }
+        } else {
+            // Permission has already been granted
+        }
     }
 
-    // currently loads the dummy events we added to the Parse server
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // locations-related tasks you need to do
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getContext(), "Location services disable: nearest events" +
+                            "cant't be found", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
+
     // TODO -- sort events by: location (radius), currently being done by date
     public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option){
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
         eventsQuery.setLimit(10);
 
         // sorting events based on spinner input
-        if(option.equals("Date")) eventsQuery.addDescendingOrder(Event.KEY_DATE);
+        eventsQuery.addDescendingOrder(Event.KEY_DATE);
 
         if(isRefresh) {
             clear();
+            swipeContainer.setRefreshing(false); // signal refresh is completed
         }
-        else if(isPaginating){
-            Log.d(APP_TAG, Integer.toString(mEvents.size()));
+        if(isPaginating){
             // if(option.equals("Date")){
                 eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size()-1).getDate());
             //}
@@ -134,7 +188,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     // this is where we will implement the sorting functionality of the spinner
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String option = parent.getItemAtPosition(position).toString();
+        option = parent.getItemAtPosition(position).toString();
         loadEvents(false, false, option);
     }
 
