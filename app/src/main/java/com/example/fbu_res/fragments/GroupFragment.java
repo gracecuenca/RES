@@ -59,8 +59,11 @@ public class GroupFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.Viewpager);
-        GroupFragmentPagerAdapter pagerAdapter = new GroupFragmentPagerAdapter(getFragmentManager(),
-                getContext());
+        GroupFragmentPagerAdapter pagerAdapter = new GroupFragmentPagerAdapter(getFragmentManager());
+        pagerAdapter.addFragment(new MyGroupsFragment(), "My Groups");
+        pagerAdapter.addFragment(new InterestGroupFragment(), "For Interests");
+        pagerAdapter.addFragment(new EventGroupFragment(), "Event Groups");
+
         viewPager.setAdapter(pagerAdapter);
 
         RootRef = FirebaseDatabase.getInstance().getReference();

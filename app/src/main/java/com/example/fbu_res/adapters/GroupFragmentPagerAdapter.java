@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.fbu_res.R;
 import com.example.fbu_res.fragments.EventGroupFragment;
@@ -16,14 +17,17 @@ import com.example.fbu_res.fragments.GroupFragment;
 import com.example.fbu_res.fragments.InterestGroupFragment;
 import com.example.fbu_res.fragments.MyGroupsFragment;
 
-public class GroupFragmentPagerAdapter extends FragmentPagerAdapter {
+import java.util.ArrayList;
+import java.util.List;
+
+public class GroupFragmentPagerAdapter extends FragmentStatePagerAdapter {
     final int PAGE_COUNT = 3;
     private String tabTitles[] = new String[] { "My Groups", "For Interests", "For Events" };
-    private Context context;
+    List<Fragment> mFragmentList = new ArrayList<>();
+    List<String> mFragmentTitleList = new ArrayList<>();
 
-    public GroupFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public GroupFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
     }
 
     @Override
@@ -33,15 +37,13 @@ public class GroupFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
-            return new MyGroupsFragment();
-        } else if (position == 1){
-            return new InterestGroupFragment();
-        } else if (position == 2){
-            return new EventGroupFragment();
-        } else {
-            return new EventGroupFragment();
-        }    }
+        return mFragmentList.get(position);
+    }
+
+    public void addFragment(Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
+    }
 
     @Override
     public CharSequence getPageTitle(int position) {
@@ -49,22 +51,4 @@ public class GroupFragmentPagerAdapter extends FragmentPagerAdapter {
         return tabTitles[position];
     }
 
-    public View getTabView(int position) {
-        // Given you have a custom layout in `res/layout/custom_tab.xml` with a TextView and ImageView
-        int resource;
-        switch (position) {
-            case 0:
-                resource = R.layout.fragment_my_groups;
-                break;
-            case 1:
-                resource = R.layout.fragment_interest_groups;
-                break;
-            case 2:
-            default:
-                resource = R.layout.fragment_event_groups;
-                break;
-        }
-        View v = LayoutInflater.from(context).inflate(resource, null);
-        return v;
-    }
 }
