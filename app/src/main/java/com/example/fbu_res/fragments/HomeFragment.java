@@ -1,7 +1,9 @@
 package com.example.fbu_res.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -83,7 +85,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public static final float GEOFENCE_RADIUS_IN_METERS = 100;
     public static final HashMap<String, LatLng> AREA_LANDMARKS = new HashMap<>();
     static {
-        // stanford university.
         AREA_LANDMARKS.put(GEOFENCE_ID_STAN_UNI, new LatLng(37.427476, -122.170262));
     }
     private PendingIntent pendingIntent;
@@ -150,46 +151,28 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         spinner.setOnItemSelectedListener(this);
 
-        // location permissions checking
-        if (checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        // LOCATION AND GEOFENCING THINGS BELOW \\
 
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
-            }
-        } else {
-            // Permission has already been granted
+        if(checkLocationPermission()){
+            // creating instance of Google API client
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+
+            locationCallback = new LocationCallback(){
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    if(locationResult == null) return;
+                    for (Location location : locationResult.getLocations()) {
+                        // Toast.makeText(getContext(), location.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            };
         }
 
-        // creating instance of Google API client
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-
-        locationCallback = new LocationCallback(){
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if(locationResult == null) return;
-                for (Location location : locationResult.getLocations()) {
-                    // Toast.makeText(getContext(), location.toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-
-        };
-
-        // locationRequest = new LocationRequest();
     }
 
     @Override
@@ -311,7 +294,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         try {
             if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    Activity#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -389,6 +373,37 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             } catch (SecurityException e) {
                 Log.d(APP_TAG, e.getMessage());
             }
+        }
+    }
+
+    public boolean checkLocationPermission(){
+        if (checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) { // permission not granted
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new AlertDialog.Builder(getContext()) // showing explanation for requesting location
+                        .setTitle("Location required.")
+                        .setMessage("Location required in order to find nearby events!")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+            } else {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
+            }
+            return false;
+        } else { // Permission has already been granted
+            return true;
         }
     }
 
