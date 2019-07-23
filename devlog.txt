@@ -43,14 +43,15 @@ screen for consumers.
 
 2019-07-19
 --------------------------------------------------------------
-Aastha ::
+Aastha :: Worked on further developing the UI for the searchView. 
 Ayo :: 
 Grace :: Finished sorting by date and began to tackled geofences
 ==============================================================
 
 2019-07-22
 --------------------------------------------------------------
-Aastha ::
+Aastha ::Created the PageViewer for the searchView and started adding  seach
+functionality. Realized that everything I did today might need to be changed for easier search. 
 Ayo :: 
 Grace :: Continuation of geofence implementation. Added location
 enabling services
