@@ -1,10 +1,13 @@
 package com.example.fbu_res;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -43,15 +47,17 @@ public class GroupMessagesActivity extends AppCompatActivity {
     ScrollView scrollView;
     Firebase reference1, reference2;
     DatabaseReference GroupNameRef, GroupMessageKeyRef;
+    int RESULT_OK = 291;
 
     private String currentGroupName, currentUsername, currentDate, currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_chat);
 
-        layout = (LinearLayout)findViewById(R.id.layout1);
+        layout = findViewById(R.id.layout1);
         sendButton = (ImageView)findViewById(R.id.sendButton);
         messageArea = (EditText)findViewById(R.id.messageArea);
         scrollView = (ScrollView)findViewById(R.id.scrollView);
@@ -173,8 +179,14 @@ public class GroupMessagesActivity extends AppCompatActivity {
             addMessageBox("You:-\n" + chatMessage, 1);
         }
         else{
-            addMessageBox(UserDetails.chatWith + ":-\n" + chatMessage, 2);
+            addMessageBox(chatName + ":-\n" + chatMessage, 2);
         }
 
+    }
+
+    public void goBack(View view){
+        Intent data = new Intent();
+        ((Activity) view.getContext()).setResult(RESULT_OK, data); // set result code and bundle data for response
+        ((Activity) view.getContext()).finish();
     }
 }

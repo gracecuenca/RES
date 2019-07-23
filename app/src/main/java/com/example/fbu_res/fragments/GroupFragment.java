@@ -1,6 +1,7 @@
 package com.example.fbu_res.fragments;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,11 +19,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.GroupFragmentPagerAdapter;
+import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Group;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,15 +42,14 @@ import com.pubnub.api.PubNub;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
 
 @ParseClassName("Group")
 public class GroupFragment extends Fragment {
 
     PubNub mPubnub_DataStream;
     DatabaseReference RootRef;
+    int RESULT_OK = 291;
+    int REQUEST_CODE = 47;
 
     @Nullable
     @Override
@@ -61,14 +63,15 @@ public class GroupFragment extends Fragment {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.Viewpager);
         GroupFragmentPagerAdapter pagerAdapter = new GroupFragmentPagerAdapter(getFragmentManager());
         pagerAdapter.addFragment(new MyGroupsFragment(), "My Groups");
-        pagerAdapter.addFragment(new InterestGroupFragment(), "For Interests");
+        pagerAdapter.addFragment(new InterestGroupFragment(), "Interest Groups");
         pagerAdapter.addFragment(new EventGroupFragment(), "Event Groups");
 
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(pagerAdapter);
 
         RootRef = FirebaseDatabase.getInstance().getReference();
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
+        TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         FloatingActionButton fabBtn = view.findViewById(R.id.fabNewGroup);
@@ -128,9 +131,9 @@ public class GroupFragment extends Fragment {
         newGroup.setName(name);
         newGroup.setNumMembs(1);
         newGroup.setImage(conversionBitmapParseFile(drawableToBitmap(getResources().getDrawable(R.drawable.ic_launcher_background))));
-        List<ParseUser> users = new ArrayList<>();
-        users.add(ParseUser.getCurrentUser());
-        newGroup.setMembers(users);
+        ParseUser user = ParseUser.getCurrentUser();
+        newGroup.addMember(user);
+        newGroup.setOwnerName(((Consumer) ParseUser.getCurrentUser()).getKeyDisplayname());
         newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
         newGroup.saveInBackground(new SaveCallback() {
             @Override
@@ -169,4 +172,12 @@ public class GroupFragment extends Fragment {
         ParseFile parseFile = new ParseFile("image_file.png",imageByte);
         return parseFile;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+        }
+    }
+
+
 }
