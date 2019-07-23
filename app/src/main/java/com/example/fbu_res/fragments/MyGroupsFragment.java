@@ -31,15 +31,10 @@ import java.util.List;
 public class MyGroupsFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
-    private int mPage;
-    PubNub mPubnub_DataStream;
     ArrayList<Group> groups;
     private MyGroupsAdapter adapter;
+    RecyclerView rvGroups;
 
-
-    public static GroupFragment newInstance(int page) {
-        return new GroupFragment();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,19 +44,7 @@ public class MyGroupsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_groups, container, false);
-        RecyclerView rvGroups = view.findViewById(R.id.rvGroups);
-
-        groups = new ArrayList<>();
-
-
-        // Create adapter passing in the sample user data
-        adapter = new MyGroupsAdapter(groups);
-        // Attach the adapter to the recyclerview to populate items
-        rvGroups.setAdapter(adapter);
-        // Set layout manager to position the items
-        rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
-        getGroups();
+        View view = inflater.inflate(R.layout.fragment_event_groups, container, false);
 
         return view;
     }
@@ -89,11 +72,25 @@ public class MyGroupsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        PNConfiguration config = new PNConfiguration();
-        config.setPublishKey(getResources().getString(R.string.PUBNUB_SUBSCRIBE_KEY));
-        config.setSubscribeKey(getResources().getString(R.string.PUBNUB_SUBSCRIBE_KEY));
-        config.setUuid(ParseUser.getCurrentUser().getUsername());
-        config.setSecure(true);
-        mPubnub_DataStream = new PubNub(config);
+        rvGroups = view.findViewById(R.id.rvGroups);
+        groups = new ArrayList<>();
+
+
+        // Create adapter passing in the sample user data
+        adapter = new MyGroupsAdapter(groups);
+        // Attach the adapter to the recyclerview to populate items
+
+        rvGroups.setAdapter(adapter);
+        // Set layout manager to position the items
+        rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
+        getGroups();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && groups != null) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
     }
 }
