@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private SwipeRefreshLayout swipeContainer;
 
     // global variable options needed for user-inputted filters
-    private String option;
+    private String option = "Date"; // default search query is Date
 
     // global variable needed for accessing permissions
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
@@ -78,7 +78,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     protected ArrayList<Geofence> mGeofenceList;
     protected GoogleApiClient mGoogleApiClient;
     private com.google.android.gms.location.LocationCallback locationCallback;
-    // LocationRequest locationRequest;
+    private PendingIntent pendingIntent;
 
     // some more constants
     public static final String GEOFENCE_ID_STAN_UNI = "STAN_UNI";
@@ -87,12 +87,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     static {
         AREA_LANDMARKS.put(GEOFENCE_ID_STAN_UNI, new LatLng(37.427476, -122.170262));
     }
-    private PendingIntent pendingIntent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // default search query is Date
-        option = "Date";
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -126,6 +123,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // Adds the scroll listener to RecyclerView
         rvEvents.addOnScrollListener(scrollListener);
 
+        // swipe container wraps around the view in order to allow pull to refresh
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -151,7 +149,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         spinner.setOnItemSelectedListener(this);
 
-        // LOCATION AND GEOFENCING THINGS BELOW \\
+        // LOCATION AND GEO FENCING THINGS BELOW \\
 
         if(checkLocationPermission()){
             // creating instance of Google API client
