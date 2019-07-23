@@ -40,3 +40,20 @@ Grace :: Implemented a rudimentary detailed view of events
 and started working on drop down filtering of events for home
 screen for consumers.
 ==============================================================
+
+2019-07-19
+--------------------------------------------------------------
+Aastha ::
+Ayo :: 
+Grace :: Finished sorting by date and began to tackled geofences
+==============================================================
+
+2019-07-22
+--------------------------------------------------------------
+Aastha ::
+Ayo :: 
+Grace :: Continuation of geofence implementation. Added location
+enabling services
+==============================================================
+
+
