@@ -1,8 +1,12 @@
 package com.example.fbu_res.models;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -18,7 +22,7 @@ public class Event extends ParseObject {
     public static final String KEY_RADIUS = "radius";
     public static final String KEY_TYPE = "type";
     public static final String KEY_DES = "Description";
-    public static final String KEY_LOC = "location";
+    public static final String KEY_DISTANCE_TO_USER = "distanceToUser";
 
     public String getName() {
         return getString(KEY_NAME);
@@ -26,7 +30,27 @@ public class Event extends ParseObject {
 
     public void setName(String description) { put(KEY_NAME, description); }
 
-    public ParseObject getLocation() { return (Address) getParseObject(KEY_LOCATION); }
+    public Address getLocation() { return (Address) getParseObject(KEY_LOCATION); }
+
+    public ParseGeoPoint getParseGeoPoint() {
+        return getLocation().getPin();
+    }
+
+    public double getLat(){
+        return getParseGeoPoint().getLatitude();
+    }
+
+    public double getLong(){
+        return getParseGeoPoint().getLongitude();
+    }
+
+    public double getDistanceToUser(){
+        return (double) getNumber(KEY_DISTANCE_TO_USER);
+    }
+
+    public void setDistanceToUser(Double distance){
+        put(KEY_DISTANCE_TO_USER, distance);
+    }
 
     public void setLocation(Address address) {
         put(KEY_LOCATION, address);
@@ -52,7 +76,7 @@ public class Event extends ParseObject {
 
     public ParseFile getImage(){return getParseFile("eventImage");}
 
-    public String getLocationString(){return getString(KEY_LOC);}
+    public String getLocationString(){return getString(KEY_LOCATION);}
 
     public void setType(String type) {
         put(KEY_TYPE, type);
