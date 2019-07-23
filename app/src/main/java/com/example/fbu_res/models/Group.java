@@ -3,16 +3,8 @@ package com.example.fbu_res.models;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 @ParseClassName("Group")
 public class Group extends ParseObject {
@@ -22,6 +14,7 @@ public class Group extends ParseObject {
     public static final String KEY_TYPE = "type";
     public static final String KEY_CHANNEL_NAME = "channel_name";
     public static final String KEY_MEMBERS = "members";
+    public static final String KEY_OWNER_NAME = "owner_name";
 
 
     public String getName() {
@@ -53,7 +46,7 @@ public class Group extends ParseObject {
     }
 
     public void setType(String type) {
-        put(KEY_NAME, type);
+        put(KEY_TYPE, type);
     }
 
     public String getChannelName() {
@@ -69,11 +62,24 @@ public class Group extends ParseObject {
         return jsonMembers;
     }
 
-    public void setMembers(List<ParseUser> users) {
+    public void addMember(ParseUser user) {
         ParseRelation relation = getRelation(KEY_MEMBERS);
-        for(int i = 0; i < users.size(); i++){
-            relation.add(users.get(i));
-        }
+        relation.add(user);
         saveInBackground();
+    }
+
+    public void removeMember(ParseUser user) {
+        ParseRelation relation = getRelation(KEY_MEMBERS);
+        relation.remove(user);
+        saveInBackground();
+    }
+
+
+    public String getOwnerName() {
+        return getString(KEY_OWNER_NAME);
+    }
+
+    public void setOwnerName(String name) {
+        put(KEY_OWNER_NAME, name);
     }
 }
