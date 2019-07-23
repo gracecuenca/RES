@@ -9,17 +9,20 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/searchViewPager"
         android:layout_width="match_parent"
-        android:layout_height="609dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="680dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchSliderTab" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/searchSliderTab"
-        android:layout_width="395dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="48dp">
+        app:layout_constraintBottom_toTopOf="@+id/searchViewPager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -31,9 +34,6 @@
             android:layout_height="wrap_content"
             android:text="Tuesday" />
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wednesday" />
     </com.google.android.material.tabs.TabLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

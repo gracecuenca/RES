@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/businessRv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="625dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/businessLocationSearchView" />
+
+        <SearchView
+            android:id="@+id/businessSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F4E05C"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <SearchView
+            android:id="@+id/businessLocationSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F4E05C"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/businessSearchView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
