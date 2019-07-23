@@ -1,5 +1,6 @@
 package com.example.fbu_res.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -20,27 +21,28 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
-public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHolder> {
+public class EventGroupsAdapter extends RecyclerView.Adapter<EventGroupsAdapter.ViewHolder>{
 
     public ArrayList<Group> groups;
     Context context;
+    int REQUEST_CODE = 47;
 
-    public MyGroupsAdapter(ArrayList<Group> groups){
+
+    public EventGroupsAdapter(ArrayList<Group> groups){
         this.groups = groups;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public EventGroupsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View group = inflater.inflate(R.layout.item_group, parent, false);
-        final MyGroupsAdapter.ViewHolder viewHolder = new MyGroupsAdapter.ViewHolder(group);
-        return viewHolder;
+        View group = inflater.inflate(R.layout.item_event_group, parent, false);
+        return new EventGroupsAdapter.ViewHolder(group);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final EventGroupsAdapter.ViewHolder holder, final int position) {
         final Group group = groups.get(position);
 
         holder.groupName.setText(group.getName());
@@ -53,24 +55,19 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
 
         holder.owner.setText("Owned by: " + group.getOwnerName());
 
-        holder.groupImage.setOnClickListener(new View.OnClickListener() {
+        holder.join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                group.setNumMembs(group.getNumMembs() + 1);
+                group.addMember(ParseUser.getCurrentUser());
+                groups.remove(group);
+                notifyDataSetChanged();
                 Intent intent = new Intent(holder.itemView.getContext(), GroupMessagesActivity.class);
                 intent.putExtra("channel_name", group.getChannelName());
-                holder.itemView.getContext().startActivity(intent);
+                ((Activity) holder.itemView.getContext()).startActivityForResult(intent, REQUEST_CODE);
             }
         });
 
-        holder.leave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                group.setNumMembs(group.getNumMembs() - 1);
-                group.removeMember(ParseUser.getCurrentUser());
-                groups.remove(group);
-                notifyDataSetChanged();
-            }
-        });
     }
 
     @Override
@@ -84,7 +81,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
         TextView numMembers;
         TextView groupType;
         TextView owner;
-        Button leave;
+        Button join;
         public ViewHolder(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivGroupPic);
@@ -92,7 +89,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
             numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvGroupType);
             owner = view.findViewById(R.id.tvOwnedBy);
-            leave = view.findViewById(R.id.btnJoin);
+            join = view.findViewById(R.id.btnJoin);
         }
     }
 
