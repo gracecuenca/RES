@@ -322,8 +322,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         eventsQuery.setLimit(10);
 
         // sorting events based on spinner input
-        if(option.equals("Date")) eventsQuery.addDescendingOrder(Event.KEY_DATE);
-        else if(option.equals("Distance")) eventsQuery.addAscendingOrder(Event.KEY_LOCATION);
+        if(option.equals("Date")){
+            eventsQuery.addDescendingOrder(Event.KEY_DATE);
+        }
+        else if(option.equals("Distance")){
+            // iterate through all the events (for now) and set up distanceToUser variable for all events
+            for(int i = 0; i < mEvents.size(); i++){
+                Event event = mEvents.get(i);
+                event.put(KEY_DISTANCE_TO_USER, currentLocation.distanceInMilesTo(event.getParseGeoPoint()));
+            }
+            eventsQuery.addAscendingOrder(KEY_DISTANCE_TO_USER);
+        }
 
         if (isRefresh) {
             clear();
@@ -331,16 +340,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
         if (isPaginating) {
             if(option.equals("Date")){
-            // TODO -- fix bug where when you select a different spinner object, the items just get appended to the end (stuff repeats)
                 eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size() - 1).getDate());
            }
             else if(option.equals("Distance")){
-                // iterate through all the events (for now) and set up distanceToUser variable for all events
-                for(int i = 0; i < mEvents.size(); i++){
-                    Event event = mEvents.get(i);
-                    event.put(KEY_DISTANCE_TO_USER, currentLocation.distanceInMilesTo(event.getParseGeoPoint()));
-                }
-                eventsQuery.whereLessThan(KEY_DISTANCE_TO_USER, mEvents.get(mEvents.size() - 1).getDistanceToUser());
+                eventsQuery.whereGreaterThan(KEY_DISTANCE_TO_USER, mEvents.get(mEvents.size() - 1).getDistanceToUser());
             }
         }
         eventsQuery.findInBackground(new FindCallback<Event>() {
@@ -357,7 +360,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     // this is where we will implement the sorting functionality of the spinner
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        clear();
         option = parent.getItemAtPosition(position).toString();
+        Log.d(APP_TAG, option);
         loadEvents(false, false, option);
     }
 
