@@ -41,6 +41,8 @@ public class SearchSliderAdapter extends FragmentPagerAdapter {
             return new EventSliderSearch();
         }    }
 
+
+
     @Override
     public CharSequence getPageTitle(int position) {
         // Generate title based on item position
