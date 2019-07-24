@@ -79,19 +79,21 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         if (charText.length() == 0) {
             if(fragment instanceof EventSliderSearch){
                 EventSliderSearch.events.addAll(titles);
+                notifyDataSetChanged();
             }else{
                 BusinessSliderSearch.businesses.addAll(titles);
+                notifyDataSetChanged();
             }
-            notifyDataSetChanged();
         } else {
             for(int i = 0; i<titles.size(); i++){
                 if(titles.get(i).toLowerCase().contains(charText)) {
                     if(fragment instanceof EventSliderSearch){
                         EventSliderSearch.events.add(titles.get(i));
+                        notifyDataSetChanged();
                     }else{
                         BusinessSliderSearch.businesses.add(titles.get(i));
+                        notifyDataSetChanged();
                     }
-                    notifyDataSetChanged();
                 }
             }
         }

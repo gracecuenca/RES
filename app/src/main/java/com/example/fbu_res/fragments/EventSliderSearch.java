@@ -29,7 +29,6 @@ public class EventSliderSearch extends Fragment {
     SearchAdapter adapter;
     SearchView eventsSv;
     SearchView locationSv;
-    ArrayList<String> eventsCopy;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,7 +46,6 @@ public class EventSliderSearch extends Fragment {
         eventsRv2.setLayoutManager(manager);
         eventsSv = view.findViewById(R.id.eventSearchView);
         locationSv = view.findViewById(R.id.eventLocationSearchView);
-        eventsCopy = (ArrayList<String>) events.clone();
 
         eventsSv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -73,7 +71,6 @@ public class EventSliderSearch extends Fragment {
                     for(int i = 0; i<objects.size(); i++){
                         Toast.makeText(getContext(), "in for loop", Toast.LENGTH_LONG).show();
                         events.addAll(objects.get(i).getTagsArray());
-                        adapter.notifyDataSetChanged();
                     }
                 }else{
                     e.printStackTrace();
