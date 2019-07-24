@@ -1,5 +1,7 @@
 package com.example.fbu_res.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -30,7 +32,9 @@ public class Event extends ParseObject {
 
     public void setName(String description) { put(KEY_NAME, description); }
 
-    public Address getLocation() { return (Address) getParseObject(KEY_LOCATION); }
+    public Address getLocation() {
+        return (Address) getParseObject(KEY_LOCATION);
+    }
 
     public ParseGeoPoint getParseGeoPoint() {
         return getLocation().getPin();
