@@ -50,8 +50,7 @@ import static androidx.core.content.ContextCompat.checkSelfPermission;
 import static com.example.fbu_res.models.Event.KEY_DISTANCE_TO_USER;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
-public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener/*,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener*/ {
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     public final String APP_TAG = "HomeFragment";
     private RecyclerView rvEvents;
@@ -79,26 +78,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private LocationRequest mLocationRequest;
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
-
-    // geofencing variables
-    // protected GoogleApiClient mGoogleApiClient;
-    // private com.google.android.gms.location.LocationCallback locationCallback;
-    // private PendingIntent pendingIntent;
-
-    // converting to geofence clients
-    // protected ArrayList<Geofence> mGeofenceList;
-    // private GeofencingClient geofencingClient;
-
-    // some more constants
-    /*
-    public static final String GEOFENCE_ID_STAN_UNI = "STAN_UNI";
-    public static final float GEOFENCE_RADIUS_IN_METERS = 100;
-    public static final int GEOFENCE_EXPIRATION_IN_MILLISECONDS = 100;
-    public static final HashMap<String, LatLng> AREA_LANDMARKS = new HashMap<>();
-    static {
-        AREA_LANDMARKS.put(GEOFENCE_ID_STAN_UNI, new LatLng(37.427476, -122.170262));
-    }
-    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -164,48 +143,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         spinner.setAdapter(spinnerAdapter);
 
         spinner.setOnItemSelectedListener(this);
-
-        // LOCATION AND GEO FENCING THINGS BELOW \\
-        /*
-        if(checkLocationPermission()){
-            // creating instance of Google API client
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-
-            locationCallback = new LocationCallback(){
-                @Override
-                public void onLocationResult(LocationResult locationResult) {
-                    if(locationResult == null) return;
-                    for (Location location : locationResult.getLocations()) {
-                        // Toast.makeText(getContext(), location.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-            };
-        }
-
-        // new stuff
-        mGeofenceList = new ArrayList<>();
-        mGeofenceList.add(new Geofence.Builder()
-                // Set the request ID of the geofence. This is a string to identify this
-                // geofence.
-                .setRequestId("test geofence")
-
-                .setCircularRegion(
-                        37.427476,
-                        -122.170262,
-                        GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build());
-        geofencingClient = LocationServices.getGeofencingClient(getContext());
-        */
-
     }
 
     // Trigger new location updates at interval
@@ -323,7 +260,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
     }
 
-    // TODO -- sort events by: location (radius), currently being done by date
     public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option) {
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
         eventsQuery.setLimit(10);
@@ -394,168 +330,5 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             event.saveInBackground();
         }
     }
-
-    /*
-    // override methods needed for the geofences
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        startLocationMonitor();
-        startGeofencing();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.d(APP_TAG, "Google connection suspended");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e(APP_TAG, "connection failed " + connectionResult.getErrorMessage());
-    }
-    */
-
-    // overrrided onstart and onstop methods
-    /*
-    @Override
-    public void onStart() {
-        super.onStart();
-        mGoogleApiClient.reconnect();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mGoogleApiClient.disconnect();
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        stopLocationUpdates();
-    }
-
-    // connecting to location services and making location request
-    private void startLocationMonitor() {
-        Log.d(APP_TAG, "start location monitor");
-        LocationRequest locationRequest = LocationRequest.create()
-                .setInterval(2000)
-                .setFastestInterval(1000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        try {
-            if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    Activity#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for Activity#requestPermissions for more details.
-                return;
-            }
-            LocationServices.getFusedLocationProviderClient(getActivity())
-                    .requestLocationUpdates(locationRequest, locationCallback, null);
-        } catch (SecurityException e){
-            Log.e(APP_TAG, e.getMessage());
-        }
-    }
-
-    protected void stopLocationUpdates(){
-        LocationServices.getFusedLocationProviderClient(getActivity())
-                .removeLocationUpdates(locationCallback);
-    }
-
-    // getting the geofence
-    @NonNull
-    private Geofence getGeofence() {
-        LatLng latLng = AREA_LANDMARKS.get(GEOFENCE_ID_STAN_UNI);
-        return new Geofence.Builder()
-                .setRequestId(GEOFENCE_ID_STAN_UNI)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setCircularRegion(latLng.latitude, latLng.longitude, GEOFENCE_RADIUS_IN_METERS)
-                .setNotificationResponsiveness(1000)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build();
-    }
-
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofence(getGeofence());
-        return builder.build();
-    }
-
-    protected void onHandleIntent(Intent intent) {
-        GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-        if (geofencingEvent.hasError()) {
-            Log.d(APP_TAG, "GeofencingEvent error " + geofencingEvent.getErrorCode());
-        }else{
-            int transaction = geofencingEvent.getGeofenceTransition();
-            List<Geofence> geofences = geofencingEvent.getTriggeringGeofences();
-            Geofence geofence = geofences.get(0);
-            if (transaction == Geofence.GEOFENCE_TRANSITION_ENTER && geofence.getRequestId().equals(GEOFENCE_ID_STAN_UNI)) {
-                Log.d(APP_TAG, "You are inside Stanford University");
-            } else {
-                Log.d(APP_TAG, "You are outside Stanford University");
-            }
-        }
-    }
-
-    private PendingIntent getGeofencePendingIntent() {
-        if (pendingIntent != null) {
-            return pendingIntent;
-        }
-        Intent intent = new Intent(getContext(), GeofenceRegistrationService.class);
-        return PendingIntent.getService(getContext(), 0, intent, PendingIntent.
-                FLAG_UPDATE_CURRENT);
-    }
-
-    private void startGeofencing() {
-        Log.d(APP_TAG, "Start geofencing monitoring call");
-        pendingIntent = getGeofencePendingIntent();
-        if (!mGoogleApiClient.isConnected()) {
-            Log.d(APP_TAG, "Google API client not connected");
-        } else {
-            try { LocationServices.getGeofencingClient(getContext())
-                        .addGeofences(getGeofencingRequest(), pendingIntent);
-            } catch (SecurityException e) {
-                Log.d(APP_TAG, e.getMessage());
-            }
-        }
-    }
-
-    public boolean checkLocationPermission(){
-        if (checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) { // permission not granted
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                new AlertDialog.Builder(getContext()) // showing explanation for requesting location
-                        .setTitle("Location required.")
-                        .setMessage("Location required in order to find nearby events!")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(getActivity(),
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
-                            }
-                        })
-                        .create()
-                        .show();
-            } else {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
-            }
-            return false;
-        } else { // Permission has already been granted
-            return true;
-        }
-    }
-    */
 
 }
