@@ -66,11 +66,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     // global variable options needed for user-inputted filters
     private String option = "Date"; // default search query is Date
 
-    // the current user
-    private Consumer user;
-    // the current location
-    private ParseGeoPoint currentLocation;
-
     // global variable needed for accessing permissions
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
 
@@ -78,6 +73,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private LocationRequest mLocationRequest;
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+
+    // the current user
+    private Consumer user;
+    // the current location
+    private ParseGeoPoint currentLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -182,64 +182,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Location location = locationResult.getLastLocation();
                         currentLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
                         user.setLocation(currentLocation);
-                        Log.d(APP_TAG, "current location: "+currentLocation.getLatitude()+ " " +currentLocation.getLongitude());
-                        onLocationChanged(location);
+                        user.saveInBackground();
                     }
                 },
                 Looper.myLooper());
-        // iterate through all the events (for now) and set up distanceToUser variable for all events
         if(option.equals("Distance")) sortByDistance();
     }
 
-    //TODO remeber to uncomment
-
-    public void onLocationChanged(Location location) {
-        // New location has now been determined
-        String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude());
-        // Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-        // You can now create a LatLng Object for use with maps
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        // iterate through all the events (for now) and set up distanceToUser variable for all events
-        if(option.equals("Distance")) sortByDistance();
-    }
-
-    public void getLastLocation() {
-        // Get last known recent location using new Google Play Services SDK (v11+)
-        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
-
-        if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    Activity#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for Activity#requestPermissions for more details.
-            return;
-        }
-        locationClient.getLastLocation()
-                .addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // GPS location can be null if GPS is switched off
-                        if (location != null) {
-                            onLocationChanged(location);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("MapDemoActivity", "Error trying to get last GPS location");
-                        e.printStackTrace();
-                    }
-                });
-    }
-
+    // TODO -- test for when the user doesn't allow us to access location
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -264,26 +214,25 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
         eventsQuery.setLimit(10);
 
-        // sorting events based on spinner input
         if(option.equals("Date")){
             eventsQuery.addAscendingOrder(Event.KEY_DATE);
-        }
-        else if(option.equals("Distance")){
+        } else if(option.equals("Distance")){
             eventsQuery.addAscendingOrder(Event.KEY_DISTANCE_TO_USER);
+           eventsQuery.whereLessThanOrEqualTo(KEY_DISTANCE_TO_USER, 10);
         }
-
         if (isRefresh) {
             clear();
             swipeContainer.setRefreshing(false); // signal refresh is completed
         }
+
         if (isPaginating) {
             if(option.equals("Date")){
                 eventsQuery.whereGreaterThan(Event.KEY_DATE, mEvents.get(mEvents.size() - 1).getDate());
-           }
-            else if(option.equals("Distance")){
+           } else if(option.equals("Distance")){
                 eventsQuery.whereGreaterThan(Event.KEY_DISTANCE_TO_USER, mEvents.get(mEvents.size() - 1).getDistanceToUser());
             }
         }
+
         eventsQuery.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> events, ParseException e) {
@@ -321,7 +270,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     public void sortByDistance(){
         for(int i = 0; i < mEvents.size(); i++){
-            // TODO -- add loading screen to show events loading when distance option is selected
             Event event = mEvents.get(i);
             double distance = currentLocation.distanceInMilesTo(event.getParseGeoPoint());
             event.put(KEY_DISTANCE_TO_USER, distance);
