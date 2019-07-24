@@ -182,7 +182,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Location location = locationResult.getLastLocation();
                         currentLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
                         user.setLocation(currentLocation);
-                        // Log.d(APP_TAG, "current location: "+currentLocation.getLatitude()+ " " +currentLocation.getLongitude());
+                        Log.d(APP_TAG, "current location: "+currentLocation.getLatitude()+ " " +currentLocation.getLongitude());
                         onLocationChanged(location);
                     }
                 },
@@ -324,8 +324,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             // TODO -- add loading screen to show events loading when distance option is selected
             Event event = mEvents.get(i);
             double distance = currentLocation.distanceInMilesTo(event.getParseGeoPoint());
-            //Log.d(APP_TAG, "Event name: "+ event.getName() + " is " + distance +
-              //      " away from current user and is at "+event.getLocation().getName());
             event.put(KEY_DISTANCE_TO_USER, distance);
             event.saveInBackground();
         }

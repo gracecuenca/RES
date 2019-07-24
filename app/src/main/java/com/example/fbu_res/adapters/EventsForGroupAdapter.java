@@ -83,7 +83,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private void configureViewHolder1(ViewHolder1 vh1, int position) {
         // loading the information from the Event object into the view
         vh1.tvTitle.setText(event.getName());
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
         vh1.tvDate.setText(dateFormat.format(event.getDate()));
         vh1.tvLocation.setText(event.getLocationString());
         vh1.tvDescription.setText(event.getDescription());
