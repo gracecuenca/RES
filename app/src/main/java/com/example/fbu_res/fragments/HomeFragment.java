@@ -1,13 +1,10 @@
 package com.example.fbu_res.fragments;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,44 +15,42 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
-import com.example.fbu_res.GeofenceRegistrationService;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
+import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingApi;
-import com.google.android.gms.location.GeofencingEvent;
-import com.google.android.gms.location.GeofencingRequest;
+import com.example.fbu_res.models.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
+import static com.example.fbu_res.models.Event.KEY_DISTANCE_TO_USER;
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
-public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener/*,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener*/ {
 
     public final String APP_TAG = "HomeFragment";
     private RecyclerView rvEvents;
@@ -71,22 +66,38 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     // global variable options needed for user-inputted filters
     private String option = "Date"; // default search query is Date
 
+    // the current user
+    private Consumer user;
+    // the current location
+    private ParseGeoPoint currentLocation;
+
     // global variable needed for accessing permissions
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
 
+    // needed for getting current location
+    private LocationRequest mLocationRequest;
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+
     // geofencing variables
-    protected ArrayList<Geofence> mGeofenceList;
-    protected GoogleApiClient mGoogleApiClient;
-    private com.google.android.gms.location.LocationCallback locationCallback;
-    private PendingIntent pendingIntent;
+    // protected GoogleApiClient mGoogleApiClient;
+    // private com.google.android.gms.location.LocationCallback locationCallback;
+    // private PendingIntent pendingIntent;
+
+    // converting to geofence clients
+    // protected ArrayList<Geofence> mGeofenceList;
+    // private GeofencingClient geofencingClient;
 
     // some more constants
+    /*
     public static final String GEOFENCE_ID_STAN_UNI = "STAN_UNI";
     public static final float GEOFENCE_RADIUS_IN_METERS = 100;
+    public static final int GEOFENCE_EXPIRATION_IN_MILLISECONDS = 100;
     public static final HashMap<String, LatLng> AREA_LANDMARKS = new HashMap<>();
     static {
         AREA_LANDMARKS.put(GEOFENCE_ID_STAN_UNI, new LatLng(37.427476, -122.170262));
     }
+    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,6 +110,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         // TODO -- customized toolbar color and logo
         // TODO -- make recycler view go to top upon refreshing
+
+        // set up current user location
+        user = (Consumer) User.getCurrentUser();
+        startLocationUpdates(); // this is where the location is being updated
 
         rvEvents = (RecyclerView) view.findViewById(R.id.rvEvents);
         // create the data source
@@ -150,7 +165,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         spinner.setOnItemSelectedListener(this);
 
         // LOCATION AND GEO FENCING THINGS BELOW \\
-
+        /*
         if(checkLocationPermission()){
             // creating instance of Google API client
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -171,6 +186,114 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             };
         }
 
+        // new stuff
+        mGeofenceList = new ArrayList<>();
+        mGeofenceList.add(new Geofence.Builder()
+                // Set the request ID of the geofence. This is a string to identify this
+                // geofence.
+                .setRequestId("test geofence")
+
+                .setCircularRegion(
+                        37.427476,
+                        -122.170262,
+                        GEOFENCE_RADIUS_IN_METERS
+                )
+                .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                        Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build());
+        geofencingClient = LocationServices.getGeofencingClient(getContext());
+        */
+
+    }
+
+    // Trigger new location updates at interval
+    protected void startLocationUpdates() {
+
+        // Create the location request to start receiving updates
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        SettingsClient settingsClient = LocationServices.getSettingsClient(getContext());
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            return;
+        }
+        getFusedLocationProviderClient(getContext()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        Location location = locationResult.getLastLocation();
+                        currentLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+                        user.setLocation(currentLocation);
+                        // Log.d(APP_TAG, "current location: "+currentPoint.getLatitude()+ " " +currentPoint.getLongitude());
+                        onLocationChanged(location);
+                    }
+                },
+                Looper.myLooper());
+    }
+
+    public void onLocationChanged(Location location) {
+        // New location has now been determined
+        String msg = "Updated Location: " +
+                Double.toString(location.getLatitude()) + "," +
+                Double.toString(location.getLongitude());
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        // You can now create a LatLng Object for use with maps
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    public void getLastLocation() {
+        // Get last known recent location using new Google Play Services SDK (v11+)
+        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(getContext());
+
+        if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            return;
+        }
+        locationClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // GPS location can be null if GPS is switched off
+                        if (location != null) {
+                            onLocationChanged(location);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("MapDemoActivity", "Error trying to get last GPS location");
+                        e.printStackTrace();
+                    }
+                });
     }
 
     @Override
@@ -199,19 +322,26 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         eventsQuery.setLimit(10);
 
         // sorting events based on spinner input
-        eventsQuery.addDescendingOrder(Event.KEY_DATE);
+        if(option.equals("Date")) eventsQuery.addDescendingOrder(Event.KEY_DATE);
+        else if(option.equals("Distance")) eventsQuery.addDescendingOrder(Event.KEY_LOCATION);
 
         if (isRefresh) {
             clear();
             swipeContainer.setRefreshing(false); // signal refresh is completed
         }
         if (isPaginating) {
-            // if(option.equals("Date")){
-            eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size() - 1).getDate());
-            //}
-            //else if(option.equals("Distance")){
-            // TODO -- insert distance functionality
-            //}
+            if(option.equals("Date")){
+            // TODO -- fix bug where when you select a different spinner object, the items just get appended to the end (stuff repeats)
+                eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size() - 1).getDate());
+           }
+            else if(option.equals("Distance")){
+                // iterate through all the events (for now) and set up distanceToUser variable for all events
+                for(int i = 0; i < mEvents.size(); i++){
+                    Event event = mEvents.get(i);
+                    event.put(KEY_DISTANCE_TO_USER, currentLocation.distanceInMilesTo(event.getParseGeoPoint()));
+                }
+                eventsQuery.whereLessThan(KEY_DISTANCE_TO_USER, mEvents.get(mEvents.size() - 1).getDistanceToUser());
+            }
         }
         eventsQuery.findInBackground(new FindCallback<Event>() {
             @Override
@@ -247,6 +377,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         adapter.notifyDataSetChanged();
     }
 
+    /*
     // override methods needed for the geofences
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -263,8 +394,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(APP_TAG, "connection failed " + connectionResult.getErrorMessage());
     }
+    */
 
     // overrrided onstart and onstop methods
+    /*
     @Override
     public void onStart() {
         super.onStart();
@@ -276,6 +409,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         super.onStop();
         mGoogleApiClient.disconnect();
     }
+
 
     @Override
     public void onPause() {
@@ -404,5 +538,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             return true;
         }
     }
+    */
 
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -21,6 +22,15 @@ public class Consumer extends ParseUser {
     public static final String KEY_INTERESTS = "interests";
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_PHONENUMBER = "phoneNumber";
+    public static final String KEY_LOCATION = "userLocation";
+
+    public void setLocation(ParseGeoPoint geoPoint){
+        put(KEY_LOCATION, geoPoint);
+    }
+
+    public ParseGeoPoint getLocation(){
+        return getParseGeoPoint(KEY_LOCATION);
+    }
 
     public String getKeyDisplayname() {
         return getString(KEY_DISPLAYNAME);
