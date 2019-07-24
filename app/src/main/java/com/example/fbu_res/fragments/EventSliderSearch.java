@@ -20,15 +20,17 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EventSliderSearch extends Fragment {
-    public static ArrayList<String> events = new ArrayList<String>();
+    public static ArrayList<String> events;
     RecyclerView eventsRv2;
     SearchAdapter adapter;
     SearchView eventsSv;
     SearchView locationSv;
+    ArrayList<String> eventsCopy;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,9 +41,10 @@ public class EventSliderSearch extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         eventsRv2 = view.findViewById(R.id.searchEventsRv);
-        queryArray();
+        events = new ArrayList<String>();
         adapter = new SearchAdapter(getContext(), new EventSliderSearch());
         eventsRv2.setAdapter(adapter);
+        queryArray();
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         eventsRv2.setLayoutManager(manager);
         eventsSv = view.findViewById(R.id.eventSearchView);
@@ -63,6 +66,7 @@ public class EventSliderSearch extends Fragment {
     }
 
     public void queryArray(){
+        eventsCopy = new ArrayList<>();
         ParseQuery<Event> parseQuery = ParseQuery.getQuery("Event");
         parseQuery.findInBackground(new FindCallback<Event>() {
             @Override
@@ -71,6 +75,7 @@ public class EventSliderSearch extends Fragment {
                     for(int i = 0; i<objects.size(); i++){
                         Toast.makeText(getContext(), "in for loop", Toast.LENGTH_LONG).show();
                         events.addAll(objects.get(i).getTagsArray());
+                        adapter.notifyDataSetChanged();
                     }
                 }else{
                     e.printStackTrace();

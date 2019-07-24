@@ -57,10 +57,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         String title;
         if(fragment instanceof EventSliderSearch){
             title = EventSliderSearch.events.get(position);
+            holder.name.setText(title);
         }else{
             title = BusinessSliderSearch.businesses.get(position);
+            holder.name.setText(title);
         }
-        holder.name.setText(title);
+
     }
 
     @Override

@@ -238,25 +238,27 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             // for Activity#requestPermissions for more details.
             return;
         }
-        getFusedLocationProviderClient(getContext()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        Location location = locationResult.getLastLocation();
-                        currentLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-                        user.setLocation(currentLocation);
+        //getFusedLocationProviderClient(getContext()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    //@Override
+                    //public void onLocationResult(LocationResult locationResult) {
+                        //Location location = locationResult.getLastLocation();
+                        //currentLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+                        //user.setLocation(currentLocation);
                         // Log.d(APP_TAG, "current location: "+currentPoint.getLatitude()+ " " +currentPoint.getLongitude());
-                        onLocationChanged(location);
-                    }
-                },
-                Looper.myLooper());
+                        //onLocationChanged(location);
+                    //}
+                //},
+                //Looper.myLooper());
     }
+
+    //TODO remeber to uncomment
 
     public void onLocationChanged(Location location) {
         // New location has now been determined
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
     }
@@ -323,7 +325,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         // sorting events based on spinner input
         if(option.equals("Date")) eventsQuery.addDescendingOrder(Event.KEY_DATE);
-        else if(option.equals("Distance")) eventsQuery.addDescendingOrder(Event.KEY_LOCATION);
+        else if(option.equals("Distance")) eventsQuery.addAscendingOrder(Event.KEY_LOCATION);
 
         if (isRefresh) {
             clear();
