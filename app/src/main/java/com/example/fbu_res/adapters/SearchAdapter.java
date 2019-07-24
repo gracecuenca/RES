@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,8 +15,13 @@ import com.example.fbu_res.R;
 import com.example.fbu_res.fragments.BusinessSliderSearch;
 import com.example.fbu_res.fragments.EventSliderSearch;
 import com.example.fbu_res.fragments.SearchSlider;
+import com.example.fbu_res.models.Event;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder>{
@@ -90,6 +96,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         }
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 

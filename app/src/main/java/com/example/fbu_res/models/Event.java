@@ -13,6 +13,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ParseClassName("Event")
 public class Event extends ParseObject {
@@ -70,6 +71,9 @@ public class Event extends ParseObject {
 
     public void setRadius(String timestamp) {
         put(KEY_RADIUS, timestamp);
+    }
+    public List<String> getTagsArray(){
+        return getList("tags");
     }
 
     public String geType() { return getString(KEY_TYPE); }

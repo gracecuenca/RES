@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,7 @@ public class EventSliderSearch extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         eventsRv2 = view.findViewById(R.id.searchEventsRv);
+        queryArray();
         adapter = new SearchAdapter(getContext(), new EventSliderSearch());
         eventsRv2.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -64,15 +66,17 @@ public class EventSliderSearch extends Fragment {
 
     public void queryArray(){
         ParseQuery<Event> parseQuery = ParseQuery.getQuery("Event");
-        /**Get all events, get all tags from all events, store all tags in an array,
-         * */
         parseQuery.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, ParseException e) {
                 if(e==null){
                     for(int i = 0; i<objects.size(); i++){
-                        events.addAll(objects.get(i).ge)
+                        Toast.makeText(getContext(), "in for loop", Toast.LENGTH_LONG).show();
+                        events.addAll(objects.get(i).getTagsArray());
+                        adapter.notifyDataSetChanged();
                     }
+                }else{
+                    e.printStackTrace();
                 }
             }
         });
