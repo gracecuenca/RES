@@ -67,12 +67,6 @@ public class GroupMessagesActivity extends AppCompatActivity {
         GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Groups")
                 .child(currentGroupName);
 
-
-
-        // pFirebase.setAndroidContext(this);
-        // reference1 = new Firebase("https://android-chat-app-e711d.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
-        // reference2 = new Firebase("https://android-chat-app-e711d.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
-
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
