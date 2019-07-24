@@ -23,6 +23,7 @@ public class Consumer extends ParseUser {
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_PHONENUMBER = "phoneNumber";
     public static final String KEY_LOCATION = "userLocation";
+    public static final String KEY_IMAGE = "profile_img";
 
     public void setLocation(ParseGeoPoint geoPoint){
         put(KEY_LOCATION, geoPoint);
@@ -32,7 +33,7 @@ public class Consumer extends ParseUser {
         return getParseGeoPoint(KEY_LOCATION);
     }
 
-    public String getKeyDisplayname() {
+    public String getDisplayname() {
         return getString(KEY_DISPLAYNAME);
     }
 
@@ -60,6 +61,14 @@ public class Consumer extends ParseUser {
         put(KEY_INTERESTS, image);
     }
 
+    public ParseFile getProfileImage(){
+        return getParseFile(KEY_IMAGE);
+    }
+
+    public void setProfileImage(ParseFile image){
+        put(KEY_IMAGE, image);
+    }
+
     public ArrayList<String> getInterests() {
         JSONArray arr = new JSONArray();
         ArrayList<String> list = new ArrayList<String>();
@@ -85,7 +94,5 @@ public class Consumer extends ParseUser {
     }
 
     private static int lastPostId = 0;
-
-
 
 }

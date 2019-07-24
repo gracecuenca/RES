@@ -33,12 +33,6 @@ public class EventDetailsActivity extends AppCompatActivity {
     List<Object> groups;
 
     // event attributes
-    private ImageView ivImage;
-    private TextView tvDate;
-    private TextView tvTitle;
-    private TextView tvDescription;
-    private TextView tvLocation;
-    RecyclerView recyclerView;
     EventsForGroupAdapter adapter;
 
     @Override

@@ -27,7 +27,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     Context context;
     public ArrayList<Event> events;
 
-    public EventAdapter(ArrayList<Event> events1){events = events1;}
+    public EventAdapter(ArrayList<Event> events){
+        this.events = events;
+    }
 
     @NonNull
     @Override

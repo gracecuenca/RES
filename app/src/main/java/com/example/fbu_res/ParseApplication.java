@@ -33,7 +33,7 @@ public class ParseApplication extends Application {
         ParseUser.registerSubclass(Event.class);
         ParseUser.registerSubclass(Group.class);
         ParseUser.registerSubclass(Categories.class);
-        ParseUser.registerSubclass(User.class);
+        // ParseUser.registerSubclass(User.class);
         ParseUser.registerSubclass(Address.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)

@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,7 +22,6 @@ import com.parse.ParseUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -143,7 +141,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public ViewHolder2(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivGroupPic);
-            groupName = view.findViewById(R.id.tvName);
+            groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvGroupType);
             owner = view.findViewById(R.id.tvOwnedBy);

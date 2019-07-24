@@ -15,13 +15,13 @@
         android:layout_marginLeft="2dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tvName"
+        app:layout_constraintEnd_toStartOf="@+id/tvDisplayname"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <TextView
-        android:id="@+id/tvName"
+        android:id="@+id/tvDisplayname"
         android:layout_width="308dp"
         android:layout_height="25dp"
         android:layout_marginStart="4dp"
@@ -49,7 +49,7 @@
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
 
     <TextView
         android:id="@+id/tvGroupType"
@@ -92,5 +92,5 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvNumMembs"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
 </androidx.constraintlayout.widget.ConstraintLayout>

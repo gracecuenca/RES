@@ -19,8 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.fbu_res.R;
@@ -133,7 +131,7 @@ public class GroupFragment extends Fragment {
         newGroup.setImage(conversionBitmapParseFile(drawableToBitmap(getResources().getDrawable(R.drawable.ic_launcher_background))));
         ParseUser user = ParseUser.getCurrentUser();
         newGroup.addMember(user);
-        newGroup.setOwnerName(((Consumer) ParseUser.getCurrentUser()).getKeyDisplayname());
+        newGroup.setOwnerName(((Consumer) ParseUser.getCurrentUser()).getDisplayname());
         newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
         newGroup.saveInBackground(new SaveCallback() {
             @Override

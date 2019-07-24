@@ -15,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -40,6 +42,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private RecyclerView rvEvents;
     private EventAdapter adapter;
     protected ArrayList<Event> mEvents;
+    Toolbar toolbar;
 
     // needed for infinite pagination
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -92,7 +96,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // TODO -- make recycler view go to top upon refreshing
 
         // set up current user location
-        user = (Consumer) User.getCurrentUser();
+        user = (Consumer) ParseUser.getCurrentUser();
         startLocationUpdates(); // this is where the location is being updated
 
         rvEvents = (RecyclerView) view.findViewById(R.id.rvEvents);
@@ -218,7 +222,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             eventsQuery.addAscendingOrder(Event.KEY_DATE);
         } else if(option.equals("Distance")){
             eventsQuery.addAscendingOrder(Event.KEY_DISTANCE_TO_USER);
-           eventsQuery.whereLessThanOrEqualTo(KEY_DISTANCE_TO_USER, 10);
+            // this is where the limiting by distance happens
+            eventsQuery.whereLessThanOrEqualTo(KEY_DISTANCE_TO_USER, 10);
         }
         if (isRefresh) {
             clear();
