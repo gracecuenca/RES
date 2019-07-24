@@ -256,7 +256,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
-        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
     }
@@ -323,7 +323,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         // sorting events based on spinner input
         if(option.equals("Date")) eventsQuery.addDescendingOrder(Event.KEY_DATE);
-        else if(option.equals("Distance")) eventsQuery.addDescendingOrder(Event.KEY_LOCATION);
+        else if(option.equals("Distance")) eventsQuery.addAscendingOrder(Event.KEY_LOCATION);
 
         if (isRefresh) {
             clear();
