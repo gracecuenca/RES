@@ -44,6 +44,8 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.http.HEAD;
+
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 import static com.example.fbu_res.models.Event.KEY_DISTANCE_TO_USER;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
@@ -251,6 +253,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // iterate through all the events (for now) and set up distanceToUser variable for all events
         if(option.equals("Distance")) sortByDistance();
     }
+
+    //TODO remeber to uncomment
 
     public void onLocationChanged(Location location) {
         // New location has now been determined

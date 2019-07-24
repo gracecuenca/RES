@@ -57,10 +57,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         String title;
         if(fragment instanceof EventSliderSearch){
             title = EventSliderSearch.events.get(position);
+            holder.name.setText(title);
         }else{
             title = BusinessSliderSearch.businesses.get(position);
+            holder.name.setText(title);
         }
-        holder.name.setText(title);
+
     }
 
     @Override
@@ -79,19 +81,21 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         if (charText.length() == 0) {
             if(fragment instanceof EventSliderSearch){
                 EventSliderSearch.events.addAll(titles);
+                notifyDataSetChanged();
             }else{
                 BusinessSliderSearch.businesses.addAll(titles);
+                notifyDataSetChanged();
             }
-            notifyDataSetChanged();
         } else {
             for(int i = 0; i<titles.size(); i++){
                 if(titles.get(i).toLowerCase().contains(charText)) {
                     if(fragment instanceof EventSliderSearch){
                         EventSliderSearch.events.add(titles.get(i));
+                        notifyDataSetChanged();
                     }else{
                         BusinessSliderSearch.businesses.add(titles.get(i));
+                        notifyDataSetChanged();
                     }
-                    notifyDataSetChanged();
                 }
             }
         }
