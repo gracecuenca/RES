@@ -40,7 +40,6 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -244,11 +243,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                         Location location = locationResult.getLastLocation();
                         currentLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
                         user.setLocation(currentLocation);
-                        // Log.d(APP_TAG, "current location: "+currentPoint.getLatitude()+ " " +currentPoint.getLongitude());
+                        // Log.d(APP_TAG, "current location: "+currentLocation.getLatitude()+ " " +currentLocation.getLongitude());
                         onLocationChanged(location);
                     }
                 },
                 Looper.myLooper());
+        // iterate through all the events (for now) and set up distanceToUser variable for all events
+        if(option.equals("Distance")) sortByDistance();
     }
 
     public void onLocationChanged(Location location) {
@@ -259,6 +260,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        // iterate through all the events (for now) and set up distanceToUser variable for all events
+        if(option.equals("Distance")) sortByDistance();
     }
 
     public void getLastLocation() {
@@ -323,15 +326,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         // sorting events based on spinner input
         if(option.equals("Date")){
-            eventsQuery.addDescendingOrder(Event.KEY_DATE);
+            eventsQuery.addAscendingOrder(Event.KEY_DATE);
         }
         else if(option.equals("Distance")){
-            // iterate through all the events (for now) and set up distanceToUser variable for all events
-            for(int i = 0; i < mEvents.size(); i++){
-                Event event = mEvents.get(i);
-                event.put(KEY_DISTANCE_TO_USER, currentLocation.distanceInMilesTo(event.getParseGeoPoint()));
-            }
-            eventsQuery.addAscendingOrder(KEY_DISTANCE_TO_USER);
+            eventsQuery.addAscendingOrder(Event.KEY_DISTANCE_TO_USER);
         }
 
         if (isRefresh) {
@@ -340,10 +338,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
         if (isPaginating) {
             if(option.equals("Date")){
-                eventsQuery.whereLessThan(Event.KEY_DATE, mEvents.get(mEvents.size() - 1).getDate());
+                eventsQuery.whereGreaterThan(Event.KEY_DATE, mEvents.get(mEvents.size() - 1).getDate());
            }
             else if(option.equals("Distance")){
-                eventsQuery.whereGreaterThan(KEY_DISTANCE_TO_USER, mEvents.get(mEvents.size() - 1).getDistanceToUser());
+                eventsQuery.whereGreaterThan(Event.KEY_DISTANCE_TO_USER, mEvents.get(mEvents.size() - 1).getDistanceToUser());
             }
         }
         eventsQuery.findInBackground(new FindCallback<Event>() {
@@ -362,7 +360,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         clear();
         option = parent.getItemAtPosition(position).toString();
-        Log.d(APP_TAG, option);
         loadEvents(false, false, option);
     }
 
@@ -380,6 +377,18 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void addAll(List<Event> list) {
         mEvents.addAll(list);
         adapter.notifyDataSetChanged();
+    }
+
+    public void sortByDistance(){
+        for(int i = 0; i < mEvents.size(); i++){
+            // TODO -- add loading screen to show events loading when distance option is selected
+            Event event = mEvents.get(i);
+            double distance = currentLocation.distanceInMilesTo(event.getParseGeoPoint());
+            //Log.d(APP_TAG, "Event name: "+ event.getName() + " is " + distance +
+              //      " away from current user and is at "+event.getLocation().getName());
+            event.put(KEY_DISTANCE_TO_USER, distance);
+            event.saveInBackground();
+        }
     }
 
     /*
