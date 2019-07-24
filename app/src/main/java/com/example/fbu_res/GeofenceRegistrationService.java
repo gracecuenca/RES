@@ -9,7 +9,7 @@ import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.List;
 
-import static com.example.fbu_res.fragments.HomeFragment.GEOFENCE_ID_STAN_UNI;
+//import static com.example.fbu_res.fragments.HomeFragment.GEOFENCE_ID_STAN_UNI;
 
 public class GeofenceRegistrationService extends IntentService {
 
@@ -28,11 +28,13 @@ public class GeofenceRegistrationService extends IntentService {
             int transaction = geofencingEvent.getGeofenceTransition();
             List<Geofence> geofences = geofencingEvent.getTriggeringGeofences();
             Geofence geofence = geofences.get(0);
+            /*
             if (transaction == Geofence.GEOFENCE_TRANSITION_ENTER && geofence.getRequestId().equals(GEOFENCE_ID_STAN_UNI)) {
                 Log.d(TAG, "You are inside Stanford University");
             } else {
                 Log.d(TAG, "You are outside Stanford University");
             }
+            */
         }
     }
 }
