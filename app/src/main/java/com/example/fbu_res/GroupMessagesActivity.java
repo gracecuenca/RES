@@ -31,7 +31,6 @@ import com.bumptech.glide.Glide;
 import com.example.fbu_res.adapters.ChatAdapter;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Message;
-import com.example.fbu_res.models.User;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;

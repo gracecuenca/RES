@@ -27,7 +27,6 @@ import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
-import com.example.fbu_res.models.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
