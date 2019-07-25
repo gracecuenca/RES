@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.fbu_res.fragments.GroupFragment;
 import com.example.fbu_res.fragments.HomeFragment;
@@ -25,6 +26,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Consumer")){
+            Toast.makeText(this, "signed in as a consumer", Toast.LENGTH_SHORT).show();
+        }else if (((Consumer)ParseUser.getCurrentUser()).getType().equals("Business")){
+            Toast.makeText(this, "signed in as a business", Toast.LENGTH_SHORT).show();
+        }
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
