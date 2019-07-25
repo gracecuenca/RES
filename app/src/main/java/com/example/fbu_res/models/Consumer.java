@@ -96,8 +96,8 @@ public class Consumer extends ParseUser {
         return getParseObject(KEY_ADDRESS);
     }
 
-    public void setAddress(String timestamp) {
-        put(KEY_ADDRESS, timestamp);
+    public void setAddress(Address address) {
+        put(KEY_ADDRESS, address);
     }
 
     private static int lastPostId = 0;

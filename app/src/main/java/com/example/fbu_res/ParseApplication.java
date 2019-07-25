@@ -30,7 +30,7 @@ public class ParseApplication extends Application {
         builder.networkInterceptors().add(httpLoggingInterceptor);
 
         ParseUser.registerSubclass(Consumer.class);
-        ParseUser.registerSubclass(Business.class);
+        // ParseUser.registerSubclass(Business.class);
         ParseUser.registerSubclass(Event.class);
         ParseUser.registerSubclass(Group.class);
         ParseUser.registerSubclass(Categories.class);

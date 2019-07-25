@@ -45,6 +45,7 @@ public class ConsumerSignUp extends AppCompatActivity {
         user.setEmail(email);
         user.setDisplayname(name);
         user.setPhonenumber(phoneNum);
+        user.setType("Consumer");
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {

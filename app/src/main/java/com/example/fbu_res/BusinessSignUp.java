@@ -14,6 +14,8 @@ import com.example.fbu_res.models.Address;
 import com.example.fbu_res.models.Business;
 import com.example.fbu_res.models.Consumer;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 public class BusinessSignUp extends AppCompatActivity {
@@ -21,7 +23,7 @@ public class BusinessSignUp extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_consumer_sign);
+        setContentView(R.layout.activity_business_sign);
 
         final EditText etName = findViewById(R.id.etName);
         final EditText etUsername = findViewById(R.id.etUsername);
@@ -40,33 +42,38 @@ public class BusinessSignUp extends AppCompatActivity {
         signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUp(etName.getText().toString(), etUsername.getText().toString(),
-                        etPassword.getText().toString(), etEmail.getText().toString()
-                        , etPhoneNum.getText().toString(), etAdd1.getText().toString()
-                       , etAdd2.getText().toString(), etZipcode.getText().toString()
-                        , etCity.getText().toString(), etState.getText().toString()
-                        , etCountry.getText().toString());
+
+                final Address address = new Address();
+                address.setAddressline1(etAdd1.getText().toString());
+                address.setAddressline2(etAdd2.getText().toString());
+                address.setZipcode(etZipcode.getText().toString());
+                address.setCity(etCity.getText().toString());
+                address.setState(etState.getText().toString());
+                address.setCountry(etCountry.getText().toString());
+                address.setName(etName.getText().toString());
+                address.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        signUp(etName.getText().toString(), etUsername.getText().toString()
+                                , etPassword.getText().toString(), etEmail.getText().toString()
+                                , etPhoneNum.getText().toString(), address);
+                    }
+                });
             }
         });
     }
 
     private void signUp(String name, String username, String password, String email, String phoneNum
-                    , String add1, String add2, String zipcode, String city, String state, String country) {
-        Business user = new Business();
+                    , Address address) {
+        Consumer user = new Consumer();
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
         user.setDisplayname(name);
         user.setPhonenumber(phoneNum);
-        Address address = new Address();
-        address.setAddressline1(add1);
-        address.setAddressline2(add2);
-        address.setZipcode(zipcode);
-        address.setCity(city);
-        address.setState(state);
-        address.setCountry(country);
-        address.setName(name);
         user.setAddress(address);
+        user.setType("Business");
+        // user.saveInBackground();
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
