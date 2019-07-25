@@ -3,6 +3,7 @@ package com.example.fbu_res;
 import android.app.Application;
 
 import com.example.fbu_res.models.Address;
+import com.example.fbu_res.models.Business;
 import com.example.fbu_res.models.Categories;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
@@ -29,6 +30,7 @@ public class ParseApplication extends Application {
         builder.networkInterceptors().add(httpLoggingInterceptor);
 
         ParseUser.registerSubclass(Consumer.class);
+        ParseUser.registerSubclass(Business.class);
         ParseUser.registerSubclass(Event.class);
         ParseUser.registerSubclass(Group.class);
         ParseUser.registerSubclass(Categories.class);

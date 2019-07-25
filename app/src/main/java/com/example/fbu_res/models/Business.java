@@ -62,8 +62,8 @@ public class Business extends ParseUser {
         return getParseObject(KEY_ADDRESS);
     }
 
-    public void setAddress(String timestamp) {
-        put(KEY_ADDRESS, timestamp);
+    public void setAddress(Address address) {
+        put(KEY_ADDRESS, address);
     }
 
     public ParseFile getProfileImg() {

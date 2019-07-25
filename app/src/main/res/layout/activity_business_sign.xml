@@ -8,10 +8,76 @@
     tools:context=".BusinessSignUp">
 
     <EditText
+        android:id="@+id/etCity"
+        android:layout_width="232dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="5dp"
+        android:hint="City"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etZipcode" />
+
+    <EditText
+        android:id="@+id/etZipcode"
+        android:layout_width="232dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="5dp"
+        android:hint="Zipcode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAdd2" />
+
+    <EditText
+        android:id="@+id/etCountry"
+        android:layout_width="232dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="5dp"
+        android:hint="Country"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etState" />
+
+    <EditText
+        android:id="@+id/etState"
+        android:layout_width="232dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="5dp"
+        android:hint="State"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etCity" />
+
+    <EditText
+        android:id="@+id/etAdd2"
+        android:layout_width="232dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="5dp"
+        android:hint="Address Line 2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAdd1" />
+
+    <EditText
+        android:id="@+id/etAdd1"
+        android:layout_width="232dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="5dp"
+        android:hint="Address Line 1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+
+    <EditText
         android:id="@+id/etUsername"
         android:layout_width="232dp"
         android:layout_height="47dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:hint="Username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -24,19 +90,20 @@
         android:layout_height="47dp"
         android:layout_marginStart="90dp"
         android:layout_marginLeft="90dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="89dp"
         android:layout_marginRight="89dp"
         android:hint="Phone Number"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/etCountry" />
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="232dp"
         android:layout_height="47dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="5dp"
         android:hint="Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
@@ -49,11 +116,12 @@
         android:layout_height="47dp"
         android:layout_marginStart="90dp"
         android:layout_marginLeft="90dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="89dp"
         android:layout_marginRight="89dp"
         android:hint="Password"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etUsername" />
 
@@ -63,11 +131,12 @@
         android:layout_height="47dp"
         android:layout_marginStart="90dp"
         android:layout_marginLeft="90dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="89dp"
         android:layout_marginRight="89dp"
-        android:hint="Name"
+        android:hint="Business Name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,12 +146,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="162dp"
         android:layout_marginLeft="162dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="162dp"
         android:layout_marginRight="162dp"
+        android:layout_marginBottom="16dp"
         android:text="Sign Up!"
         android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPhoneNum" />
 
