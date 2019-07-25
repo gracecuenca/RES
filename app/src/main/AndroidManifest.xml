@@ -36,15 +36,6 @@
         <meta-data android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
 
-        <service android:name=".GeofenceRegistrationService"/>
-
-        <receiver android:name=".GeofenceBroadcastReceiver"  android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
-            </intent-filter>
-        </receiver>
-
     </application>
 
 </manifest>
