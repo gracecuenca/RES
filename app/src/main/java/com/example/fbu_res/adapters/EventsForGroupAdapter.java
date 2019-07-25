@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
+import com.google.common.base.MoreObjects;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -90,6 +92,14 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             Glide.with(vh1.itemView.getContext()).load(image.getUrl()).into(vh1.ivImage);
         }
 
+        vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Item has been added to calendar",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void configureViewHolder2(final ViewHolder2 vh1, int position) {
@@ -156,6 +166,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         private TextView tvTitle;
         private TextView tvDescription;
         private TextView tvLocation;
+        private Button btnAddToCalendar;
 
 
         public ViewHolder1(View v) {
@@ -165,7 +176,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             tvTitle = (TextView) v.findViewById(R.id.tvTitle);
             tvDescription = (TextView) v.findViewById(R.id.tvDescription);
             tvLocation = (TextView) v.findViewById(R.id.tvLocation);
-
+            btnAddToCalendar = (Button) v.findViewById(R.id.btnAddToCalendar);
         }
     }
 
