@@ -59,7 +59,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 viewHolder = new ViewHolder1(v1);
                 break;
             case GROUPS:
-                View v2 = inflater.inflate(R.layout.item_group, viewGroup, false);
+                View v2 = inflater.inflate(R.layout.item_event_group, viewGroup, false);
                 viewHolder = new ViewHolder2(v2);
                 break;
             default:
@@ -147,11 +147,11 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             public void onClick(View v) {
                 group.setNumMembs(group.getNumMembs() + 1);
                 group.addMember(ParseUser.getCurrentUser());
-                objects.remove(group);
-                notifyDataSetChanged();
                 Intent intent = new Intent(vh1.itemView.getContext(), GroupMessagesActivity.class);
                 intent.putExtra("channel_name", group.getChannelName());
                 ((Activity) vh1.itemView.getContext()).startActivityForResult(intent, REQUEST_CODE);
+                objects.remove(group);
+                notifyDataSetChanged();
             }
         });
     }

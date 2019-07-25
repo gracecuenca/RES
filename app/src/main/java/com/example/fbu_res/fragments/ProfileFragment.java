@@ -69,8 +69,8 @@ public class ProfileFragment extends Fragment {
         // showing the profile of the user
         ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
         tvDisplayname = (TextView) view.findViewById(R.id.tvDisplayname);
-        if(user.getProfileImage() != null){
-            Glide.with(getContext()).load(user.getProfileImage().getUrl()).into(ivProfileImage);
+        if(user.getProfileImg() != null){
+            Glide.with(getContext()).load(user.getProfileImg().getUrl()).into(ivProfileImage);
         }
         tvDisplayname.setText(user.getDisplayname());
 

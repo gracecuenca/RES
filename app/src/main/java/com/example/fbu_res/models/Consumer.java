@@ -24,7 +24,7 @@ public class Consumer extends ParseUser {
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_PHONENUMBER = "phoneNumber";
     public static final String KEY_LOCATION = "userLocation";
-    public static final String KEY_IMAGE = "profile_img";
+    public static final String KEY_PROFILE_IMG = "profile_img";
     public static final String KEY_INTERESTED_EVENTS = "interestedEvents";
 
     public void setInterestedEvents(Event event){
@@ -37,6 +37,7 @@ public class Consumer extends ParseUser {
         ParseRelation interestedEvents = getRelation(KEY_INTERESTED_EVENTS);
         return interestedEvents;
     }
+
 
     public void setLocation(ParseGeoPoint geoPoint){
         put(KEY_LOCATION, geoPoint);
@@ -74,14 +75,6 @@ public class Consumer extends ParseUser {
         put(KEY_INTERESTS, image);
     }
 
-    public ParseFile getProfileImage(){
-        return getParseFile(KEY_IMAGE);
-    }
-
-    public void setProfileImage(ParseFile image){
-        put(KEY_IMAGE, image);
-    }
-
     public ArrayList<String> getInterests() {
         JSONArray arr = new JSONArray();
         ArrayList<String> list = new ArrayList<String>();
@@ -108,4 +101,12 @@ public class Consumer extends ParseUser {
 
     private static int lastPostId = 0;
 
+
+    public ParseFile getProfileImg() {
+        return getParseFile(KEY_PROFILE_IMG);
+    }
+
+    public void setProfileImg(ParseFile profileImg){
+        put(KEY_PROFILE_IMG, profileImg);
+    }
 }
