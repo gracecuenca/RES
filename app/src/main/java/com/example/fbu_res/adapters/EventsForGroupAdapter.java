@@ -3,6 +3,7 @@ package com.example.fbu_res.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,7 +23,10 @@ import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
 import com.google.common.base.MoreObjects;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
@@ -36,7 +41,6 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     int REQUEST_CODE = 47;
     private final int DETAILS = 0, GROUPS = 1;
     Event event;
-
 
     public EventsForGroupAdapter(List<Object> objects, Event event){
         this.objects = objects;
@@ -83,7 +87,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 break;
         }    }
 
-    private void configureViewHolder1(ViewHolder1 vh1, int position) {
+    private void configureViewHolder1(final ViewHolder1 vh1, int position) {
         // loading the information from the Event object into the view
         vh1.tvTitle.setText(event.getName());
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -102,6 +106,24 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 currentUser.setInterestedEvents(event);
                 Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary" +
                                 "under profile", Toast.LENGTH_SHORT).show();
+                vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+            }
+        });
+
+        ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
+        query.whereEqualTo(Consumer.KEY_INTERESTED_EVENTS, event);
+        query.findInBackground(new FindCallback<Consumer>() {
+            @Override
+            public void done(List objects, ParseException e) {
+                int size = objects.size();
+                if(size == 1) {
+                    vh1.btnAddToCalendar.setClickable(false);
+                    vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                }
+                else if(size == 0) {
+                    vh1.btnAddToCalendar.setClickable(true);
+                    vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                }
             }
         });
 
@@ -182,6 +204,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             tvDescription = (TextView) v.findViewById(R.id.tvDescription);
             tvLocation = (TextView) v.findViewById(R.id.tvLocation);
             btnAddToCalendar = (Button) v.findViewById(R.id.btnAddToCalendar);
+
         }
     }
 

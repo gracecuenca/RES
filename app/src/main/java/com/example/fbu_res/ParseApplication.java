@@ -7,7 +7,6 @@ import com.example.fbu_res.models.Categories;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
-import com.example.fbu_res.models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -33,7 +32,6 @@ public class ParseApplication extends Application {
         ParseUser.registerSubclass(Event.class);
         ParseUser.registerSubclass(Group.class);
         ParseUser.registerSubclass(Categories.class);
-        // ParseUser.registerSubclass(User.class);
         ParseUser.registerSubclass(Address.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
