@@ -15,6 +15,8 @@ public class Group extends ParseObject {
     public static final String KEY_CHANNEL_NAME = "channel_name";
     public static final String KEY_MEMBERS = "members";
     public static final String KEY_OWNER_NAME = "owner_name";
+    public static final String KEY_ASSOCIATED_EVENT = "associated_event";
+
 
 
     public String getName() {
@@ -82,4 +84,11 @@ public class Group extends ParseObject {
     public void setOwnerName(String name) {
         put(KEY_OWNER_NAME, name);
     }
+
+
+    public void setAssociatedEvent(Event event){
+        put(KEY_ASSOCIATED_EVENT, event);
+    }
+
+
 }

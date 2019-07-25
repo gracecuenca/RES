@@ -2,7 +2,6 @@ package com.example.fbu_res.models;
 
 import android.util.Log;
 
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -14,31 +13,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @ParseClassName("_User")
-public class Consumer extends ParseUser {
+public class Business extends ParseUser {
     public static final String KEY_DISPLAYNAME = "displayName";
     public static final String KEY_EMAIL = "email";
-    public static final String KEY_INTERESTS = "interests";
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_PHONENUMBER = "phoneNumber";
     public static final String KEY_LOCATION = "userLocation";
     public static final String KEY_PROFILE_IMG = "profile_img";
-    public static final String KEY_INTERESTED_EVENTS = "interestedEvents";
     public static final String KEY_TYPE = "type";
-
-    public void setInterestedEvents(Event event){
-        ParseRelation relation = getRelation(KEY_INTERESTED_EVENTS);
-        relation.add(event);
-        saveInBackground();
-    }
-
-    public ParseRelation getInterestedEvents(){
-        ParseRelation interestedEvents = getRelation(KEY_INTERESTED_EVENTS);
-        return interestedEvents;
-    }
-
 
     public void setLocation(ParseGeoPoint geoPoint){
         put(KEY_LOCATION, geoPoint);
@@ -72,24 +56,7 @@ public class Consumer extends ParseUser {
         return getString(KEY_PHONENUMBER);
     }
 
-    public void setInterests(ParseFile image) {
-        put(KEY_INTERESTS, image);
-    }
-
-    public ArrayList<String> getInterests() {
-        JSONArray arr = new JSONArray();
-        ArrayList<String> list = new ArrayList<String>();
-        try {
-            for (int i = 0; i < arr.length(); i++) {
-                list.add(arr.getJSONObject(i).getString("name"));
-            }
-        } catch (JSONException e) {
-            Log.d("Consumer Intrests", "Couldn't retrieve list of interests");
-        }
-        return list;
-    }
-
-    public Consumer() {
+    public Business() {
     }
 
     public ParseObject getAddress() {
@@ -99,9 +66,6 @@ public class Consumer extends ParseUser {
     public void setAddress(Address address) {
         put(KEY_ADDRESS, address);
     }
-
-    private static int lastPostId = 0;
-
 
     public ParseFile getProfileImg() {
         return getParseFile(KEY_PROFILE_IMG);
@@ -118,5 +82,4 @@ public class Consumer extends ParseUser {
     public String getType() {
         return getString(KEY_TYPE);
     }
-
 }

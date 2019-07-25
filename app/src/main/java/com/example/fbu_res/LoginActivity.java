@@ -63,32 +63,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /*
-    private void signUp(String username, String password){
-        // Create the ParseUser
-        ParseUser user = new ParseUser();
-        // Set core properties
-        user.setUsername(username);
-        user.setPassword(password);
-        // Invoke signUpInBackground
-        user.signUpInBackground(new SignUpCallback() {
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("LoginActivity", "Sign up successful");
-                    final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Log.e("LoginActivity", "Sign up failed");
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Account with this username already exists", Toast.LENGTH_LONG).show();
-
-                }
-            }
-        });
-    }
-    */
-
     private void login(String username, String password){
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override

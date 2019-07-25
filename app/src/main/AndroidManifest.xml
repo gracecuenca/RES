@@ -20,6 +20,7 @@
         <activity android:name=".GroupMessagesActivity"></activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ConsumerSignUp" />
+        <activity android:name=".BusinessSignUp" />
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity android:name=".HomeActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -35,15 +36,6 @@
 
         <meta-data android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_api_key" />
-
-        <service android:name=".GeofenceRegistrationService"/>
-
-        <receiver android:name=".GeofenceBroadcastReceiver"  android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
-            </intent-filter>
-        </receiver>
 
     </application>
 
