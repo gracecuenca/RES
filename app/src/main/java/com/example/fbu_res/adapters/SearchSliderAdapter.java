@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.fbu_res.R;
 import com.example.fbu_res.fragments.BusinessSliderSearch;
@@ -16,7 +17,7 @@ import com.example.fbu_res.fragments.InterestGroupFragment;
 import com.example.fbu_res.fragments.MyGroupsFragment;
 import com.example.fbu_res.fragments.SearchSlider;
 
-public class SearchSliderAdapter extends FragmentPagerAdapter {
+public class SearchSliderAdapter extends FragmentStatePagerAdapter {
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Events", "Businesses"};
     private Context context;

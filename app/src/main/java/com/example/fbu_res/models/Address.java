@@ -60,8 +60,8 @@ public class Address extends ParseObject {
         put(KEY_STATE, state);
     }
 
-    public int getZipcode() {
-        return getNumber(KEY_ZIPCODE).intValue();
+    public String getZipcode() {
+        return getString(KEY_ZIPCODE);
     }
 
     public void setZipcode(String address) {

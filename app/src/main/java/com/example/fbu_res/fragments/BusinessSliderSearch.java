@@ -36,7 +36,7 @@ public class BusinessSliderSearch extends Fragment {
         businesses.add("Starbucks");
         businesses.add("Jamba Juice");
         businesses.add("Pressed Juicery");
-        adapter = new SearchAdapter(getContext(), new BusinessSliderSearch());
+        adapter = new SearchAdapter(new BusinessSliderSearch());
         businessRv.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         businessRv.setLayoutManager(manager);
