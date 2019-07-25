@@ -3,6 +3,7 @@ package com.example.fbu_res.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
+import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
 import com.google.common.base.MoreObjects;
 import com.parse.ParseFile;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.text.DateFormat;
@@ -95,8 +98,10 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Item has been added to calendar",
-                        Toast.LENGTH_SHORT).show();
+                Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
+                currentUser.setInterestedEvents(event);
+                Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary" +
+                                "under profile", Toast.LENGTH_SHORT).show();
             }
         });
 
