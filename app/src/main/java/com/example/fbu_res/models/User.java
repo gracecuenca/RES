@@ -15,4 +15,6 @@ public class User extends ParseUser{
     public ParseGeoPoint getLocation(){
         return getParseGeoPoint(KEY_LOCATION);
     }
+
+
 }

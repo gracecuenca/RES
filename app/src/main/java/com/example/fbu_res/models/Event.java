@@ -50,6 +50,7 @@ public class Event extends ParseObject {
     }
 
     public double getDistanceToUser(){
+        if(getNumber(KEY_DISTANCE_TO_USER) == null) return 0.0;
         return (double) getNumber(KEY_DISTANCE_TO_USER);
     }
 

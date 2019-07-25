@@ -3,27 +3,30 @@ package com.example.fbu_res.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
+import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
+import com.google.common.base.MoreObjects;
 import com.parse.ParseFile;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -83,7 +86,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private void configureViewHolder1(ViewHolder1 vh1, int position) {
         // loading the information from the Event object into the view
         vh1.tvTitle.setText(event.getName());
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
         vh1.tvDate.setText(dateFormat.format(event.getDate()));
         vh1.tvLocation.setText(event.getLocationString());
         vh1.tvDescription.setText(event.getDescription());
@@ -91,6 +94,16 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if(image != null){
             Glide.with(vh1.itemView.getContext()).load(image.getUrl()).into(vh1.ivImage);
         }
+
+        vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
+                currentUser.setInterestedEvents(event);
+                Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary" +
+                                "under profile", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -143,7 +156,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public ViewHolder2(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivGroupPic);
-            groupName = view.findViewById(R.id.tvName);
+            groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvGroupType);
             owner = view.findViewById(R.id.tvOwnedBy);
@@ -158,6 +171,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         private TextView tvTitle;
         private TextView tvDescription;
         private TextView tvLocation;
+        private Button btnAddToCalendar;
 
 
         public ViewHolder1(View v) {
@@ -167,7 +181,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             tvTitle = (TextView) v.findViewById(R.id.tvTitle);
             tvDescription = (TextView) v.findViewById(R.id.tvDescription);
             tvLocation = (TextView) v.findViewById(R.id.tvLocation);
-
+            btnAddToCalendar = (Button) v.findViewById(R.id.btnAddToCalendar);
         }
     }
 

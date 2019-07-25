@@ -85,7 +85,7 @@ public class InterestGroupAdapter extends RecyclerView.Adapter<InterestGroupAdap
         public ViewHolder(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivGroupPic);
-            groupName = view.findViewById(R.id.tvName);
+            groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvGroupType);
             owner = view.findViewById(R.id.tvOwnedBy);

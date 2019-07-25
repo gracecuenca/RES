@@ -54,24 +54,14 @@ public class EventDetailsActivity extends AppCompatActivity {
     List<Object> groups;
     DatabaseReference RootRef;
 
-
     // event attributes
-    private ImageView ivImage;
-    private TextView tvDate;
-    private TextView tvTitle;
-    private TextView tvDescription;
-    private TextView tvLocation;
-    RecyclerView recyclerView;
     EventsForGroupAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
-
         bindDataToAdapter();
-
-
     }
 
     private void bindDataToAdapter() {

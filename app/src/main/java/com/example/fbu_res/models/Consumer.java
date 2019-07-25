@@ -7,6 +7,7 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
@@ -24,6 +25,19 @@ public class Consumer extends ParseUser {
     public static final String KEY_PHONENUMBER = "phoneNumber";
     public static final String KEY_LOCATION = "userLocation";
     public static final String KEY_PROFILE_IMG = "profile_img";
+    public static final String KEY_INTERESTED_EVENTS = "interestedEvents";
+
+    public void setInterestedEvents(Event event){
+        ParseRelation relation = getRelation(KEY_INTERESTED_EVENTS);
+        relation.add(event);
+        saveInBackground();
+    }
+
+    public ParseRelation getInterestedEvents(){
+        ParseRelation interestedEvents = getRelation(KEY_INTERESTED_EVENTS);
+        return interestedEvents;
+    }
+
 
     public void setLocation(ParseGeoPoint geoPoint){
         put(KEY_LOCATION, geoPoint);
@@ -33,7 +47,7 @@ public class Consumer extends ParseUser {
         return getParseGeoPoint(KEY_LOCATION);
     }
 
-    public String getKeyDisplayname() {
+    public String getDisplayname() {
         return getString(KEY_DISPLAYNAME);
     }
 
