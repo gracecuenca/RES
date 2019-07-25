@@ -41,9 +41,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     int REQUEST_CODE = 47;
     private final int DETAILS = 0, GROUPS = 1;
     Event event;
-    int size = 0;
-
-
+    
     public EventsForGroupAdapter(List<Object> objects, Event event){
         this.objects = objects;
         this.event = event;
