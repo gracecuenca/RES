@@ -20,6 +20,7 @@
         <activity android:name=".GroupMessagesActivity"></activity>
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ConsumerSignUp" />
+        <activity android:name=".BusinessSignUp" />
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity android:name=".HomeActivity"
             android:windowSoftInputMode="adjustPan" />

@@ -11,7 +11,10 @@ import com.example.fbu_res.fragments.GroupFragment;
 import com.example.fbu_res.fragments.HomeFragment;
 import com.example.fbu_res.fragments.ProfileFragment;
 import com.example.fbu_res.fragments.SearchFragment;
+import com.example.fbu_res.models.Business;
+import com.example.fbu_res.models.Consumer;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -37,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
                         fragment = new SearchFragment();
                         break;
                     case R.id.action_groups:
+                        if(ParseUser.getCurrentUser().get("type").equals(Consumer.class.toString()))
                         fragment = new GroupFragment();
                         break;
                     case R.id.action_profile:

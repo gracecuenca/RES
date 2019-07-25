@@ -22,6 +22,7 @@ public class Business extends ParseUser {
     public static final String KEY_PHONENUMBER = "phoneNumber";
     public static final String KEY_LOCATION = "userLocation";
     public static final String KEY_PROFILE_IMG = "profile_img";
+    public static final String KEY_TYPE = "type";
 
     public void setLocation(ParseGeoPoint geoPoint){
         put(KEY_LOCATION, geoPoint);
@@ -72,5 +73,13 @@ public class Business extends ParseUser {
 
     public void setProfileImg(ParseFile profileImg){
         put(KEY_PROFILE_IMG, profileImg);
+    }
+
+    public void setType(String type) {
+        put(KEY_TYPE, type);
+    }
+
+    public String getType() {
+        return getString(KEY_TYPE);
     }
 }
