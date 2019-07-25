@@ -22,7 +22,7 @@ import java.util.List;
 
 public class GroupFragmentPagerAdapter extends FragmentStatePagerAdapter {
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "My Groups", "For Events", "For Interests" };
+    private String tabTitles[] = new String[] { "My Groups", "Interest Groups", "Event Groups" };
     List<Fragment> mFragmentList = new ArrayList<>();
     List<String> mFragmentTitleList = new ArrayList<>();
 

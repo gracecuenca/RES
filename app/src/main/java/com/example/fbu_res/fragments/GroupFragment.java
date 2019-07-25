@@ -46,7 +46,6 @@ import java.sql.Timestamp;
 @ParseClassName("Group")
 public class GroupFragment extends Fragment {
 
-    PubNub mPubnub_DataStream;
     DatabaseReference RootRef;
     int RESULT_OK = 291;
     int REQUEST_CODE = 47;
@@ -133,6 +132,7 @@ public class GroupFragment extends Fragment {
         newGroup.setImage(conversionBitmapParseFile(drawableToBitmap(getResources().getDrawable(R.drawable.ic_launcher_background))));
         ParseUser user = ParseUser.getCurrentUser();
         newGroup.addMember(user);
+        newGroup.setType("Interests");
         newGroup.setOwnerName(((Consumer) ParseUser.getCurrentUser()).getKeyDisplayname());
         newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
         newGroup.saveInBackground(new SaveCallback() {
