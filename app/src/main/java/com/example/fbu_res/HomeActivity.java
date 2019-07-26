@@ -29,6 +29,10 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
+
+
+
+
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

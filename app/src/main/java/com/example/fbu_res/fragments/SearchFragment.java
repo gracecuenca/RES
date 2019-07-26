@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -40,6 +41,7 @@ import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Categories;
 import com.example.fbu_res.models.Categories;
 import com.example.fbu_res.models.Event;
+import com.example.fbu_res.util.YelpClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,9 +58,18 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.yelp.fusion.client.connection.YelpFusionApi;
+import com.yelp.fusion.client.connection.YelpFusionApiFactory;
+import com.yelp.fusion.client.models.SearchResponse;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class SearchFragment extends Fragment{
     RecyclerView eventsRv;
@@ -69,6 +80,7 @@ public class SearchFragment extends Fragment{
     ArrayList<Categories> categoriesArrayList;
     RecyclerView categoriesRV;
     Toolbar toolbar;
+    YelpClient client;
 
     //GoogleMap mgoogleMap;
     //MapView mMapView;
@@ -109,6 +121,7 @@ public class SearchFragment extends Fragment{
 
         queryEvents();
         queryCategories();
+
         /*
         mMapView = view.findViewById(R.id.mapView2);
         if (mMapView != null) {
@@ -197,10 +210,4 @@ public class SearchFragment extends Fragment{
 
     }
     */
-
-
-
-
-
-
 }
