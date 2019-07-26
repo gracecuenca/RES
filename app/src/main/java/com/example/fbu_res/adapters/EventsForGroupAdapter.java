@@ -24,8 +24,10 @@ import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
 import com.google.common.base.MoreObjects;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -140,8 +142,15 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         vh1.numMembers.setText(String.valueOf(group.getNumMembs()) +
                 (group.getNumMembs() > 1 ? " members" : " member"));
 
-        vh1.owner.setText("Owned by: " + group.getOwner().getUsername());
+        ParseUser owner = group.getOwner();
+        owner.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                String username = (String) object.get("username");
+                vh1.owner.setText("Owned by: " + username);
 
+            }
+        });
         vh1.join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

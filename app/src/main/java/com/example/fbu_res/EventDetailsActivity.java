@@ -32,8 +32,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -136,7 +138,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                         }
                     }
                 });
-        Group newGroup = new Group();
+        final Group newGroup = new Group();
         newGroup.setName(name);
         newGroup.setNumMembs(1);
         newGroup.setImage(conversionBitmapParseFile(drawableToBitmap(getResources().getDrawable(R.drawable.ic_launcher_background))));
@@ -144,16 +146,23 @@ public class EventDetailsActivity extends AppCompatActivity {
         newGroup.addMember(user);
         newGroup.setType("Event");
         newGroup.setAssociatedEvent(event);
-        newGroup.setOwner(ParseUser.getCurrentUser());
-        newGroup.setOfficial(event.getOwner().equals(ParseUser.getCurrentUser()));
-        newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
-        newGroup.saveInBackground(new SaveCallback() {
+        newGroup.setOwner(user);
+        ParseUser owner = event.getOwner();
+        owner.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
             @Override
-            public void done(ParseException e) {
-                Log.d("Group Fragment", "Saved succesfully");
+            public void done(ParseUser object, ParseException e) {
+                newGroup.setOfficial(object.equals(ParseUser.getCurrentUser()));
+                newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
+                newGroup.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Log.d("Group Fragment", "Saved succesfully");
+                    }
+                });
+                groups.add(newGroup);
             }
         });
-        groups.add(newGroup);
+
         adapter.notifyDataSetChanged();
     }
 
