@@ -16,6 +16,8 @@ public class Group extends ParseObject {
     public static final String KEY_MEMBERS = "members";
     public static final String KEY_OWNER = "owner";
     public static final String KEY_ASSOCIATED_EVENT = "associated_event";
+    public static final String KEY_OFFICIAL = "official";
+
 
 
 
@@ -88,6 +90,14 @@ public class Group extends ParseObject {
 
     public void setOwner(ParseUser user) {
         put(KEY_OWNER, user);
+    }
+
+    public void setOfficial(Boolean official) {
+        put(KEY_OFFICIAL, official);
+    }
+
+    public Boolean getOfficial(){
+        return getBoolean(KEY_OFFICIAL);
     }
 
 }

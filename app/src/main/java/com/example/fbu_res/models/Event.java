@@ -26,6 +26,8 @@ public class Event extends ParseObject {
     public static final String KEY_TYPE = "type";
     public static final String KEY_DES = "Description";
     public static final String KEY_DISTANCE_TO_USER = "distanceToUser";
+    public static final String KEY_OWNER = "owner";
+
 
     public String getName() {
         return getString(KEY_NAME);
@@ -101,5 +103,13 @@ public class Event extends ParseObject {
         }
 
         return events;
+    }
+
+    public void setOwner(Consumer user){
+        put(KEY_OWNER, user);
+    }
+
+    public ParseUser getOwner(){
+        return (ParseUser) getParseUser(KEY_OWNER);
     }
 }
