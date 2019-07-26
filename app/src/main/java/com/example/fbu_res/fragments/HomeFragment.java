@@ -53,6 +53,7 @@ import retrofit2.http.HEAD;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 import static com.example.fbu_res.models.Event.KEY_DISTANCE_TO_USER;
+import static com.example.fbu_res.models.Event.KEY_OWNER;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -62,7 +63,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private EventAdapter adapter;
     protected ArrayList<Event> mEvents;
     private Button btnAddEvent;
-    Toolbar toolbar;
 
     // needed for infinite pagination
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -96,7 +96,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         super.onViewCreated(view, savedInstanceState);
 
         // TODO -- customized toolbar color and logo
-        // TODO -- make recycler view go to top upon refreshing
 
         // set up current user location
         user = (Consumer) ParseUser.getCurrentUser();
@@ -154,7 +153,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // make the add event button visible only if the current user is a business
         btnAddEvent = (Button) view.findViewById(R.id.btnAddEvent);
 
-        // checking to see if user logged in
+        // if user is logged in
+        // consumers: cannot create events
+        // businesses: can create events
         if(user != null) {
             if (user.getType().equals("Consumer")) btnAddEvent.setVisibility(View.GONE);
             else if (user.getType().equals("Business")) {
@@ -237,7 +238,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
     }
 
+    // this method will query differently based on whether
     public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option) {
+
+        // loading events for a consumer
+        Consumer user = (Consumer) ParseUser.getCurrentUser();
+
         ParseQuery<Event> eventsQuery = new ParseQuery<Event>(Event.class);
         eventsQuery.setLimit(10);
 
@@ -248,18 +254,21 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             // this is where the limiting by distance happens
             eventsQuery.whereLessThanOrEqualTo(KEY_DISTANCE_TO_USER, 10);
         }
+
         if (isRefresh) {
             clear();
             swipeContainer.setRefreshing(false); // signal refresh is completed
         }
-
         if (isPaginating) {
             if(option.equals("Date")){
                 eventsQuery.whereGreaterThan(Event.KEY_DATE, mEvents.get(mEvents.size() - 1).getDate());
-           } else if(option.equals("Distance")){
+            } else if(option.equals("Distance")){
                 eventsQuery.whereGreaterThan(Event.KEY_DISTANCE_TO_USER, mEvents.get(mEvents.size() - 1).getDistanceToUser());
             }
         }
+
+        // businesses will only see the events that they've created
+        if(user.getType().equals("Business")){ eventsQuery.whereEqualTo(Event.KEY_OWNER, user); }
 
         eventsQuery.findInBackground(new FindCallback<Event>() {
             @Override
