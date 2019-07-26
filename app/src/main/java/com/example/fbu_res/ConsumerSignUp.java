@@ -54,6 +54,7 @@ public class ConsumerSignUp extends AppCompatActivity {
         user.setPhonenumber(phoneNum);
         user.setType("Consumer");
         user.setProfileImg(conversionBitmapParseFile(drawableToBitmap(getResources().getDrawable(R.drawable.ic_defaultprofilepic))));
+        user.saveInBackground();
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {

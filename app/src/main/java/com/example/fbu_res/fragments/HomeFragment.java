@@ -1,6 +1,7 @@
 package com.example.fbu_res.fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.fbu_res.AddEventActivity;
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
@@ -58,6 +61,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private RecyclerView rvEvents;
     private EventAdapter adapter;
     protected ArrayList<Event> mEvents;
+    private Button btnAddEvent;
     Toolbar toolbar;
 
     // needed for infinite pagination
@@ -146,6 +150,26 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         spinner.setAdapter(spinnerAdapter);
 
         spinner.setOnItemSelectedListener(this);
+
+        // make the add event button visible only if the current user is a business
+        btnAddEvent = (Button) view.findViewById(R.id.btnAddEvent);
+
+        // checking to see if user logged in
+        if(user != null) {
+            if (user.getType().equals("Consumer")) btnAddEvent.setVisibility(View.GONE);
+            else if (user.getType().equals("Business")) {
+                btnAddEvent.setVisibility(View.VISIBLE);
+
+                // the on click listener will only be set up if the user is a business
+                btnAddEvent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), AddEventActivity.class);
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
     }
 
     // Trigger new location updates at interval

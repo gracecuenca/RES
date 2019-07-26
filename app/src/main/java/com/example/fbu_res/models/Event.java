@@ -13,6 +13,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +28,10 @@ public class Event extends ParseObject {
     public static final String KEY_TYPE = "type";
     public static final String KEY_DES = "Description";
     public static final String KEY_DISTANCE_TO_USER = "distanceToUser";
+    public static final String KEY_IMAGE = "eventImage";
     public static final String KEY_OWNER = "owner";
 
+    public Event(){}
 
     public String getName() {
         return getString(KEY_NAME);
@@ -64,6 +68,14 @@ public class Event extends ParseObject {
         put(KEY_LOCATION, address);
     }
 
+    public void setDate(String date){
+        try {
+            put(KEY_DATE, new SimpleDateFormat("MM/dd/yyyy").parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Date getDate() {
         return getDate(KEY_DATE);
     }
@@ -85,7 +97,13 @@ public class Event extends ParseObject {
 
     public String geType() { return getString(KEY_TYPE); }
 
-    public ParseFile getImage(){return getParseFile("eventImage");}
+    public void setImage(ParseFile image){
+        put(KEY_IMAGE, image);
+    }
+
+    public ParseFile getImage(){
+        return getParseFile(KEY_IMAGE);
+    }
 
     public String getLocationString(){return getString(KEY_LOCATION);}
 
@@ -93,7 +111,18 @@ public class Event extends ParseObject {
         put(KEY_TYPE, type);
     }
 
+    public void setDescription(String desc){
+        put(KEY_DES, desc);
+    }
+
     public String getDescription(){return getString(KEY_DES);}
+
+    public void setOwner(ParseUser user){
+        put(KEY_OWNER, user);
+    }
+    public ParseUser getOwner(){
+        return getParseUser(KEY_OWNER);
+    }
 
     public static ArrayList<Event> createEventsList(int numPosts) {
         ArrayList<Event> events = new ArrayList<Event>();
@@ -103,13 +132,5 @@ public class Event extends ParseObject {
         }
 
         return events;
-    }
-
-    public void setOwner(Consumer user){
-        put(KEY_OWNER, user);
-    }
-
-    public ParseUser getOwner(){
-        return (ParseUser) getParseUser(KEY_OWNER);
     }
 }

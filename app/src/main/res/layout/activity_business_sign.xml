@@ -8,17 +8,6 @@
     tools:context=".BusinessSignUp">
 
     <EditText
-        android:id="@+id/etCity"
-        android:layout_width="232dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="5dp"
-        android:hint="City"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etZipcode" />
-
-    <EditText
         android:id="@+id/etZipcode"
         android:layout_width="232dp"
         android:layout_height="47dp"
@@ -27,7 +16,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAdd2" />
+        app:layout_constraintTop_toBottomOf="@+id/etAddressline2" />
+
+    <EditText
+        android:id="@+id/etCity"
+        android:layout_width="232dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="8dp"
+        android:hint="City"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etZipcode" />
 
     <EditText
         android:id="@+id/etCountry"
@@ -44,7 +44,7 @@
         android:id="@+id/etState"
         android:layout_width="232dp"
         android:layout_height="47dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:hint="State"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/etCity" />
 
     <EditText
-        android:id="@+id/etAdd2"
+        android:id="@+id/etAddressline2"
         android:layout_width="232dp"
         android:layout_height="47dp"
         android:layout_marginTop="5dp"
@@ -60,10 +60,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAdd1" />
+        app:layout_constraintTop_toBottomOf="@+id/etAddressLine1" />
 
     <EditText
-        android:id="@+id/etAdd1"
+        android:id="@+id/etAddressLine1"
         android:layout_width="232dp"
         android:layout_height="47dp"
         android:layout_marginTop="5dp"
@@ -90,7 +90,7 @@
         android:layout_height="47dp"
         android:layout_marginStart="90dp"
         android:layout_marginLeft="90dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="89dp"
         android:layout_marginRight="89dp"
         android:hint="Phone Number"
