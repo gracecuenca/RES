@@ -144,7 +144,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         newGroup.addMember(user);
         newGroup.setType("Event");
         newGroup.setAssociatedEvent(event);
-        newGroup.setOwnerName(((Consumer) ParseUser.getCurrentUser()).getDisplayname());
+        newGroup.setOwner(ParseUser.getCurrentUser());
+        newGroup.setOfficial(event.getOwner().equals(ParseUser.getCurrentUser()));
         newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
         newGroup.saveInBackground(new SaveCallback() {
             @Override

@@ -27,6 +27,7 @@ public class Consumer extends ParseUser {
     public static final String KEY_PROFILE_IMG = "profile_img";
     public static final String KEY_INTERESTED_EVENTS = "interestedEvents";
     public static final String KEY_TYPE = "type";
+    public static final String KEY_CREATED_EVENTS = "createdEvents";
 
     public void setInterestedEvents(Event event){
         ParseRelation relation = getRelation(KEY_INTERESTED_EVENTS);
@@ -117,6 +118,17 @@ public class Consumer extends ParseUser {
 
     public String getType() {
         return getString(KEY_TYPE);
+    }
+
+    public void addCreatedEvents(Event event){
+        ParseRelation relation = getRelation(KEY_CREATED_EVENTS);
+        relation.add(event);
+        saveInBackground();
+    }
+
+    public ParseRelation getCreatedEvents(){
+        ParseRelation relation = getRelation(KEY_CREATED_EVENTS);
+        return relation;
     }
 
 }

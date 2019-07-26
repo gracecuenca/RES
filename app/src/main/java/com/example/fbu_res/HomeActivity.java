@@ -5,9 +5,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.fbu_res.fragments.BusinessGroupsFragment;
 import com.example.fbu_res.fragments.GroupFragment;
 import com.example.fbu_res.fragments.HomeFragment;
 import com.example.fbu_res.fragments.ProfileFragment;
@@ -29,6 +31,8 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+
+
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -43,7 +47,11 @@ public class HomeActivity extends AppCompatActivity {
                         fragment = new SearchFragment();
                         break;
                     case R.id.action_groups:
-                        fragment = new GroupFragment();
+                        if(ParseUser.getCurrentUser().get("type").equals("Consumer")) {
+                            fragment = new GroupFragment();
+                        } else {
+                            fragment = new BusinessGroupsFragment();
+                        }
                         break;
                     case R.id.action_profile:
                         fragment = new ProfileFragment();

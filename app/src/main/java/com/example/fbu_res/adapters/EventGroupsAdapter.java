@@ -17,6 +17,9 @@ import com.bumptech.glide.Glide;
 import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.models.Group;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -53,8 +56,15 @@ public class EventGroupsAdapter extends RecyclerView.Adapter<EventGroupsAdapter.
         holder.numMembers.setText(String.valueOf(group.getNumMembs()) +
                 (group.getNumMembs() > 1 ? " members" : " member"));
 
-        holder.owner.setText("Owned by: " + group.getOwnerName());
+        ParseUser owner = group.getOwner();
+        owner.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                String username = (String) object.get("username");
+                holder.owner.setText("Owned by: " + username);
 
+            }
+        });
         holder.join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

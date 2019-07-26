@@ -31,17 +31,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.pubnub.api.PubNub;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 
-public class GroupFragment extends Fragment {
+public class BusinessGroupsFragment extends Fragment {
 
     DatabaseReference RootRef;
     int RESULT_OK = 291;
@@ -58,8 +56,8 @@ public class GroupFragment extends Fragment {
 // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.Viewpager);
         GroupFragmentPagerAdapter pagerAdapter = new GroupFragmentPagerAdapter(getFragmentManager());
-        pagerAdapter.addFragment(new MyGroupsFragment(), "My Groups");
-        pagerAdapter.addFragment(new InterestGroupFragment(), "Interest Groups");
+        pagerAdapter.addFragment(new OwnedGroupsFragment(), "Owned Groups");
+        pagerAdapter.addFragment(new MyGroupsFragment(), "Groups You're In");
         pagerAdapter.addFragment(new EventGroupFragment(), "Event Groups");
 
         viewPager.setOffscreenPageLimit(3);
@@ -81,11 +79,11 @@ public class GroupFragment extends Fragment {
     }
 
     public void requestNewGroup(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(GroupFragment.this.getContext()
+        AlertDialog.Builder builder = new AlertDialog.Builder(BusinessGroupsFragment.this.getContext()
                 , R.style.AlertDialog);
         builder.setTitle("Enter Group Name :");
 
-        final EditText groupNameField = new EditText(GroupFragment.this.getContext());
+        final EditText groupNameField = new EditText(BusinessGroupsFragment.this.getContext());
         groupNameField.setHint("e.g. Ayyo's Group?");
         builder.setView(groupNameField);
 
@@ -96,7 +94,7 @@ public class GroupFragment extends Fragment {
                 String groupName = groupNameField.getText().toString() +
                         ParseUser.getCurrentUser().getUsername() + new Timestamp(System.currentTimeMillis());
                 if (TextUtils.isEmpty(groupName)) {
-                    Toast.makeText(GroupFragment.this.getContext(), "Please write more..."
+                    Toast.makeText(BusinessGroupsFragment.this.getContext(), "Please write more..."
                             , Toast.LENGTH_SHORT);
                 } else {
                     createNewGroup(groupName, groupNameField.getText().toString());
@@ -119,7 +117,7 @@ public class GroupFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(GroupFragment.this.getContext(), groupName + " is Created Succesfully", Toast.LENGTH_SHORT);
+                            Toast.makeText(BusinessGroupsFragment.this.getContext(), groupName + " is Created Succesfully", Toast.LENGTH_SHORT);
                         }
                     }
                 });
