@@ -41,7 +41,6 @@ import com.pubnub.api.PubNub;
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
 
-@ParseClassName("Group")
 public class GroupFragment extends Fragment {
 
     DatabaseReference RootRef;
@@ -131,7 +130,7 @@ public class GroupFragment extends Fragment {
         ParseUser user = ParseUser.getCurrentUser();
         newGroup.addMember(user);
         newGroup.setType("Interests");
-        newGroup.setOwnerName(((Consumer) ParseUser.getCurrentUser()).getDisplayname());
+        newGroup.setOwner(ParseUser.getCurrentUser());
         newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
         newGroup.saveInBackground(new SaveCallback() {
             @Override

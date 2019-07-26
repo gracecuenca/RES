@@ -14,7 +14,7 @@ public class Group extends ParseObject {
     public static final String KEY_TYPE = "type";
     public static final String KEY_CHANNEL_NAME = "channel_name";
     public static final String KEY_MEMBERS = "members";
-    public static final String KEY_OWNER_NAME = "owner_name";
+    public static final String KEY_OWNER = "owner";
     public static final String KEY_ASSOCIATED_EVENT = "associated_event";
 
 
@@ -75,20 +75,19 @@ public class Group extends ParseObject {
         relation.remove(user);
         saveInBackground();
     }
-
-
-    public String getOwnerName() {
-        return getString(KEY_OWNER_NAME);
-    }
-
-    public void setOwnerName(String name) {
-        put(KEY_OWNER_NAME, name);
-    }
+    
 
 
     public void setAssociatedEvent(Event event){
         put(KEY_ASSOCIATED_EVENT, event);
     }
 
+    public ParseUser getOwner() {
+        return getParseUser(KEY_OWNER);
+    }
+
+    public void setOwner(ParseUser user) {
+        put(KEY_OWNER, user);
+    }
 
 }
