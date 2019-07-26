@@ -51,7 +51,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
         holder.numMembers.setText(String.valueOf(group.getNumMembs()) +
                 (group.getNumMembs() > 1 ? " members" : " member"));
 
-        holder.owner.setText("Owned by: " + group.getOwnerName());
+        holder.owner.setText("Owned by: " + group.getOwner().getUsername());
 
         holder.groupImage.setOnClickListener(new View.OnClickListener() {
             @Override

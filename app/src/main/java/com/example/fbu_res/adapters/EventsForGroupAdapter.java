@@ -140,7 +140,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         vh1.numMembers.setText(String.valueOf(group.getNumMembs()) +
                 (group.getNumMembs() > 1 ? " members" : " member"));
 
-        vh1.owner.setText("Owned by: " + group.getOwnerName());
+        vh1.owner.setText("Owned by: " + group.getOwner().getUsername());
 
         vh1.join.setOnClickListener(new View.OnClickListener() {
             @Override

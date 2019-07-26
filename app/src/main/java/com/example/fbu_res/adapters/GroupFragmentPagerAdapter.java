@@ -48,7 +48,7 @@ public class GroupFragmentPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         // Generate title based on item position
-        return tabTitles[position];
+        return mFragmentTitleList.get(position);
     }
 
 }

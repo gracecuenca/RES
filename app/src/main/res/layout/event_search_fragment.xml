@@ -15,6 +15,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="3dp"
+            android:clickable="true"
+            android:focusable="auto"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventLocationSearchView" />
 
@@ -35,6 +37,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventSearchView" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/locationEventRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="616dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventLocationSearchView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
