@@ -29,9 +29,15 @@ public class Consumer extends ParseUser {
     public static final String KEY_TYPE = "type";
     public static final String KEY_CREATED_EVENTS = "createdEvents";
 
-    public void setInterestedEvents(Event event){
+    public void addInterestedEvent(Event event){
         ParseRelation relation = getRelation(KEY_INTERESTED_EVENTS);
         relation.add(event);
+        saveInBackground();
+    }
+
+    public void removeInterestedEvent(Event event){
+        ParseRelation relation = getRelation(KEY_INTERESTED_EVENTS);
+        relation.remove(event);
         saveInBackground();
     }
 
@@ -39,7 +45,6 @@ public class Consumer extends ParseUser {
         ParseRelation interestedEvents = getRelation(KEY_INTERESTED_EVENTS);
         return interestedEvents;
     }
-
 
     public void setLocation(ParseGeoPoint geoPoint){
         put(KEY_LOCATION, geoPoint);

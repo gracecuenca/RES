@@ -3,8 +3,6 @@ package com.example.fbu_res.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +20,12 @@ import com.example.fbu_res.R;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
-import com.google.common.base.MoreObjects;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.text.DateFormat;
@@ -100,34 +96,61 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if(image != null){
             Glide.with(vh1.itemView.getContext()).load(image.getUrl()).into(vh1.ivImage);
         }
-
-        vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
-                currentUser.setInterestedEvents(event);
-                Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary" +
-                                "under profile", Toast.LENGTH_SHORT).show();
-                vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
-            }
-        });
-
-        ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
-        query.whereEqualTo(Consumer.KEY_INTERESTED_EVENTS, event);
-        query.findInBackground(new FindCallback<Consumer>() {
-            @Override
-            public void done(List objects, ParseException e) {
-                int size = objects.size();
-                if(size == 1) {
-                    vh1.btnAddToCalendar.setClickable(false);
+        // businesses can't add events to their calendars/ itineraries
+        if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Business")){
+            vh1.btnAddToCalendar.setClickable(false);
+            vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+            vh1.btnRemoveFromCalendar.setClickable(false);
+            vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+        }
+        else if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Consumer")){
+            final Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
+            vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentUser.addInterestedEvent(event);
+                    Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary " +
+                            "under profile", Toast.LENGTH_SHORT).show();
                     vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    vh1.btnRemoveFromCalendar.setClickable(true);
+                    vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
                 }
-                else if(size == 0) {
+            });
+
+            vh1.btnRemoveFromCalendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentUser.removeInterestedEvent(event);
+                    Toast.makeText(v.getContext(), event.getName()+ " has been removed from itinerary " +
+                            "under profile", Toast.LENGTH_SHORT).show();
+                    vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
                     vh1.btnAddToCalendar.setClickable(true);
                     vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
                 }
-            }
-        });
+            });
+
+            ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
+            query.whereEqualTo(Consumer.KEY_INTERESTED_EVENTS, event);
+            query.findInBackground(new FindCallback<Consumer>() {
+                @Override
+                public void done(List objects, ParseException e) {
+                    int size = objects.size();
+                    if(size == 1) {
+                        vh1.btnAddToCalendar.setClickable(false);
+                        vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                        vh1.btnRemoveFromCalendar.setClickable(true);
+                        vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                    }
+                    else if(size == 0) {
+                        vh1.btnAddToCalendar.setClickable(true);
+                        vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                        vh1.btnRemoveFromCalendar.setClickable(false);
+                        vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    }
+                }
+            });
+
+        }
 
     }
 
@@ -203,6 +226,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         private TextView tvDescription;
         private TextView tvLocation;
         private Button btnAddToCalendar;
+        private Button btnRemoveFromCalendar;
 
 
         public ViewHolder1(View v) {
@@ -213,7 +237,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             tvDescription = (TextView) v.findViewById(R.id.tvDescription);
             tvLocation = (TextView) v.findViewById(R.id.tvLocation);
             btnAddToCalendar = (Button) v.findViewById(R.id.btnAddToCalendar);
-
+            btnRemoveFromCalendar = (Button) v.findViewById(R.id.btnRemoveFromCalendar);
         }
     }
 
