@@ -90,6 +90,7 @@ public class Address extends ParseObject {
 
     public void setPin(ParseGeoPoint pin) {
         put(KEY_PIN, pin);
+        saveInBackground();
     }
 
     public Address(){

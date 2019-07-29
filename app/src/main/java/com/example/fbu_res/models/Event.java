@@ -30,8 +30,7 @@ public class Event extends ParseObject {
     public static final String KEY_DISTANCE_TO_USER = "distanceToUser";
     public static final String KEY_IMAGE = "eventImage";
     public static final String KEY_OWNER = "owner";
-
-    public Event(){}
+    public static final String KEY_ADDRESS = "address";    public Event(){}
 
     public String getName() {
         return getString(KEY_NAME);
@@ -66,6 +65,7 @@ public class Event extends ParseObject {
 
     public void setLocation(Address address) {
         put(KEY_LOCATION, address);
+        saveInBackground();
     }
 
     public void setDate(String date){

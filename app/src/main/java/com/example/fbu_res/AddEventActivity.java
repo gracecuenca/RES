@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,11 +23,13 @@ import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class AddEventActivity extends AppCompatActivity {
 
@@ -101,7 +104,7 @@ public class AddEventActivity extends AppCompatActivity {
                         // getting the current business in order to add to the relation
                         Consumer user = (Consumer) ParseUser.getCurrentUser();
 
-                        Address address = new Address();
+                        final Address address = new Address();
                         address.setName(etLocationName.getText().toString());
                         address.setAddressline1(etAddressLine1.getText().toString());
                         address.setAddressline2(etAddressLine2.getText().toString());
@@ -121,8 +124,8 @@ public class AddEventActivity extends AppCompatActivity {
                                 event.setName(etName.getText().toString());
                                 event.setDate(etDate.getText().toString()); // TODO -- fix the date method
                                 event.setDescription(etDescription.getText().toString());
+                                event.setLocation(address);
                                 // checking to see if the user uploaded a file
-
                                 if(photoFile == null || ivPreview.getDrawable() == null){
                                     Log.e(APP_TAG, "No photo to submit");
                                     Toast.makeText(getApplicationContext(), "There is no photo!", Toast.LENGTH_LONG).show();
@@ -135,6 +138,25 @@ public class AddEventActivity extends AppCompatActivity {
                                     public void done(ParseException e) {
                                         Toast.makeText(getApplicationContext(), "successfully created the event", Toast.LENGTH_SHORT).show();
                                         setContentView(R.layout.activity_add_event);
+
+                                        // testing to see if geocoder object and get us the longitude and latitude
+                                        String strAddresss = address.getAddressline1() + " "+
+                                                address.getAddressline2() + ", " +
+                                                address.getCity() + ", " + address.getState()+ " "+
+                                                address.getZipcode() + ", "+
+                                                address.getCountry()+ " ";
+                                        Geocoder geocoder = new Geocoder(getApplicationContext());
+                                        List<android.location.Address> addresses;
+                                        try{
+                                            addresses = geocoder.getFromLocationName(strAddresss, 5);
+                                            android.location.Address loc = addresses.get(0);
+                                            Log.d(APP_TAG, strAddresss);
+                                            Log.d(APP_TAG,  loc.getLatitude() + ", " +loc.getLongitude());
+                                            address.setPin(new ParseGeoPoint(loc.getLatitude(), loc.getLongitude()));
+                                        }catch (Exception eo){
+                                            eo.printStackTrace();
+                                        }
+
                                     }
                                 });
                             }
