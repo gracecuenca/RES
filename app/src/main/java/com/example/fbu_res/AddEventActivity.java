@@ -66,6 +66,9 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        // clear cache before loading image into preview
+        // deleteCache(this);
+
         etName = (EditText) findViewById(R.id.etName);
         etLocationName = (EditText) findViewById(R.id.etLocationName);
         etAddressLine1 = (EditText) findViewById(R.id.etAdressline1);
@@ -102,7 +105,7 @@ public class AddEventActivity extends AppCompatActivity {
                         // creation of the event
 
                         // getting the current business in order to add to the relation
-                        Consumer user = (Consumer) ParseUser.getCurrentUser();
+                        final Consumer user = (Consumer) ParseUser.getCurrentUser();
 
                         final Address address = new Address();
                         address.setName(etLocationName.getText().toString());
@@ -125,13 +128,13 @@ public class AddEventActivity extends AppCompatActivity {
                                 event.setDate(etDate.getText().toString()); // TODO -- fix the date method
                                 event.setDescription(etDescription.getText().toString());
                                 event.setLocation(address);
+                                event.setOwner(user);
                                 // checking to see if the user uploaded a file
                                 if(photoFile == null || ivPreview.getDrawable() == null){
                                     Log.e(APP_TAG, "No photo to submit");
                                     Toast.makeText(getApplicationContext(), "There is no photo!", Toast.LENGTH_LONG).show();
                                 }
                                 event.setImage(new ParseFile(photoFile));
-
                                 event.setOwner(ParseUser.getCurrentUser());
                                 event.saveInBackground(new SaveCallback() {
                                     @Override
@@ -216,6 +219,33 @@ public class AddEventActivity extends AppCompatActivity {
             if (cursor != null) {
                 cursor.close();
             }
+        }
+    }
+
+    // deleting cache functions
+    public static void deleteCache(Context context){
+        try{
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean deleteDir(File dir){
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
         }
     }
 
