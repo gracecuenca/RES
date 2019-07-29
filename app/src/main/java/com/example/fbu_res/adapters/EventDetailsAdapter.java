@@ -32,7 +32,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public List<Object> objects;
     Context context;
@@ -40,7 +40,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final int DETAILS = 0, GROUPS = 1;
     Event event;
 
-    public EventsForGroupAdapter(List<Object> objects, Event event){
+    public EventDetailsAdapter(List<Object> objects, Event event){
         this.objects = objects;
         this.event = event;
     }
@@ -133,8 +133,8 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             query.whereEqualTo(Consumer.KEY_INTERESTED_EVENTS, event);
             query.findInBackground(new FindCallback<Consumer>() {
                 @Override
-                public void done(List objects, ParseException e) {
-                    int size = objects.size();
+                public void done(List items, ParseException e) {
+                    int size = items.size();
                     if(size == 1) {
                         vh1.btnAddToCalendar.setClickable(false);
                         vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));

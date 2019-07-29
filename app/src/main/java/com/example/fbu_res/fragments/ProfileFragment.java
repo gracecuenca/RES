@@ -48,8 +48,6 @@ public class ProfileFragment extends Fragment {
     private ArrayList<Event> events;
     private EventAdapter adapter;
 
-    // attributes in order to display the scroll
-
     // The onCreateView method is called when Fragment should create its View object hierarchy,
     // either dynamically or via XML layout inflation.
     @Override
@@ -62,7 +60,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         // setting up the current user
         user = (Consumer) ParseUser.getCurrentUser();
 
