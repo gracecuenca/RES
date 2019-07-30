@@ -141,8 +141,6 @@ public class AddEventActivity extends AppCompatActivity {
                                     public void done(ParseException e) {
                                         Toast.makeText(getApplicationContext(), "successfully created the event", Toast.LENGTH_SHORT).show();
                                         setContentView(R.layout.activity_add_event);
-
-                                        // testing to see if geocoder object and get us the longitude and latitude
                                         String strAddresss = address.getAddressline1() + " "+
                                                 address.getAddressline2() + ", " +
                                                 address.getCity() + ", " + address.getState()+ " "+
@@ -153,8 +151,6 @@ public class AddEventActivity extends AppCompatActivity {
                                         try{
                                             addresses = geocoder.getFromLocationName(strAddresss, 5);
                                             android.location.Address loc = addresses.get(0);
-                                            Log.d(APP_TAG, strAddresss);
-                                            Log.d(APP_TAG,  loc.getLatitude() + ", " +loc.getLongitude());
                                             address.setPin(new ParseGeoPoint(loc.getLatitude(), loc.getLongitude()));
                                         }catch (Exception eo){
                                             eo.printStackTrace();
