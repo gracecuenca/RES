@@ -3,6 +3,8 @@ package com.example.fbu_res.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
+import com.example.fbu_res.fragments.ProfileFragment;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
@@ -31,6 +36,8 @@ import com.parse.ParseUser;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -96,6 +103,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(image != null){
             Glide.with(vh1.itemView.getContext()).load(image.getUrl()).into(vh1.ivImage);
         }
+
         // businesses can't add events to their calendars/ itineraries
         if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Business")){
             vh1.btnAddToCalendar.setClickable(false);
@@ -103,6 +111,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             vh1.btnRemoveFromCalendar.setClickable(false);
             vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
         }
+        // but consumers can
         else if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Consumer")){
             final Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
             vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
@@ -126,22 +135,24 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
                     vh1.btnAddToCalendar.setClickable(true);
                     vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+
+
                 }
             });
 
-            ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
-            query.whereEqualTo(Consumer.KEY_INTERESTED_EVENTS, event);
-            query.findInBackground(new FindCallback<Consumer>() {
+            // querying to see if the event is already in the list of the consumer's interested events
+            ParseQuery q = currentUser.getInterestedEvents().getQuery();
+            q.whereEqualTo(Event.KEY_NAME, event.getName());
+            q.findInBackground(new FindCallback<Consumer>() {
                 @Override
                 public void done(List items, ParseException e) {
-                    int size = items.size();
-                    if(size == 1) {
+                    if(items.size() == 1) {
                         vh1.btnAddToCalendar.setClickable(false);
                         vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
                         vh1.btnRemoveFromCalendar.setClickable(true);
                         vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
                     }
-                    else if(size == 0) {
+                    else if(items.size() == 0) {
                         vh1.btnAddToCalendar.setClickable(true);
                         vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
                         vh1.btnRemoveFromCalendar.setClickable(false);

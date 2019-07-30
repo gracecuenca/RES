@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -31,6 +32,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -48,10 +50,14 @@ public class ProfileFragment extends Fragment {
     private ArrayList<Event> events;
     private EventAdapter adapter;
 
+    // Event removedEvent;
+
     // The onCreateView method is called when Fragment should create its View object hierarchy,
     // either dynamically or via XML layout inflation.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // getting the event that was removed from calendar
+        // removedEvent = (Event)getArguments().get("removed event");
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
@@ -66,7 +72,7 @@ public class ProfileFragment extends Fragment {
         // showing the profile of the user
         ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
         tvDisplayname = (TextView) view.findViewById(R.id.tvDisplayname);
-        if(user.getProfileImg() != null){
+        if (user.getProfileImg() != null) {
             Glide.with(getContext()).load(user.getProfileImg().getUrl()).into(ivProfileImage);
         }
         tvDisplayname.setText(user.getDisplayname());
@@ -92,6 +98,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        Log.d("profile", "oncreateview is called");
 
     }
 
