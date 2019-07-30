@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
+import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -50,7 +51,17 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
         if(group.getImage()!=null){
             Glide.with(context).load(group.getImage().getUrl()).into(holder.groupImage);
         }
-        holder.groupType.setText(group.getType());
+        if(group.getType().equals("Interests")){
+            holder.groupType.setText(group.getType());
+        } else {
+            Event event = group.getAssociatedEvent();
+            event.fetchInBackground(new GetCallback<Event>() {
+                @Override
+                public void done(Event object, ParseException e) {
+                    holder.groupType.setText("Event: " + object.getName());
+                }
+            });
+        }
         holder.numMembers.setText(String.valueOf(group.getNumMembs()) +
                 (group.getNumMembs() > 1 ? " members" : " member"));
 
@@ -101,7 +112,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
             groupImage = view.findViewById(R.id.ivGroupPic);
             groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
-            groupType = view.findViewById(R.id.tvGroupType);
+            groupType = view.findViewById(R.id.tvEventName);
             owner = view.findViewById(R.id.tvOwnedBy);
             leave = view.findViewById(R.id.btnJoin);
         }

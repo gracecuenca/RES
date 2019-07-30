@@ -73,13 +73,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/apptoolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></include>
-
     <Button
         android:id="@+id/btnAddEvent"
         android:layout_width="wrap_content"

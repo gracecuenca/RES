@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.adapters.EventsForGroupAdapter;
 import com.example.fbu_res.fragments.GroupFragment;
+import com.example.fbu_res.models.Address;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
@@ -40,6 +43,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
@@ -93,6 +97,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                 requestNewGroup(v);
             }
         });
+
+        if(((Consumer) ParseUser.getCurrentUser()).getType().equals("Consumer")) {
+            ((ViewGroup) create.getParent()).removeView(create);
+        }
     }
 
     public void requestNewGroup(View view) {
@@ -151,7 +159,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         owner.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
             @Override
             public void done(ParseUser object, ParseException e) {
-                newGroup.setOfficial(object.equals(ParseUser.getCurrentUser()));
+                newGroup.setOfficial(object.getUsername().equals(ParseUser.getCurrentUser().getUsername()));
                 newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
                 newGroup.saveInBackground(new SaveCallback() {
                     @Override

@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
 
     <TextView
-        android:id="@+id/tvGroupType"
+        android:id="@+id/tvEventName"
         android:layout_width="203dp"
         android:layout_height="22dp"
         android:layout_marginStart="8dp"
@@ -76,7 +76,7 @@
         android:text="Join"
         android:textAllCaps="false"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/tvGroupType"
+        app:layout_constraintStart_toEndOf="@+id/tvEventName"
         app:layout_constraintTop_toBottomOf="@+id/tvOwnedBy" />
 
     <TextView

@@ -3,8 +3,10 @@ package com.example.fbu_res.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +24,12 @@ import com.example.fbu_res.R;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
-import com.google.common.base.MoreObjects;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.text.DateFormat;
@@ -138,15 +138,18 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if(group.getImage()!=null){
             Glide.with(context).load(group.getImage().getUrl()).into(vh1.groupImage);
         }
-        vh1.groupType.setText(group.getType());
-        vh1.numMembers.setText(String.valueOf(group.getNumMembs()) +
+
+        vh1.groupType.setText("Event: ");
+        vh1.groupType.append(event.getName());
+        vh1.numMembers.setText(group.getNumMembs() +
                 (group.getNumMembs() > 1 ? " members" : " member"));
 
         ParseUser owner = group.getOwner();
         owner.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                String username = (String) object.get("username");
+                String username = group.getOfficial() ? (String) object.get("username")
+                        : (String) object.get(Consumer.KEY_DISPLAYNAME);
                 vh1.owner.setText("Owned by: " + username);
 
             }
@@ -163,6 +166,9 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 notifyDataSetChanged();
             }
         });
+        if(!group.getOfficial() && vh1.verified.getParent() != null) {
+            ((ViewGroup) vh1.verified.getParent()).removeView(vh1.verified);
+        }
     }
 
     @Override
@@ -184,14 +190,16 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TextView groupType;
         TextView owner;
         Button join;
+        ImageView verified;
         public ViewHolder2(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivGroupPic);
             groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
-            groupType = view.findViewById(R.id.tvGroupType);
+            groupType = view.findViewById(R.id.tvEventName);
             owner = view.findViewById(R.id.tvOwnedBy);
             join = view.findViewById(R.id.btnJoin);
+            verified = view.findViewById(R.id.ivVerified);
         }
     }
 

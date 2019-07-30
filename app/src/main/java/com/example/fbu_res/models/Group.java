@@ -84,6 +84,10 @@ public class Group extends ParseObject {
         put(KEY_ASSOCIATED_EVENT, event);
     }
 
+    public Event getAssociatedEvent(){
+        return (Event) getParseObject(KEY_ASSOCIATED_EVENT);
+    }
+
     public ParseUser getOwner() {
         return getParseUser(KEY_OWNER);
     }
