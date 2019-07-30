@@ -3,8 +3,6 @@ package com.example.fbu_res.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
-import com.example.fbu_res.fragments.ProfileFragment;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
@@ -37,7 +32,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static java.security.AccessController.getContext;
 
 public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -172,15 +166,18 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(group.getImage()!=null){
             Glide.with(context).load(group.getImage().getUrl()).into(vh1.groupImage);
         }
-        vh1.groupType.setText(group.getType());
-        vh1.numMembers.setText(String.valueOf(group.getNumMembs()) +
+
+        vh1.groupType.setText("Event: ");
+        vh1.groupType.append(event.getName());
+        vh1.numMembers.setText(group.getNumMembs() +
                 (group.getNumMembs() > 1 ? " members" : " member"));
 
         ParseUser owner = group.getOwner();
         owner.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                String username = (String) object.get("username");
+                String username = group.getOfficial() ? (String) object.get("username")
+                        : (String) object.get(Consumer.KEY_DISPLAYNAME);
                 vh1.owner.setText("Owned by: " + username);
 
             }
@@ -197,6 +194,9 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 notifyDataSetChanged();
             }
         });
+        if(!group.getOfficial() && vh1.verified.getParent() != null) {
+            ((ViewGroup) vh1.verified.getParent()).removeView(vh1.verified);
+        }
     }
 
     @Override
@@ -218,14 +218,16 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView groupType;
         TextView owner;
         Button join;
+        ImageView verified;
         public ViewHolder2(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivGroupPic);
             groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
-            groupType = view.findViewById(R.id.tvGroupType);
+            groupType = view.findViewById(R.id.tvEventName);
             owner = view.findViewById(R.id.tvOwnedBy);
             join = view.findViewById(R.id.btnJoin);
+            verified = view.findViewById(R.id.ivVerified);
         }
     }
 
