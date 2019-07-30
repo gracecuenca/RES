@@ -88,25 +88,39 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        Log.d("profile", "oncreateview is called");
-
     }
 
     private void loadEvents(){
-        ParseRelation interestedEvents = user.getInterestedEvents();
-        ParseQuery<Event> eventsQuery = interestedEvents.getQuery();
-        eventsQuery.addAscendingOrder(Event.KEY_DATE);
+        if(user.getType().equals("Consumer")){
+            ParseRelation interestedEvents = user.getInterestedEvents();
+            ParseQuery<Event> eventsQuery = interestedEvents.getQuery();
+            eventsQuery.addAscendingOrder(Event.KEY_DATE);
 
-        eventsQuery.findInBackground(new FindCallback<Event>() {
-            @Override
-            public void done(List<Event> events, ParseException e) {
-                if (e != null) {
-                    e.printStackTrace();
-                    return;
+            eventsQuery.findInBackground(new FindCallback<Event>() {
+                @Override
+                public void done(List<Event> events, ParseException e) {
+                    if (e != null) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    addAll(events);
                 }
-                addAll(events);
-            }
-        });
+            });
+        } else if(user.getType().equals("Business")){
+            ParseRelation createdEvents = user.getCreatedEvents();
+            ParseQuery<Event> eventsQuery = createdEvents.getQuery();
+            eventsQuery.addAscendingOrder(Event.KEY_DATE);
+            eventsQuery.findInBackground(new FindCallback<Event>() {
+                @Override
+                public void done(List<Event> events, ParseException e) {
+                    if (e != null) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    addAll(events);
+                }
+            });
+        }
     }
 
     // Clean all elements of the recycler
