@@ -1,18 +1,24 @@
 package com.example.fbu_res.fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +30,16 @@ import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.BusinessSearchAdapter;
 import com.example.fbu_res.adapters.SearchAdapter;
 import com.example.fbu_res.models.BusinessSearch;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.parse.ParseGeoPoint;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
@@ -36,11 +51,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static androidx.core.content.ContextCompat.checkSelfPermission;
 import static androidx.core.content.ContextCompat.getSystemService;
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class BusinessSliderSearch extends Fragment {
     RecyclerView businessRv;
@@ -58,6 +76,12 @@ public class BusinessSliderSearch extends Fragment {
     SearchView locationSearchView;
     RecyclerView locationSearchRecyclerView;
     Geocoder geocoder;
+    String currentLat;
+    String currentLong;
+    String lat;
+    String longi;
+    private FusedLocationProviderClient fusedLocationClient;
+
     ArrayList<LatLng> longLat = new ArrayList<>();
     @Nullable
     @Override
@@ -69,6 +93,7 @@ public class BusinessSliderSearch extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getCurrentLocation();
         businessRv = view.findViewById(R.id.businessRv);
         businessSearches = new ArrayList<>();
         locations = new ArrayList<>();
@@ -102,6 +127,7 @@ public class BusinessSliderSearch extends Fragment {
         });
 
         locationSearchView = view.findViewById(R.id.businessLocationSearchView);
+        locationSearchView.setQuery("Current Location", false);
 
         locationSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -115,6 +141,8 @@ public class BusinessSliderSearch extends Fragment {
                                 longLat.add(new LatLng(addresses.get(i).getLatitude(), addresses.get(i).getLongitude()));
                                 String locationName = addresses.get(i).getFeatureName();
                                 BusinessSearch locationSearch = new BusinessSearch(locationName, 1);
+                                lat = Double.toString(longLat.get(0).latitude);
+                                longi = Double.toString(longLat.get(0).longitude);
                                 locations.add(locationSearch);
                             }
 
@@ -147,9 +175,6 @@ public class BusinessSliderSearch extends Fragment {
                 e.printStackTrace();
             }
         }
-
-
-
     }
 
 
@@ -171,9 +196,9 @@ public class BusinessSliderSearch extends Fragment {
         protected String doInBackground(String... strings) {
             params.put("term", searchText);
             params.put("categories", searchText);
-            //TODO: initially, there will be search by current location, then user can search
-            params.put("latitude", Double.toString(longLat.get(0).latitude));
-            params.put("longitude", Double.toString(longLat.get(0).longitude));
+            //TODO: initially, there will be search by current location, then user can searchjjljg
+            params.put("latitude", lat);
+            params.put("longitude", longi);
             Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
             Response<SearchResponse> response = null;
             try {
@@ -203,5 +228,24 @@ public class BusinessSliderSearch extends Fragment {
             return null;
         }
     }
+
+    @SuppressLint("MissingPermission")
+    public void getCurrentLocation(){
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener((Activity) getContext(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            lat = Double.toString(location.getLatitude());
+                            longi = Double.toString(location.getLongitude());
+                        }
+                    }
+                });
+
+    }
+
+
 
 }
