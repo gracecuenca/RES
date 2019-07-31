@@ -30,11 +30,17 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class AddEventActivity extends AppCompatActivity {
 
     public static final String APP_TAG = "AddEventActivity";
+
+    // date regex
+    private static final Pattern date =
+            Pattern.compile("^((0|1)\\d{1})/((0|1|2)\\d{1})/((19|20)\\d{2})");
 
     // fields that are required by user when creating an event
     EditText etName;
@@ -87,7 +93,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (isInputEmpty(etName)) setTextError(etName);
-                validateButton();
+                validateNextButton();
             }
         });
         etLocationName = (EditText) findViewById(R.id.etLocationName);
@@ -105,7 +111,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(isInputEmpty(etLocationName)) setTextError(etLocationName);
-                validateButton();
+                validateNextButton();
             }
         });
         etAddressLine1 = (EditText) findViewById(R.id.etAdressline1);
@@ -123,7 +129,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(isInputEmpty(etAddressLine1)) setTextError(etAddressLine1);
-                validateButton();
+                validateNextButton();
             }
         });
         etAddressLine2 = (EditText) findViewById(R.id.etAddressline2);
@@ -141,7 +147,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(isInputEmpty(etAddressLine2)) setTextError(etAddressLine2);
-                validateButton();
+                validateNextButton();
             }
         });
         etZipcode = (EditText) findViewById(R.id.etZipcode);
@@ -159,7 +165,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(isInputEmpty(etZipcode)) setTextError(etZipcode);
-                validateButton();
+                validateNextButton();
             }
         });
         etCity = (EditText) findViewById(R.id.etCity);
@@ -177,7 +183,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(isInputEmpty(etCity)) setTextError(etCity);
-                validateButton();
+                validateNextButton();
             }
         });
         etState = (EditText)findViewById(R.id.etState);
@@ -195,7 +201,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(isInputEmpty(etState)) setTextError(etState);
-                validateButton();
+                validateNextButton();
             }
         });
         etCountry = (EditText) findViewById(R.id.etCountry);
@@ -213,7 +219,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(isInputEmpty(etCountry)) setTextError(etCountry);
-                validateButton();
+                validateNextButton();
             }
         });
 
@@ -229,11 +235,51 @@ public class AddEventActivity extends AppCompatActivity {
 
                 // setting up the rest of the attributes
                 etDate = (EditText) findViewById(R.id.etDate);
+                etDate.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if(isInputEmpty(etDate)) setTextError(etDate);
+                        if(!isCorrectDate(etDate)) setDateError(etDate);
+                        validateCreateButton();
+                    }
+                });
                 etDescription = (EditText) findViewById(R.id.etDescription);
+                etDescription.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        if(isInputEmpty(etDescription)) setTextError(etDescription);
+                        validateCreateButton();
+                    }
+                });
+
+                ivPreview = (ImageView) findViewById(R.id.ivPreview);
+
                 btnSelectImage = (Button) findViewById(R.id.btnSelectImage);
                 btnCreateEvent = (Button) findViewById(R.id.btnCreateEvent);
 
-                Log.d("lol", "made it here");
+                // initially making the create button unclickable
+                btnCreateEvent.setEnabled(false);
+                btnCreateEvent.setClickable(false);
 
                 btnSelectImage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -245,9 +291,6 @@ public class AddEventActivity extends AppCompatActivity {
                 btnCreateEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // creation of the event
-
-                        // getting the current business in order to add to the relation
                         final Consumer user = (Consumer) ParseUser.getCurrentUser();
 
                         final Address address = new Address();
@@ -259,8 +302,6 @@ public class AddEventActivity extends AppCompatActivity {
                         address.setZipcode(etZipcode.getText().toString());
                         address.setCountry(etCountry.getText().toString());
 
-                        // TODO -- find a way to get the geopoint of a business specified location
-
                         address.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -268,7 +309,7 @@ public class AddEventActivity extends AppCompatActivity {
 
                                 // setting the attributes for an event
                                 event.setName(etName.getText().toString());
-                                event.setDate(etDate.getText().toString()); // TODO -- fix the date method
+                                event.setDate(etDate.getText().toString());
                                 event.setDescription(etDescription.getText().toString());
                                 event.setLocation(address);
                                 event.setOwner(user);
@@ -315,10 +356,7 @@ public class AddEventActivity extends AppCompatActivity {
 
     // does the input text have anything in it
     public boolean isInputEmpty(EditText et){
-        if(et.getText().toString().length() == 0){
-            return true;
-        }
-        return false;
+        return et.getText().toString().length() == 0;
     }
 
     // setting the error
@@ -327,7 +365,33 @@ public class AddEventActivity extends AppCompatActivity {
         else et.setError(null);
     }
 
-    public void validateButton(){
+    // setting date error
+    public void setDateError(EditText et){
+        if(!isCorrectDate(et)){
+            et.setError("Please format valid date as: mm/dd/yyyy");
+            return;
+        }
+        et.setError(null);
+    }
+
+    // does the input text match the correct date format
+    public boolean isCorrectDate(EditText et){
+        return date.matcher(et.getText().toString()).matches() &&
+                Integer.parseInt(et.getText().toString().substring(6)) >= Calendar.getInstance().get(Calendar.YEAR);
+    }
+
+    public void validateCreateButton(){
+        if(!isInputEmpty(etDate) && isCorrectDate(etDate) && !isInputEmpty(etDescription) &&
+        ivPreview.getDrawable() != null){
+            btnCreateEvent.setClickable(true);
+            btnCreateEvent.setEnabled(true);
+        }else{
+            btnCreateEvent.setEnabled(false);
+            btnCreateEvent.setClickable(false);
+        }
+    }
+
+    public void validateNextButton(){
         if(!isInputEmpty(etName) && !isInputEmpty(etLocationName) && !isInputEmpty(etAddressLine1) &&
         !isInputEmpty(etAddressLine2) && !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
         !isInputEmpty(etState) && !isInputEmpty(etCountry)){
@@ -365,10 +429,10 @@ public class AddEventActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             // Load the selected image into a preview
-            ivPreview = (ImageView) findViewById(R.id.ivPreview);
             ivPreview.setImageBitmap(selectedImage);
             photoFileName = getRealPathFromURI(getApplicationContext(), photoUri);
             photoFile = new File(photoFileName);
+            validateCreateButton();
         }
     }
 
