@@ -152,8 +152,9 @@ public class SearchFragment extends Fragment{
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.search_menu, menu);
-        return;
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

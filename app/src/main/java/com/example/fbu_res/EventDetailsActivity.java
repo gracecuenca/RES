@@ -15,14 +15,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.fbu_res.adapters.EventsForGroupAdapter;
-import com.example.fbu_res.fragments.GroupFragment;
+import com.example.fbu_res.adapters.EventDetailsAdapter;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
@@ -35,7 +32,6 @@ import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -44,8 +40,6 @@ import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +51,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     DatabaseReference RootRef;
 
     // event attributes
-    EventsForGroupAdapter adapter;
+    EventDetailsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +70,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         groups = new ArrayList<>();
         // Create adapter passing in the sample user data
-        adapter = new EventsForGroupAdapter(groups, event);
+        adapter = new EventDetailsAdapter(groups, event);
         // Attach the adapter to the recyclerview to populate items
         rvDetails.setAdapter(adapter);
         // Set layout manager to position the items
@@ -93,6 +87,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                 requestNewGroup(v);
             }
         });
+
+        if(((Consumer) ParseUser.getCurrentUser()).getType().equals("Consumer")) {
+            ((ViewGroup) create.getParent()).removeView(create);
+        }
     }
 
     public void requestNewGroup(View view) {
@@ -151,7 +149,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         owner.fetchIfNeededInBackground(new GetCallback<ParseUser>() {
             @Override
             public void done(ParseUser object, ParseException e) {
-                newGroup.setOfficial(object.equals(ParseUser.getCurrentUser()));
+                newGroup.setOfficial(object.getUsername().equals(ParseUser.getCurrentUser().getUsername()));
                 newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
                 newGroup.saveInBackground(new SaveCallback() {
                     @Override

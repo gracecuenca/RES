@@ -22,19 +22,16 @@
 
     <TextView
         android:id="@+id/tvDisplayname"
-        android:layout_width="308dp"
+        android:layout_width="281dp"
         android:layout_height="25dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="TextView"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/tvNumMembs"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
@@ -52,18 +49,19 @@
         app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
 
     <TextView
-        android:id="@+id/tvGroupType"
+        android:id="@+id/tvEventName"
         android:layout_width="203dp"
         android:layout_height="22dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
-        app:layout_constraintTop_toBottomOf="@+id/tvNumMembs" />
+        app:layout_constraintTop_toBottomOf="@+id/tvNumMembs"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnJoin"
@@ -71,12 +69,12 @@
         android:layout_height="39dp"
         android:layout_marginStart="36dp"
         android:layout_marginLeft="36dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:background="@android:color/holo_orange_dark"
         android:text="Leave"
         android:textAllCaps="false"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/tvGroupType"
+        app:layout_constraintStart_toEndOf="@+id/tvEventName"
         app:layout_constraintTop_toBottomOf="@+id/tvOwnedBy" />
 
     <TextView
@@ -93,4 +91,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvNumMembs"
         app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
+
+    <ImageView
+        android:id="@+id/ivVerified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvOwnedBy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvDisplayname"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_verified" />
 </androidx.constraintlayout.widget.ConstraintLayout>

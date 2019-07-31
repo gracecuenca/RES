@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddEventActivity"></activity>
+        <activity android:name=".DirectMessageActivity"></activity>
+        <activity android:name=".AddEventActivity" />
         <activity android:name=".GroupMessagesActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".ConsumerSignUp" />

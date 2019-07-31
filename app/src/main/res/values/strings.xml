@@ -2,10 +2,10 @@
     <string name="app_name">FBU_RES</string>
     <string name="PUBNUB_PUBLISH_KEY">pub-c-af6a71df-4c48-4689-8fdc-c1570ff8ba40</string>
     <string name="PUBNUB_SUBSCRIBE_KEY">sub-c-3636d2c4-a8bd-11e9-9764-faf49bb54dbb</string>
-    <string name="google_maps_api_key">AIzaSyCSecRnyUx3Tb-BhtynvC37aL7Pola7yCI</string>
+    <string name="google_maps_api_key">AIzaSyDkfUn09ygcXwUh9Vtv8YCq0GQC0rgMPlY</string>
     <string name="profile_me">My Profile Pic</string>
     <string name="profile_other">Other profile pic</string>
     <string name="item">Item</string>
     <string name="CLIENT_ID">ROO1IY2l9ZuTmAKRfTWOvg</string>
-    <string name = "YELP_API_KEY">BnRIYh3GBQfo6tCRdTbCYr1JTxUcS2u3b4Z8nUswd_9ir2Cb27bL2wP-HzREH81wjrIaTEjOdfAF-wx4Zz9cD-2j0AhIZ966pDA8MDMmbaCl30hEAmLk_llJhj87XXYx</string>
+    <string name="YELP_API_KEY">BnRIYh3GBQfo6tCRdTbCYr1JTxUcS2u3b4Z8nUswd_9ir2Cb27bL2wP-HzREH81wjrIaTEjOdfAF-wx4Zz9cD-2j0AhIZ966pDA8MDMmbaCl30hEAmLk_llJhj87XXYx</string>
 </resources>

@@ -1,18 +1,14 @@
 package com.example.fbu_res.fragments;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,18 +21,14 @@ import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.fbu_res.models.Event.KEY_DISTANCE_TO_USER;
 
 public class ProfileFragment extends Fragment {
 
@@ -48,12 +40,14 @@ public class ProfileFragment extends Fragment {
     private ArrayList<Event> events;
     private EventAdapter adapter;
 
-    // attributes in order to display the scroll
+    // Event removedEvent;
 
     // The onCreateView method is called when Fragment should create its View object hierarchy,
     // either dynamically or via XML layout inflation.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // getting the event that was removed from calendar
+        // removedEvent = (Event)getArguments().get("removed event");
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
@@ -62,14 +56,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         // setting up the current user
         user = (Consumer) ParseUser.getCurrentUser();
 
         // showing the profile of the user
         ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
         tvDisplayname = (TextView) view.findViewById(R.id.tvDisplayname);
-        if(user.getProfileImg() != null){
+        if (user.getProfileImg() != null) {
             Glide.with(getContext()).load(user.getProfileImg().getUrl()).into(ivProfileImage);
         }
         tvDisplayname.setText(user.getDisplayname());
@@ -95,24 +88,39 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
     }
 
     private void loadEvents(){
-        ParseRelation interestedEvents = user.getInterestedEvents();
-        ParseQuery<Event> eventsQuery = interestedEvents.getQuery();
-        eventsQuery.addAscendingOrder(Event.KEY_DATE);
+        if(user.getType().equals("Consumer")){
+            ParseRelation interestedEvents = user.getInterestedEvents();
+            ParseQuery<Event> eventsQuery = interestedEvents.getQuery();
+            eventsQuery.addAscendingOrder(Event.KEY_DATE);
 
-        eventsQuery.findInBackground(new FindCallback<Event>() {
-            @Override
-            public void done(List<Event> events, ParseException e) {
-                if (e != null) {
-                    e.printStackTrace();
-                    return;
+            eventsQuery.findInBackground(new FindCallback<Event>() {
+                @Override
+                public void done(List<Event> events, ParseException e) {
+                    if (e != null) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    addAll(events);
                 }
-                addAll(events);
-            }
-        });
+            });
+        } else if(user.getType().equals("Business")){
+            ParseRelation createdEvents = user.getCreatedEvents();
+            ParseQuery<Event> eventsQuery = createdEvents.getQuery();
+            eventsQuery.addAscendingOrder(Event.KEY_DATE);
+            eventsQuery.findInBackground(new FindCallback<Event>() {
+                @Override
+                public void done(List<Event> events, ParseException e) {
+                    if (e != null) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    addAll(events);
+                }
+            });
+        }
     }
 
     // Clean all elements of the recycler

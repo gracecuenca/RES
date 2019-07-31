@@ -3,8 +3,6 @@ package com.example.fbu_res.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,21 +20,20 @@ import com.example.fbu_res.R;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
-import com.google.common.base.MoreObjects;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public List<Object> objects;
     Context context;
@@ -44,7 +41,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final int DETAILS = 0, GROUPS = 1;
     Event event;
 
-    public EventsForGroupAdapter(List<Object> objects, Event event){
+    public EventDetailsAdapter(List<Object> objects, Event event){
         this.objects = objects;
         this.event = event;
     }
@@ -101,33 +98,64 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             Glide.with(vh1.itemView.getContext()).load(image.getUrl()).into(vh1.ivImage);
         }
 
-        vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
-                currentUser.setInterestedEvents(event);
-                Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary" +
-                                "under profile", Toast.LENGTH_SHORT).show();
-                vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
-            }
-        });
-
-        ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
-        query.whereEqualTo(Consumer.KEY_INTERESTED_EVENTS, event);
-        query.findInBackground(new FindCallback<Consumer>() {
-            @Override
-            public void done(List objects, ParseException e) {
-                int size = objects.size();
-                if(size == 1) {
-                    vh1.btnAddToCalendar.setClickable(false);
+        // businesses can't add events to their calendars/ itineraries
+        if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Business")){
+            vh1.btnAddToCalendar.setClickable(false);
+            vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+            vh1.btnRemoveFromCalendar.setClickable(false);
+            vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+        }
+        // but consumers can
+        else if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Consumer")){
+            final Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
+            vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentUser.addInterestedEvent(event);
+                    Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary " +
+                            "under profile", Toast.LENGTH_SHORT).show();
                     vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    vh1.btnRemoveFromCalendar.setClickable(true);
+                    vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
                 }
-                else if(size == 0) {
+            });
+
+            vh1.btnRemoveFromCalendar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentUser.removeInterestedEvent(event);
+                    Toast.makeText(v.getContext(), event.getName()+ " has been removed from itinerary " +
+                            "under profile", Toast.LENGTH_SHORT).show();
+                    vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
                     vh1.btnAddToCalendar.setClickable(true);
                     vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+
+
                 }
-            }
-        });
+            });
+
+            // querying to see if the event is already in the list of the consumer's interested events
+            ParseQuery q = currentUser.getInterestedEvents().getQuery();
+            q.whereEqualTo(Event.KEY_NAME, event.getName());
+            q.findInBackground(new FindCallback<Consumer>() {
+                @Override
+                public void done(List items, ParseException e) {
+                    if(items.size() == 1) {
+                        vh1.btnAddToCalendar.setClickable(false);
+                        vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                        vh1.btnRemoveFromCalendar.setClickable(true);
+                        vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                    }
+                    else if(items.size() == 0) {
+                        vh1.btnAddToCalendar.setClickable(true);
+                        vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                        vh1.btnRemoveFromCalendar.setClickable(false);
+                        vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    }
+                }
+            });
+
+        }
 
     }
 
@@ -138,15 +166,18 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         if(group.getImage()!=null){
             Glide.with(context).load(group.getImage().getUrl()).into(vh1.groupImage);
         }
-        vh1.groupType.setText(group.getType());
-        vh1.numMembers.setText(String.valueOf(group.getNumMembs()) +
+
+        vh1.groupType.setText("Event: ");
+        vh1.groupType.append(event.getName());
+        vh1.numMembers.setText(group.getNumMembs() +
                 (group.getNumMembs() > 1 ? " members" : " member"));
 
         ParseUser owner = group.getOwner();
         owner.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                String username = (String) object.get("username");
+                String username = group.getOfficial() ? (String) object.get("username")
+                        : (String) object.get(Consumer.KEY_DISPLAYNAME);
                 vh1.owner.setText("Owned by: " + username);
 
             }
@@ -163,6 +194,9 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 notifyDataSetChanged();
             }
         });
+        if(!group.getOfficial() && vh1.verified.getParent() != null) {
+            ((ViewGroup) vh1.verified.getParent()).removeView(vh1.verified);
+        }
     }
 
     @Override
@@ -184,14 +218,16 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TextView groupType;
         TextView owner;
         Button join;
+        ImageView verified;
         public ViewHolder2(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivGroupPic);
             groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
-            groupType = view.findViewById(R.id.tvGroupType);
+            groupType = view.findViewById(R.id.tvEventName);
             owner = view.findViewById(R.id.tvOwnedBy);
             join = view.findViewById(R.id.btnJoin);
+            verified = view.findViewById(R.id.ivVerified);
         }
     }
 
@@ -203,6 +239,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         private TextView tvDescription;
         private TextView tvLocation;
         private Button btnAddToCalendar;
+        private Button btnRemoveFromCalendar;
 
 
         public ViewHolder1(View v) {
@@ -213,7 +250,7 @@ public class EventsForGroupAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             tvDescription = (TextView) v.findViewById(R.id.tvDescription);
             tvLocation = (TextView) v.findViewById(R.id.tvLocation);
             btnAddToCalendar = (Button) v.findViewById(R.id.btnAddToCalendar);
-
+            btnRemoveFromCalendar = (Button) v.findViewById(R.id.btnRemoveFromCalendar);
         }
     }
 

@@ -54,7 +54,51 @@ Aastha ::Created the PageViewer for the searchView and started adding  seach
 functionality. Realized that everything I did today might need to be changed for easier search. 
 Ayo :: 
 Grace :: Continuation of geofence implementation. Added location
-enabling services
+enabling services, used Google maps API
 ==============================================================
 
+2019-07-23
+--------------------------------------------------------------
+Aastha ::
+Ayo :: 
+Grace :: Ditched Google maps API implementation of geofencing
+since Parse has GeoQueryies and GeoPoints. Added GeoPoint
+functionality for events and was able to get current user's
+location.
+==============================================================
 
+2019-07-24
+--------------------------------------------------------------
+Aastha ::
+Ayo :: 
+Grace :: Completed sorting buy distance from current user
+on the home page. Started the profile fragment for consumers.
+==============================================================
+
+2019-07-25
+--------------------------------------------------------------
+Aastha ::
+Ayo :: 
+Grace :: Profile view completed and started on business side.
+Helped Ayo with Business side login and sign up.Planned and 
+fleshed out how the team would be reusing certainfragments, 
+nav bars, and elements. Realized that two classescannot both 
+extend ParseUser and had to restructure and reorganize code.
+==============================================================
+
+2019-07-26
+--------------------------------------------------------------
+Aastha ::
+Ayo :: 
+Grace :: Finished the business side home page with events that
+the business created. Finished adding an event functionality.
+Had a bit of trouble with uploading events from Gallery but
+Ayo helped a lot with it.
+==============================================================
+
+2019-07-29
+--------------------------------------------------------------
+Aastha ::
+Ayo :: 
+Grace :: 
+==============================================================
