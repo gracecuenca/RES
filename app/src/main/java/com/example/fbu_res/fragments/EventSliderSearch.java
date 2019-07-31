@@ -125,6 +125,7 @@ public class EventSliderSearch extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 eventsRv2.setVisibility(View.INVISIBLE);
                 eventLocationRecyclerView.setVisibility(View.VISIBLE);
                 locationSearchAdapater.filter(newText);

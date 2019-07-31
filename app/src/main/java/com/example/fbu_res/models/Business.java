@@ -14,7 +14,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-@ParseClassName("_User")
 public class Business extends ParseUser {
     public static final String KEY_DISPLAYNAME = "displayName";
     public static final String KEY_EMAIL = "email";
@@ -23,63 +22,37 @@ public class Business extends ParseUser {
     public static final String KEY_LOCATION = "userLocation";
     public static final String KEY_PROFILE_IMG = "profile_img";
     public static final String KEY_TYPE = "type";
+    public static String designation = "";
 
-    public void setLocation(ParseGeoPoint geoPoint){
-        put(KEY_LOCATION, geoPoint);
+    public static String getKeyDisplayname() {
+        return KEY_DISPLAYNAME;
     }
 
-    public ParseGeoPoint getLocation(){
-        return getParseGeoPoint(KEY_LOCATION);
+    public static String getKeyEmail() {
+        return KEY_EMAIL;
     }
 
-    public String getDisplayname() {
-        return getString(KEY_DISPLAYNAME);
+    public static String getKeyAddress() {
+        return KEY_ADDRESS;
     }
 
-    public void setDisplayname(String name) {
-        put(KEY_DISPLAYNAME, name);
+    public static String getKeyPhonenumber() {
+        return KEY_PHONENUMBER;
     }
 
-    public void setEmail(String email) {
-        put(KEY_EMAIL, email);
+    public static String getKeyLocation() {
+        return KEY_LOCATION;
     }
 
-    public String getEmail() {
-        return getString(KEY_EMAIL);
+    public static String getKeyProfileImg() {
+        return KEY_PROFILE_IMG;
     }
 
-    public void setPhonenumber(String phoneNumber) {
-        put(KEY_PHONENUMBER, phoneNumber);
+    public static String getKeyType() {
+        return KEY_TYPE;
     }
 
-    public String getPhonenumber() {
-        return getString(KEY_PHONENUMBER);
-    }
-
-    public Business() {
-    }
-
-    public ParseObject getAddress() {
-        return getParseObject(KEY_ADDRESS);
-    }
-
-    public void setAddress(Address address) {
-        put(KEY_ADDRESS, address);
-    }
-
-    public ParseFile getProfileImg() {
-        return getParseFile(KEY_PROFILE_IMG);
-    }
-
-    public void setProfileImg(ParseFile profileImg){
-        put(KEY_PROFILE_IMG, profileImg);
-    }
-
-    public void setType(String type) {
-        put(KEY_TYPE, type);
-    }
-
-    public String getType() {
-        return getString(KEY_TYPE);
+    public static void setDesignation(String name){
+        designation = name;
     }
 }

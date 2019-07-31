@@ -31,8 +31,6 @@ public class LocationSearchAdapater extends RecyclerView.Adapter<LocationSearchA
 
         if(fragment instanceof EventSliderSearch){
             this.titles.addAll(EventSliderSearch.locations);
-        } else{
-            this.titles.addAll(BusinessSliderSearch.businesses);
         }
     }
     @NonNull
@@ -49,23 +47,19 @@ public class LocationSearchAdapater extends RecyclerView.Adapter<LocationSearchA
         if(fragment instanceof EventSliderSearch){
             title = EventSliderSearch.locations.get(position);
             holder.name.setText(title);
-        }else{
-            title = BusinessSliderSearch.businesses.get(position);
-            holder.name.setText(title);
         }
 
     }
 
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
-        BusinessSliderSearch.businesses.clear();
+
         EventSliderSearch.locations.clear();
         if (charText.length() == 0) {
             if(fragment instanceof EventSliderSearch){
                 EventSliderSearch.locations.addAll(titles);
                 notifyDataSetChanged();
             }else{
-                BusinessSliderSearch.businesses.addAll(titles);
                 notifyDataSetChanged();
             }
         } else {
@@ -73,9 +67,6 @@ public class LocationSearchAdapater extends RecyclerView.Adapter<LocationSearchA
                 if(titles.get(i).toLowerCase().contains(charText)) {
                     if(fragment instanceof EventSliderSearch){
                         EventSliderSearch.locations.add(titles.get(i));
-                        notifyDataSetChanged();
-                    }else{
-                        BusinessSliderSearch.businesses.add(titles.get(i));
                         notifyDataSetChanged();
                     }
                 }
