@@ -28,6 +28,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -67,6 +68,9 @@ public class AddEventActivity extends AppCompatActivity {
 
     // button to officially create the event and add to relation
     Button btnCreateEvent;
+
+    // photo
+    ParseFile pf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -318,9 +322,8 @@ public class AddEventActivity extends AppCompatActivity {
                                     Log.e(APP_TAG, "No photo to submit");
                                     Toast.makeText(getApplicationContext(), "There is no photo!", Toast.LENGTH_LONG).show();
                                 }
-                                ParseFile photo = new ParseFile(photoFile);
-                                photo.saveInBackground();
-                                event.setImage(photo);
+                                // event.setImage(new ParseFile(photoFile));
+                                event.setImage(pf);
                                 event.setOwner(ParseUser.getCurrentUser());
                                 event.saveInBackground(new SaveCallback() {
                                     @Override
@@ -432,6 +435,15 @@ public class AddEventActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             // Load the selected image into a preview
+
+            // compression
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            final byte[] d = stream.toByteArray();
+
+            pf = new ParseFile(d);
+            pf.saveInBackground();
+
             ivPreview.setImageBitmap(selectedImage);
             photoFileName = getRealPathFromURI(getApplicationContext(), photoUri);
             photoFile = new File(photoFileName);
