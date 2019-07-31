@@ -9,8 +9,9 @@ import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -69,16 +70,158 @@ public class AddEventActivity extends AppCompatActivity {
         // clear cache before loading image into preview
         // deleteCache(this);
 
-        etName = (EditText) findViewById(R.id.etName);
-        etLocationName = (EditText) findViewById(R.id.etLocationName);
-        etAddressLine1 = (EditText) findViewById(R.id.etAdressline1);
-        etAddressLine2 = (EditText) findViewById(R.id.etAddressline2);
-        etZipcode = (EditText) findViewById(R.id.etZipcode);
-        etCity = (EditText) findViewById(R.id.etCity);
-        etState = (EditText)findViewById(R.id.etState);
-        etCountry = (EditText) findViewById(R.id.etCountry);
+        // TODO -- possible to create a single text watcher that validates emptiness on inputs
 
+        etName = (EditText) findViewById(R.id.etName);
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isInputEmpty(etName)) setTextError(etName);
+                validateButton();
+            }
+        });
+        etLocationName = (EditText) findViewById(R.id.etLocationName);
+        etLocationName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(isInputEmpty(etLocationName)) setTextError(etLocationName);
+                validateButton();
+            }
+        });
+        etAddressLine1 = (EditText) findViewById(R.id.etAdressline1);
+        etAddressLine1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(isInputEmpty(etAddressLine1)) setTextError(etAddressLine1);
+                validateButton();
+            }
+        });
+        etAddressLine2 = (EditText) findViewById(R.id.etAddressline2);
+        etAddressLine2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(isInputEmpty(etAddressLine2)) setTextError(etAddressLine2);
+                validateButton();
+            }
+        });
+        etZipcode = (EditText) findViewById(R.id.etZipcode);
+        etZipcode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(isInputEmpty(etZipcode)) setTextError(etZipcode);
+                validateButton();
+            }
+        });
+        etCity = (EditText) findViewById(R.id.etCity);
+        etCity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(isInputEmpty(etCity)) setTextError(etCity);
+                validateButton();
+            }
+        });
+        etState = (EditText)findViewById(R.id.etState);
+        etState.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(isInputEmpty(etState)) setTextError(etState);
+                validateButton();
+            }
+        });
+        etCountry = (EditText) findViewById(R.id.etCountry);
+        etCountry.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(isInputEmpty(etCountry)) setTextError(etCountry);
+                validateButton();
+            }
+        });
+
+        // initially making the state of the button unclickable
         btnNext = (Button) findViewById(R.id.btnNext);
+        btnNext.setEnabled(false);
+        btnNext.setClickable(false);
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,6 +311,32 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    // does the input text have anything in it
+    public boolean isInputEmpty(EditText et){
+        if(et.getText().toString().length() == 0){
+            return true;
+        }
+        return false;
+    }
+
+    // setting the error
+    public void setTextError(EditText et){
+        if(isInputEmpty(et)) et.setError("This field cannot be empty");
+        else et.setError(null);
+    }
+
+    public void validateButton(){
+        if(!isInputEmpty(etName) && !isInputEmpty(etLocationName) && !isInputEmpty(etAddressLine1) &&
+        !isInputEmpty(etAddressLine2) && !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
+        !isInputEmpty(etState) && !isInputEmpty(etCountry)){
+            btnNext.setClickable(true);
+            btnNext.setEnabled(true);
+        } else{
+            btnNext.setClickable(false);
+            btnNext.setEnabled(false);
+        }
     }
 
     // Trigger gallery selection for a photo
