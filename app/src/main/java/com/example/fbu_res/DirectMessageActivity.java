@@ -32,11 +32,12 @@ public class DirectMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direct_message);
 
-        rvUsers = findViewById(R.id.reyclerview_message_list);
+        rvUsers = findViewById(R.id.rvDM);
         users = new ArrayList<>();
         adapter = new DMAdapter( users);
         rvUsers.setAdapter(adapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
+        getUsers();
     }
 
     private void getUsers(){

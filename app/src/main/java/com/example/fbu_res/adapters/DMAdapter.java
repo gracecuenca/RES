@@ -55,13 +55,14 @@ public class DMAdapter extends RecyclerView.Adapter<DMAdapter.ViewHolder>{
         holder.profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user1 = ((Consumer) ParseUser.getCurrentUser()).getDisplayname();
-                String user2 = user.getDisplayname();
+                String user1 = ((Consumer) ParseUser.getCurrentUser()).getUsername();
+                String user2 = user.getUsername();
                 Intent i = new Intent(holder.itemView.getContext(), GroupMessagesActivity.class);
                 i.putExtra("channel_name", user1.compareTo(user2) > 0 ? user1 + user2 : user2 + user1);
                 holder.itemView.getContext().startActivity(i);
             }
         });
+
     }
 
     @Override
