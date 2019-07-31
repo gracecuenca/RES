@@ -93,6 +93,9 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
                 notifyDataSetChanged();
             }
         });
+        if(!group.getOfficial() && holder.verified.getParent() != null) {
+            ((ViewGroup) holder.verified.getParent()).removeView(holder.verified);
+        }
     }
 
     @Override
@@ -107,6 +110,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
         TextView groupType;
         TextView owner;
         Button leave;
+        ImageView verified;
         public ViewHolder(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivGroupPic);
@@ -115,6 +119,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
             groupType = view.findViewById(R.id.tvEventName);
             owner = view.findViewById(R.id.tvOwnedBy);
             leave = view.findViewById(R.id.btnJoin);
+            verified = view.findViewById(R.id.ivVerified);
         }
     }
 

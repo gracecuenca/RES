@@ -1,20 +1,15 @@
 package com.example.fbu_res.fragments;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -26,19 +21,14 @@ import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
-import org.parceler.Parcels;
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.fbu_res.models.Event.KEY_DISTANCE_TO_USER;
 
 public class ProfileFragment extends Fragment {
 
