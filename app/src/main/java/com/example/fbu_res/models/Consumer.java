@@ -28,6 +28,7 @@ public class Consumer extends ParseUser {
     public static final String KEY_INTERESTED_EVENTS = "interestedEvents";
     public static final String KEY_TYPE = "type";
     public static final String KEY_CREATED_EVENTS = "createdEvents";
+    public static final String KEY_DM_USERS = "dm_users";
 
     public void addInterestedEvent(Event event){
         ParseRelation relation = getRelation(KEY_INTERESTED_EVENTS);
@@ -133,6 +134,17 @@ public class Consumer extends ParseUser {
 
     public ParseRelation getCreatedEvents(){
         ParseRelation relation = getRelation(KEY_CREATED_EVENTS);
+        return relation;
+    }
+
+    public void addDMUser(Consumer user){
+        ParseRelation relation = getRelation(KEY_DM_USERS);
+        relation.add(user);
+        saveInBackground();
+    }
+
+    public ParseRelation getDMUsers(){
+        ParseRelation relation = getRelation(KEY_DM_USERS);
         return relation;
     }
 
