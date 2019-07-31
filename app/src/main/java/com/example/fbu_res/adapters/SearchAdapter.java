@@ -42,8 +42,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         if(fragment instanceof EventSliderSearch){
             this.titles.addAll(EventSliderSearch.events);
-        } else{
-            this.titles.addAll(BusinessSliderSearch.businesses);
         }
     }
 
@@ -62,9 +60,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         if(fragment instanceof EventSliderSearch){
             title = EventSliderSearch.events.get(position);
             holder.name.setText(title);
-        }else{
-            title = BusinessSliderSearch.businesses.get(position);
-            holder.name.setText(title);
         }
 
     }
@@ -73,21 +68,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public int getItemCount() {
         if(fragment instanceof EventSliderSearch){
             return EventSliderSearch.events.size();
-        }else{
-            return BusinessSliderSearch.businesses.size();
         }
+
+        return 0;
     }
 
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
-        BusinessSliderSearch.businesses.clear();
         EventSliderSearch.events.clear();
         if (charText.length() == 0) {
             if(fragment instanceof EventSliderSearch){
                 EventSliderSearch.events.addAll(titles);
-                notifyDataSetChanged();
-            }else{
-                BusinessSliderSearch.businesses.addAll(titles);
                 notifyDataSetChanged();
             }
         } else {
@@ -95,9 +86,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 if(titles.get(i).toLowerCase().contains(charText)) {
                     if(fragment instanceof EventSliderSearch){
                         EventSliderSearch.events.add(titles.get(i));
-                        notifyDataSetChanged();
-                    }else{
-                        BusinessSliderSearch.businesses.add(titles.get(i));
                         notifyDataSetChanged();
                     }
                 }
