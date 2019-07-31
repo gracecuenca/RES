@@ -305,7 +305,7 @@ public class AddEventActivity extends AppCompatActivity {
                         address.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {
-                                Event event = new Event();
+                                final Event event = new Event();
 
                                 // setting the attributes for an event
                                 event.setName(etName.getText().toString());
@@ -318,11 +318,14 @@ public class AddEventActivity extends AppCompatActivity {
                                     Log.e(APP_TAG, "No photo to submit");
                                     Toast.makeText(getApplicationContext(), "There is no photo!", Toast.LENGTH_LONG).show();
                                 }
-                                event.setImage(new ParseFile(photoFile));
+                                ParseFile photo = new ParseFile(photoFile);
+                                photo.saveInBackground();
+                                event.setImage(photo);
                                 event.setOwner(ParseUser.getCurrentUser());
                                 event.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
+                                        user.addCreatedEvents(event);
                                         Toast.makeText(getApplicationContext(), "successfully created the event", Toast.LENGTH_SHORT).show();
                                         setContentView(R.layout.activity_add_event);
                                         String strAddresss = address.getAddressline1() + " "+
