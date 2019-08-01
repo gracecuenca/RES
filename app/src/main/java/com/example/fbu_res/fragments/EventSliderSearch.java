@@ -149,7 +149,7 @@ public class EventSliderSearch extends Fragment {
                     }
                     withoutRepeats(events);
                     adapter.update(events);
-                    adapter.notifyDataSetChanged();
+                    //adapter.notifyDataSetChanged();
                 }else{
                     e.printStackTrace();
                 }
