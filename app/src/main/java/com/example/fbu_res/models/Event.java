@@ -101,6 +101,7 @@ public class Event extends ParseObject {
 
     public void setImage(ParseFile image){
         put(KEY_IMAGE, image);
+        saveInBackground();
     }
 
     public ParseFile getImage(){

@@ -35,10 +35,6 @@ public class HomeActivity extends AppCompatActivity {
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-
-
-
-
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        // getMenuInflater().inflate(R.menu.menu_toolbar, menu);
         return true;
     }
 

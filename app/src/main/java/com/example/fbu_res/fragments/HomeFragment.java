@@ -6,8 +6,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,7 +18,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -30,16 +31,12 @@ import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -49,11 +46,8 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.http.HEAD;
-
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 import static com.example.fbu_res.models.Event.KEY_DISTANCE_TO_USER;
-import static com.example.fbu_res.models.Event.KEY_OWNER;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -63,6 +57,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private EventAdapter adapter;
     protected ArrayList<Event> mEvents;
     private Button btnAddEvent;
+    private Toolbar toolbar;
+    private AppCompatActivity activity;
 
     // needed for infinite pagination
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -95,11 +91,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // TODO -- customized toolbar color and logo
+        // setting up opersonalized toolbar
+        activity = (AppCompatActivity) getActivity();
+        toolbar = (Toolbar) view.findViewById(R.id.homeToolbar);
+        activity.setSupportActionBar(toolbar);
+        activity.setTitle("");
 
         // set up current user location
         user = (Consumer) ParseUser.getCurrentUser();
-        startLocationUpdates(); // this is where the location is being updated
+        startLocationUpdates();
 
         rvEvents = (RecyclerView) view.findViewById(R.id.rvEvents);
         // create the data source
@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
-        // Configure the refreshing colors
+        // Configure the refreshing color
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
@@ -151,26 +151,31 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         spinner.setOnItemSelectedListener(this);
 
         // make the add event button visible only if the current user is a business
-        btnAddEvent = (Button) view.findViewById(R.id.btnAddEvent);
-
-        // if user is logged in
-        // consumers: cannot create events
-        // businesses: can create events
         if(user != null) {
-            if (user.getType().equals("Consumer")) btnAddEvent.setVisibility(View.GONE);
-            else if (user.getType().equals("Business")) {
-                btnAddEvent.setVisibility(View.VISIBLE);
-
-                // the on click listener will only be set up if the user is a business
-                btnAddEvent.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getContext(), AddEventActivity.class);
-                        startActivity(intent);
-                    }
-                });
-            }
+            if (user.getType().equals("Business")) setHasOptionsMenu(true);
+            else if(user.getType().equals("Consumer")) setHasOptionsMenu(false);
         }
+    }
+
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        activity.getMenuInflater().inflate(R.menu.menu_home, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_event:
+                Intent intent = new Intent(getContext(), AddEventActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                super.onOptionsItemSelected(item);
+                break;
+        }
+        return true;
     }
 
     // Trigger new location updates at interval

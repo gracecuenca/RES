@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/directMessage"
-        android:icon="@drawable/chat"
-        android:title="Compose"
-        app:showAsAction="ifRoom"></item>
+        android:id="@+id/action_add_event"
+        android:icon="@drawable/plus_circle_outline"
+        android:title="add event"
+        app:showAsAction="always" />
 </menu>

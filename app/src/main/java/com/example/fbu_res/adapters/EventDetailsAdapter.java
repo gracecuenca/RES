@@ -15,7 +15,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.fbu_res.EventDetailsActivity;
 import com.example.fbu_res.GroupMessagesActivity;
+import com.example.fbu_res.ProfileActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
@@ -93,10 +95,28 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         vh1.tvDate.setText(dateFormat.format(event.getDate()));
         vh1.tvLocation.setText(event.getLocationString());
         vh1.tvDescription.setText(event.getDescription());
+        final Consumer user = (Consumer) event.getOwner();
+        try {
+            user.fetchIfNeeded();
+            vh1.tvBusinessName.setText(user.getDisplayname());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        vh1.tvBusinessName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(vh1.itemView.getContext(), ProfileActivity.class);
+                i.putExtra("objectId", user.getObjectId());
+                v.getContext().startActivity(i);
+            }
+        });
+
         ParseFile image = event.getImage();
         if(image != null){
             Glide.with(vh1.itemView.getContext()).load(image.getUrl()).into(vh1.ivImage);
         }
+
+        
 
         // businesses can't add events to their calendars/ itineraries
         if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Business")){
@@ -240,7 +260,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private TextView tvLocation;
         private Button btnAddToCalendar;
         private Button btnRemoveFromCalendar;
-
+        private TextView tvBusinessName;
 
         public ViewHolder1(View v) {
             super(v);
@@ -251,6 +271,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tvLocation = (TextView) v.findViewById(R.id.tvLocation);
             btnAddToCalendar = (Button) v.findViewById(R.id.btnAddToCalendar);
             btnRemoveFromCalendar = (Button) v.findViewById(R.id.btnRemoveFromCalendar);
+            tvBusinessName = v.findViewById(R.id.tvBusinessName);
         }
     }
 

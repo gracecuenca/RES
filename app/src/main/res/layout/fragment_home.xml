@@ -36,19 +36,27 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/homeToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F4E05C"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
+
     <Spinner
         android:id="@+id/spinnerSort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginTop="72dp"
         android:dropDownWidth="match_parent"
         android:entries="@array/sort_arrays"
-        app:layout_constraintEnd_toStartOf="@+id/btnAddEvent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,22 +66,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="72dp"
         android:text="Sort By: "
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnAddEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="Add Event"
-        app:layout_constraintBottom_toTopOf="@+id/swipeContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
