@@ -82,11 +82,6 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        // clear cache before loading image into preview
-        // deleteCache(this);
-
-        // TODO -- possible to create a single text watcher that validates emptiness on inputs
-
         etName = (EditText) findViewById(R.id.etName);
         etName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -155,8 +150,8 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setTextError(etAddressLine2);
-                validateNextButton();
+                // setTextError(etAddressLine2);
+                // validateNextButton();
             }
         });
         etZipcode = (EditText) findViewById(R.id.etZipcode);
@@ -204,9 +199,6 @@ public class AddEventActivity extends AppCompatActivity {
                 ArrayAdapter.createFromResource(this, R.array.state_arrays, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-
-        // no default option for spinner
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -329,12 +321,6 @@ public class AddEventActivity extends AppCompatActivity {
                                 event.setDescription(etDescription.getText().toString());
                                 event.setLocation(address);
                                 event.setOwner(user);
-                                // checking to see if the user uploaded a file
-                                if(photoFile == null || ivPreview.getDrawable() == null){
-                                    Log.e(APP_TAG, "No photo to submit");
-                                    Toast.makeText(getApplicationContext(), "There is no photo!", Toast.LENGTH_LONG).show();
-                                }
-                                // event.setImage(new ParseFile(photoFile));
                                 event.setImage(pf);
                                 event.setOwner(ParseUser.getCurrentUser());
                                 event.saveInBackground(new SaveCallback() {
@@ -366,8 +352,6 @@ public class AddEventActivity extends AppCompatActivity {
 
                     }
                 });
-
-
             }
         });
 
@@ -426,8 +410,8 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void validateNextButton(){
         if(!isInputEmpty(etName) && !isInputEmpty(etLocationName) && !isInputEmpty(etAddressLine1) &&
-        !isInputEmpty(etAddressLine2) && !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
-        !state.equals("Select state") && !isInputEmpty(etCountry)){
+                !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
+                !state.equals("Select state") && !isInputEmpty(etCountry)){
             btnNext.setClickable(true);
             btnNext.setEnabled(true);
         } else{
@@ -461,62 +445,16 @@ public class AddEventActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // Load the selected image into a preview
 
-            // compression
+            // compressing image
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
             final byte[] d = stream.toByteArray();
 
             pf = new ParseFile(d);
             pf.saveInBackground();
-
             ivPreview.setImageBitmap(selectedImage);
-            photoFileName = getRealPathFromURI(getApplicationContext(), photoUri);
-            photoFile = new File(photoFileName);
             validateCreateButton();
-        }
-    }
-
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    // deleting cache functions
-    public static void deleteCache(Context context){
-        try{
-            File dir = context.getCacheDir();
-            deleteDir(dir);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean deleteDir(File dir){
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-            return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
         }
     }
 
