@@ -4,17 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.fbu_res.AddEventActivity;
 import com.example.fbu_res.LoginActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
@@ -32,13 +38,14 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
-    private Button btnLogout;
     private Consumer user;
     private ImageView ivProfileImage;
     private TextView tvDisplayname;
     private RecyclerView rvInterestedEvents;
     private ArrayList<Event> events;
     private EventAdapter adapter;
+    AppCompatActivity activity;
+    Toolbar toolbar;
 
     // Event removedEvent;
 
@@ -56,6 +63,14 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // setting up toolbar
+        activity = (AppCompatActivity) getActivity();
+        toolbar = (Toolbar) view.findViewById(R.id.profileToolbar);
+        activity.setSupportActionBar(toolbar);
+        activity.setTitle("");
+        setHasOptionsMenu(true);
+
         // setting up the current user
         user = (Consumer) ParseUser.getCurrentUser();
 
@@ -79,15 +94,26 @@ public class ProfileFragment extends Fragment {
 
         loadEvents();
 
-        // logout button functionality
-        btnLogout = (Button) view.findViewById(R.id.btnLogout);
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
+    }
 
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        activity.getMenuInflater().inflate(R.menu.menu_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                logout();
+                break;
+            default:
+                super.onOptionsItemSelected(item);
+                break;
+        }
+        return true;
     }
 
     private void loadEvents(){
