@@ -42,6 +42,8 @@ public class AddEventActivity extends AppCompatActivity {
     // date regex
     private static final Pattern date =
             Pattern.compile("^((0|1)\\d{1})/((0|1|2)\\d{1})/((19|20)\\d{2})");
+    public static final Pattern zipcode =
+            Pattern.compile("^\\d{5}$");
 
     // fields that are required by user when creating an event
     EditText etName;
@@ -96,7 +98,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (isInputEmpty(etName)) setTextError(etName);
+                setTextError(etName);
                 validateNextButton();
             }
         });
@@ -114,7 +116,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etLocationName)) setTextError(etLocationName);
+                setTextError(etLocationName);
                 validateNextButton();
             }
         });
@@ -132,7 +134,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etAddressLine1)) setTextError(etAddressLine1);
+                setTextError(etAddressLine1);
                 validateNextButton();
             }
         });
@@ -150,7 +152,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etAddressLine2)) setTextError(etAddressLine2);
+                setTextError(etAddressLine2);
                 validateNextButton();
             }
         });
@@ -168,7 +170,8 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etZipcode)) setTextError(etZipcode);
+                setTextError(etZipcode);
+                setZipcodeError(etZipcode);
                 validateNextButton();
             }
         });
@@ -186,7 +189,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etCity)) setTextError(etCity);
+                setTextError(etCity);
                 validateNextButton();
             }
         });
@@ -204,7 +207,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etState)) setTextError(etState);
+                setTextError(etState);
                 validateNextButton();
             }
         });
@@ -222,7 +225,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etCountry)) setTextError(etCountry);
+                setTextError(etCountry);
                 validateNextButton();
             }
         });
@@ -253,7 +256,7 @@ public class AddEventActivity extends AppCompatActivity {
                     @Override
                     public void afterTextChanged(Editable s) {
                         if(isInputEmpty(etDate)) setTextError(etDate);
-                        if(!isCorrectDate(etDate)) setDateError(etDate);
+                        setDateError(etDate);
                         validateCreateButton();
                     }
                 });
@@ -381,10 +384,24 @@ public class AddEventActivity extends AppCompatActivity {
         et.setError(null);
     }
 
+    // setting zipcode error
+    public void setZipcodeError(EditText et){
+        if(!isCorrectZipcde(et)){
+            et.setError("Please format valid zipcode as: xxxxx");
+            return;
+        }
+        et.setError(null);
+    }
+
     // does the input text match the correct date format
     public boolean isCorrectDate(EditText et){
         return date.matcher(et.getText().toString()).matches() &&
                 Integer.parseInt(et.getText().toString().substring(6)) >= Calendar.getInstance().get(Calendar.YEAR);
+    }
+
+    // is this a correct zipcode format
+    public boolean isCorrectZipcde(EditText et){
+        return zipcode.matcher(et.getText().toString()).matches();
     }
 
     public void validateCreateButton(){
