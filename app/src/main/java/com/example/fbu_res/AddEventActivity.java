@@ -14,9 +14,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.fbu_res.models.Address;
@@ -52,7 +55,7 @@ public class AddEventActivity extends AppCompatActivity {
     EditText etAddressLine2;
     EditText etZipcode;
     EditText etCity;
-    EditText etState;
+    String state;
     EditText etCountry;
     EditText etDate;
     EditText etDescription;
@@ -193,24 +196,30 @@ public class AddEventActivity extends AppCompatActivity {
                 validateNextButton();
             }
         });
-        etState = (EditText)findViewById(R.id.etState);
-        etState.addTextChangedListener(new TextWatcher() {
+        // setting up sorting by spinner input here
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerState);
+
+        // creating adapter for the spinner
+        ArrayAdapter<CharSequence> spinnerAdapter =
+                ArrayAdapter.createFromResource(this, R.array.state_arrays, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+
+        // no default option for spinner
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                setTextError(etState);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                state = parent.getItemAtPosition(position).toString();
                 validateNextButton();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                state = "Select state";
+            }
         });
+
         etCountry = (EditText) findViewById(R.id.etCountry);
         etCountry.addTextChangedListener(new TextWatcher() {
             @Override
@@ -305,7 +314,7 @@ public class AddEventActivity extends AppCompatActivity {
                         address.setAddressline1(etAddressLine1.getText().toString());
                         address.setAddressline2(etAddressLine2.getText().toString());
                         address.setCity(etCity.getText().toString());
-                        address.setState(etState.getText().toString());
+                        address.setState(state);
                         address.setZipcode(etZipcode.getText().toString());
                         address.setCountry(etCountry.getText().toString());
 
@@ -418,7 +427,7 @@ public class AddEventActivity extends AppCompatActivity {
     public void validateNextButton(){
         if(!isInputEmpty(etName) && !isInputEmpty(etLocationName) && !isInputEmpty(etAddressLine1) &&
         !isInputEmpty(etAddressLine2) && !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
-        !isInputEmpty(etState) && !isInputEmpty(etCountry)){
+        !state.equals("Select state") && !isInputEmpty(etCountry)){
             btnNext.setClickable(true);
             btnNext.setEnabled(true);
         } else{
