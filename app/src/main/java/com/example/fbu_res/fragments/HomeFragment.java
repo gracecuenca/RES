@@ -222,7 +222,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     public void onLocationResult(LocationResult locationResult) {
                         Location location = locationResult.getLastLocation();
                         currentLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+                        Log.d("loc", location.getLatitude() +" "+ location.getLongitude());
                         if(!currentLocation.equals(user.getLocation())){
+                            Log.d("loc", "hi");
                             user.setLocation(currentLocation);
                             user.saveInBackground();
                             if(option.equals("Distance")) {
@@ -284,7 +286,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             eventsQuery.addAscendingOrder(Event.KEY_DATE);
         } else if(option.equals("Distance")){
             eventsQuery.addAscendingOrder(Event.KEY_DISTANCE_TO_USER);
-            eventsQuery.whereLessThanOrEqualTo(KEY_DISTANCE_TO_USER, 10); // 10 mile radius
+            eventsQuery.whereLessThanOrEqualTo(KEY_DISTANCE_TO_USER, 10000); // 10 mile radius
         }
 
         if (isRefresh) {
@@ -340,8 +342,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void sortByDistance(){
         for(int i = 0; i < mEvents.size(); i++){
             Event event = mEvents.get(i);
-            int distance = (int) currentLocation.distanceInMilesTo(event.getParseGeoPoint());
-            Log.d(APP_TAG, Integer.toString(distance));
+            double distance = currentLocation.distanceInMilesTo(event.getParseGeoPoint());
+            Log.d(APP_TAG, Double.toString(distance));
             event.setDistanceToUser(distance);
         }
     }

@@ -56,12 +56,12 @@ public class Event extends ParseObject {
         return getParseGeoPoint().getLongitude();
     }
 
-    public int getDistanceToUser(){
-        if(getNumber(KEY_DISTANCE_TO_USER) == null) return 0;
-        return (int) getNumber(KEY_DISTANCE_TO_USER);
+    public Number getDistanceToUser(){
+        if(getNumber(KEY_DISTANCE_TO_USER) == null) return 0.0;
+        return getNumber(KEY_DISTANCE_TO_USER);
     }
 
-    public void setDistanceToUser(Integer distance){
+    public void setDistanceToUser(Double distance){
         put(KEY_DISTANCE_TO_USER, distance);
         saveInBackground();
     }

@@ -325,7 +325,6 @@ public class AddEventActivity extends AppCompatActivity {
                                 // event.setImage(new ParseFile(photoFile));
                                 event.setImage(pf);
                                 event.setOwner(ParseUser.getCurrentUser());
-                                // event.setDistanceToUser();
                                 event.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
@@ -343,6 +342,7 @@ public class AddEventActivity extends AppCompatActivity {
                                             addresses = geocoder.getFromLocationName(strAddresss, 5);
                                             android.location.Address loc = addresses.get(0);
                                             address.setPin(new ParseGeoPoint(loc.getLatitude(), loc.getLongitude()));
+                                            event.setDistanceToUser(user.getLocation().distanceInMilesTo(address.getParseGeoPoint(Address.KEY_PIN)));
                                         }catch (Exception eo){
                                             eo.printStackTrace();
                                         }
