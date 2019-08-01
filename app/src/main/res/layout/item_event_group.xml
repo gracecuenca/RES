@@ -30,7 +30,9 @@
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="TextView"
+        android:textColor="@color/black"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvNumMembs"
         app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
         app:layout_constraintTop_toTopOf="parent"
@@ -94,10 +96,11 @@
         app:layout_constraintStart_toEndOf="@+id/tvNumMembs"
         app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/ivVerified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:riv_corner_radius="30dip"
         android:layout_marginStart="3dp"
         android:layout_marginLeft="3dp"
         android:layout_marginEnd="6dp"
@@ -107,5 +110,5 @@
         app:layout_constraintStart_toEndOf="@+id/tvDisplayname"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.041"
-        app:srcCompat="@drawable/ic_verified" />
+        android:src="@drawable/ic_verified" />
 </androidx.constraintlayout.widget.ConstraintLayout>
