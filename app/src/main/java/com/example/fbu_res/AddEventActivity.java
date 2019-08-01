@@ -325,6 +325,7 @@ public class AddEventActivity extends AppCompatActivity {
                                 // event.setImage(new ParseFile(photoFile));
                                 event.setImage(pf);
                                 event.setOwner(ParseUser.getCurrentUser());
+                                // event.setDistanceToUser();
                                 event.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {

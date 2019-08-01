@@ -1,11 +1,14 @@
 package com.example.fbu_res.fragments;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,8 +21,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -27,6 +33,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_res.AddEventActivity;
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
+import com.example.fbu_res.HomeActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Consumer;
@@ -56,7 +63,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private RecyclerView rvEvents;
     private EventAdapter adapter;
     protected ArrayList<Event> mEvents;
-    private Button btnAddEvent;
     private Toolbar toolbar;
     private AppCompatActivity activity;
 
@@ -76,6 +82,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private LocationRequest mLocationRequest;
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     // the current user
     private Consumer user;
@@ -91,7 +98,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // setting up opersonalized toolbar
+        // setting up personalized toolbar
         activity = (AppCompatActivity) getActivity();
         toolbar = (Toolbar) view.findViewById(R.id.homeToolbar);
         activity.setSupportActionBar(toolbar);
@@ -99,7 +106,14 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         // set up current user location
         user = (Consumer) ParseUser.getCurrentUser();
-        startLocationUpdates();
+
+        if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){ // if permissions not granted
+            requestPermissions();
+        } else{
+            startLocationUpdates();
+        }
 
         rvEvents = (RecyclerView) view.findViewById(R.id.rvEvents);
         // create the data source
@@ -157,7 +171,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
     }
 
-    // Menu icons are inflated just as they were with actionbar
+    // Menu things
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         activity.getMenuInflater().inflate(R.menu.menu_home, menu);
@@ -196,17 +210,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         SettingsClient settingsClient = LocationServices.getSettingsClient(getContext());
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        // location has not been granted
         if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    Activity#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for Activity#requestPermissions for more details.
+            requestPermissions();
             return;
         }
         getFusedLocationProviderClient(getContext()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
@@ -214,15 +222,38 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     public void onLocationResult(LocationResult locationResult) {
                         Location location = locationResult.getLastLocation();
                         currentLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-                        user.setLocation(currentLocation);
-                        user.saveInBackground();
+                        if(!currentLocation.equals(user.getLocation())){
+                            user.setLocation(currentLocation);
+                            user.saveInBackground();
+                            if(option.equals("Distance")) {
+                                clear(); // comment out if u dont want it to spasm
+                                sortByDistance();
+                                loadEvents(false, false, option); // comment out if u dont want it to spasm
+                            }
+                        }
                     }
                 },
                 Looper.myLooper());
-        if(option.equals("Distance")) sortByDistance();
     }
 
-    // TODO -- test for when the user doesn't allow us to access location
+    // requesting permissions
+    public void requestPermissions(){
+        new AlertDialog.Builder(getContext())
+                .setTitle("Location Permissions needed")
+                .setMessage("Please enable location services")
+                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Prompt the user once explanation has been shown
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                MY_PERMISSIONS_REQUEST_LOCATION);
+                    }
+                })
+                .create()
+                .show();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -230,11 +261,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // locations-related tasks you need to do
+                    startLocationUpdates();
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                     Toast.makeText(getContext(), "Location services disabled: nearest events" +
                             "cant't be found", Toast.LENGTH_LONG).show();
                 }
@@ -256,8 +284,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             eventsQuery.addAscendingOrder(Event.KEY_DATE);
         } else if(option.equals("Distance")){
             eventsQuery.addAscendingOrder(Event.KEY_DISTANCE_TO_USER);
-            // this is where the limiting by distance happens
-            eventsQuery.whereLessThanOrEqualTo(KEY_DISTANCE_TO_USER, 10);
+            eventsQuery.whereLessThanOrEqualTo(KEY_DISTANCE_TO_USER, 10); // 10 mile radius
         }
 
         if (isRefresh) {
@@ -313,9 +340,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void sortByDistance(){
         for(int i = 0; i < mEvents.size(); i++){
             Event event = mEvents.get(i);
-            double distance = currentLocation.distanceInMilesTo(event.getParseGeoPoint());
-            event.put(KEY_DISTANCE_TO_USER, distance);
-            event.saveInBackground();
+            int distance = (int) currentLocation.distanceInMilesTo(event.getParseGeoPoint());
+            Log.d(APP_TAG, Integer.toString(distance));
+            event.setDistanceToUser(distance);
         }
     }
 
