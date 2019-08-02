@@ -95,7 +95,7 @@ public class InterestGroupAdapter extends RecyclerView.Adapter<InterestGroupAdap
         Button join;
         public ViewHolder(View view){
             super(view);
-            groupImage = view.findViewById(R.id.ivGroupPic);
+            groupImage = view.findViewById(R.id.ivNewGroup);
             groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvEventName);

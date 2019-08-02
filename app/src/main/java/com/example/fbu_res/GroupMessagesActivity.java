@@ -1,66 +1,44 @@
 package com.example.fbu_res;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.adapters.ChatAdapter;
 import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.Group;
 import com.example.fbu_res.models.Message;
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class GroupMessagesActivity extends AppCompatActivity {
     LinearLayout layout;
@@ -71,6 +49,7 @@ public class GroupMessagesActivity extends AppCompatActivity {
     DatabaseReference GroupNameRef, GroupMessageKeyRef;
     int RESULT_OK = 291;
     ParseFile profileImg;
+    Group currentGroup;
 
     ChatAdapter adapter;
     RecyclerView rvMessages;
@@ -94,11 +73,28 @@ public class GroupMessagesActivity extends AppCompatActivity {
         sendButton = (ImageView)findViewById(R.id.sendButton);
         messageArea = (EditText)findViewById(R.id.messageArea);
         scrollView = (ScrollView)findViewById(R.id.scrollView);
+        final TextView groupName = findViewById(R.id.tvGroupName);
+        final ImageView groupPic = findViewById(R.id.ivNewGroup);
 
-        currentGroupName = getIntent().getStringExtra("channel_name");
+        ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.whereEqualTo("objectId", getIntent().getStringExtra("objectId"));
+        query.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(List<Group> objects, ParseException e) {
+                currentGroup = objects.get(0);
+
+                groupName.setText(currentGroup.getName());
+                Glide.with(getApplicationContext())
+                        .load(currentGroup.getImage().getUrl())
+                        .into(groupPic);
+            }
+        });
+
+
         currentUsername = ParseUser.getCurrentUser().getUsername();
         profileImg = ((Consumer) ParseUser.getCurrentUser()).getProfileImg();
 
+        currentGroupName = getIntent().getStringExtra("channel_name");
         GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Groups")
                 .child(currentGroupName);
 
@@ -112,6 +108,7 @@ public class GroupMessagesActivity extends AppCompatActivity {
                 messageArea.setText("");
             }
         });
+
 
 
     }

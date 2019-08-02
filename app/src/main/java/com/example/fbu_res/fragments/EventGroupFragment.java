@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventGroupsAdapter;
+import com.example.fbu_res.adapters.MyGroupsAdapter;
 import com.example.fbu_res.models.Group;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -31,8 +33,9 @@ public class EventGroupFragment extends Fragment {
     private int mPage;
     PubNub mPubnub_DataStream;
     ArrayList<Group> groups;
-    private EventGroupsAdapter adapter;
+    private MyGroupsAdapter adapter;
     RecyclerView rvGroups;
+    EndlessRecyclerViewScrollListener scrollListener;
 
 
     @Override
@@ -53,8 +56,10 @@ public class EventGroupFragment extends Fragment {
         // Define the class we would like to query
         ParseUser user = ParseUser.getCurrentUser();
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.orderByAscending("createdAt");
         query.whereEqualTo("type", "Event");
         query.whereNotEqualTo("members", user);
+        query.setLimit(10);
 
         query.findInBackground(new FindCallback<Group>() {
             @Override
@@ -79,12 +84,46 @@ public class EventGroupFragment extends Fragment {
 
 
         // Create adapter passing in the sample user data
-        adapter = new EventGroupsAdapter(groups);
+        adapter = new MyGroupsAdapter(groups);
         // Attach the adapter to the recyclerview to populate items
         rvGroups.setAdapter(adapter);
         // Set layout manager to position the items
-        rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutMan = new LinearLayoutManager(getContext());
+
+        rvGroups.setLayoutManager(layoutMan);
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutMan) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadNextDataFromApi(page);
+            }
+        };
+
         getGroups();
+    }
+
+    private void loadNextDataFromApi(int page) {
+        // Define the class we would like to query
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.orderByAscending("createdAt");
+        query.whereEqualTo("type", "Event");
+        query.whereNotEqualTo("members", user);
+        query.setLimit(10);
+        query.whereGreaterThan("createdAt", groups.get(groups.size()-1).getCreatedAt());
+
+        query.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(List<Group> objects, ParseException e) {
+                if (e == null) {
+                    for(int i = 0; i < objects.size(); ++i) {
+                        groups.add(objects.get(i));
+                        adapter.notifyItemInserted(i);
+                    }
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 
     @Override

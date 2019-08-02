@@ -8,6 +8,19 @@
     android:orientation="vertical"
     tools:context="com.example.fbu_res.GroupMessagesActivity">
 
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/ivNewGroup"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginBottom="6dp"
+        android:src="@mipmap/ic_launcher_round"
+        app:layout_constraintBottom_toTopOf="@+id/reyclerview_message_list"
+        app:layout_constraintStart_toEndOf="@+id/button3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:riv_corner_radius="15dip" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reyclerview_message_list"
         android:layout_width="406dp"
@@ -54,14 +67,27 @@
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="65dp"
-        android:layout_height="33dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginStart="2dp"
         android:layout_marginLeft="2dp"
-        android:background="@android:color/holo_blue_dark"
+        android:background="@drawable/arrow_left"
         android:onClick="goBack"
-        android:text="Go Back"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvGroupName"
+        android:layout_width="wrap_content"
+        android:layout_height="29dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginBottom="7dp"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/reyclerview_message_list"
+        app:layout_constraintStart_toEndOf="@+id/ivNewGroup"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

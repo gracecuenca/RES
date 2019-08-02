@@ -5,6 +5,17 @@
     <!-- Customize your theme here. -->
 </style>
 
-<style name="AlertDialog" parent="Base.Theme.AppCompat.Light.Dialog"></style>
+<style name="AlertDialog" parent="Base.Theme.AppCompat.Light.Dialog">
 
+</style>
+
+    <style name="MyCustomTheme" parent="@android:style/Theme.Panel">
+        <item name="android:windowAnimationStyle">@style/MyAnimation.Window</item>
+        <item name="android:background">@drawable/rounded_dialog</item>
+    </style>
+
+    <style name="MyAnimation.Window" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/anim_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_out</item>
+    </style>
 </resources>

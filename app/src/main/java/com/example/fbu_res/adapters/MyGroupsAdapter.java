@@ -19,7 +19,6 @@ import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -62,23 +61,11 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
                 }
             });
         }
-        holder.numMembers.setText(String.valueOf(group.getNumMembs()) +
-                (group.getNumMembs() > 1 ? " members" : " member"));
-
-
-        ParseUser owner = group.getOwner();
-        owner.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject object, ParseException e) {
-                String username = (String) object.get("username");
-                holder.owner.setText("Owned by: " + username);
-
-            }
-        });
         holder.groupImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(holder.itemView.getContext(), GroupMessagesActivity.class);
+                intent.putExtra("objectId", group.getObjectId());
                 intent.putExtra("channel_name", group.getChannelName());
                 holder.itemView.getContext().startActivity(intent);
             }
@@ -106,16 +93,14 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView groupImage;
         TextView groupName;
-        TextView numMembers;
         TextView groupType;
         TextView owner;
         Button leave;
         ImageView verified;
         public ViewHolder(View view){
             super(view);
-            groupImage = view.findViewById(R.id.ivGroupPic);
+            groupImage = view.findViewById(R.id.ivNewGroup);
             groupName = view.findViewById(R.id.tvDisplayname);
-            numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvEventName);
             owner = view.findViewById(R.id.tvOwnedBy);
             leave = view.findViewById(R.id.btnJoin);

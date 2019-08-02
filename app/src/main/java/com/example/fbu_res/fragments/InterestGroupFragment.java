@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventGroupsAdapter;
 import com.example.fbu_res.adapters.InterestGroupAdapter;
@@ -33,8 +34,9 @@ public class InterestGroupFragment extends Fragment {
     private int mPage;
     PubNub mPubnub_DataStream;
     ArrayList<Group> groups;
-    private InterestGroupAdapter adapter;
+    private MyGroupsAdapter adapter;
     RecyclerView rvGroups;
+    EndlessRecyclerViewScrollListener scrollListener;
 
 
     @Override
@@ -55,8 +57,10 @@ public class InterestGroupFragment extends Fragment {
         // Define the class we would like to query
         ParseUser user = ParseUser.getCurrentUser();
         ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.orderByAscending("createdAt");
         query.whereEqualTo("type", "Interests");
         query.whereNotEqualTo("members", user);
+        query.setLimit(10);
 
         query.findInBackground(new FindCallback<Group>() {
             @Override
@@ -81,12 +85,48 @@ public class InterestGroupFragment extends Fragment {
 
 
         // Create adapter passing in the sample user data
-        adapter = new InterestGroupAdapter(groups);
+        adapter = new MyGroupsAdapter(groups);
         // Attach the adapter to the recyclerview to populate items
         rvGroups.setAdapter(adapter);
         // Set layout manager to position the items
-        rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutMan = new LinearLayoutManager(getContext());
+        rvGroups.setLayoutManager(layoutMan);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutMan) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadNextDataFromApi(page);
+            }
+        };
         getGroups();
+        rvGroups.addOnScrollListener(scrollListener);
+
+    }
+
+    // Append the next page of data into the adapter
+    // This method probably sends out a network request and appends new data items to your adapter.
+    public void loadNextDataFromApi(int offset) {
+        // Define the class we would like to query
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+        query.orderByAscending("createdAt");
+        query.whereEqualTo("type", "Interests");
+        query.whereNotEqualTo("members", user);
+        query.setLimit(10);
+        query.whereGreaterThan("createdAt", groups.get(groups.size()-1).getCreatedAt());
+
+        query.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(List<Group> objects, ParseException e) {
+                if (e == null) {
+                    int size = groups.size();
+                    groups.addAll(objects);
+                    adapter.notifyItemRangeInserted(size , objects.size());
+                } else {
+                    Log.d("item", "Error: " + e.getMessage());
+                }
+            }
+        });
     }
 
     @Override

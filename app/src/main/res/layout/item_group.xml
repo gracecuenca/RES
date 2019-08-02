@@ -8,88 +8,59 @@
     android:orientation="vertical">
 
     <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/ivGroupPic"
-        android:layout_width="86dp"
-        android:layout_height="84dp"
-        app:riv_corner_radius="42dip"
+        android:id="@+id/ivNewGroup"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="2dp"
         android:layout_marginLeft="2dp"
         android:layout_marginBottom="4dp"
+        android:src="@android:drawable/sym_def_app_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvDisplayname"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@android:drawable/sym_def_app_icon" />
+        app:riv_corner_radius="42dip" />
 
     <TextView
         android:id="@+id/tvDisplayname"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="23dp"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tvNumMembs"
-        app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/tvNumMembs"
-        android:layout_width="209dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="10dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
-        app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/ivNewGroup"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvEventName"
-        android:layout_width="203dp"
-        android:layout_height="22dp"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="12sp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
-        app:layout_constraintTop_toBottomOf="@+id/tvNumMembs"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toEndOf="@+id/ivNewGroup"
+        app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
 
     <Button
         android:id="@+id/btnJoin"
         android:layout_width="59dp"
         android:layout_height="39dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/holo_orange_dark"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/rounded_button"
         android:text="Leave"
         android:textAllCaps="false"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/tvEventName"
-        app:layout_constraintTop_toBottomOf="@+id/tvOwnedBy" />
-
-    <TextView
-        android:id="@+id/tvOwnedBy"
-        android:layout_width="93dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:gravity="center"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvNumMembs"
-        app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/ivVerified"

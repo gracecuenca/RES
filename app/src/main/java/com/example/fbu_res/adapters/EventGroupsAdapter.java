@@ -111,7 +111,7 @@ public class EventGroupsAdapter extends RecyclerView.Adapter<EventGroupsAdapter.
         ImageView verified;
         public ViewHolder(View view){
             super(view);
-            groupImage = view.findViewById(R.id.ivGroupPic);
+            groupImage = view.findViewById(R.id.ivNewGroup);
             groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvEventName);

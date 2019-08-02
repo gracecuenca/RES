@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.fbu_res.EventDetailsActivity;
 import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.ProfileActivity;
 import com.example.fbu_res.R;
@@ -241,7 +240,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ImageView verified;
         public ViewHolder2(View view){
             super(view);
-            groupImage = view.findViewById(R.id.ivGroupPic);
+            groupImage = view.findViewById(R.id.ivNewGroup);
             groupName = view.findViewById(R.id.tvDisplayname);
             numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvEventName);

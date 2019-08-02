@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/ivGroupPic"
+        android:id="@+id/ivNewGroup"
         android:layout_width="86dp"
         android:layout_height="84dp"
         app:riv_corner_radius="42dip"
@@ -36,7 +36,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/tvNumMembs"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
+        app:layout_constraintStart_toEndOf="@+id/ivNewGroup"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -49,7 +49,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
+        app:layout_constraintStart_toEndOf="@+id/ivNewGroup"
         app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivGroupPic"
+        app:layout_constraintStart_toEndOf="@+id/ivNewGroup"
         app:layout_constraintTop_toBottomOf="@+id/tvNumMembs" />
 
     <Button
