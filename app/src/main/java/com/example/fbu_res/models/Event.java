@@ -56,13 +56,14 @@ public class Event extends ParseObject {
         return getParseGeoPoint().getLongitude();
     }
 
-    public double getDistanceToUser(){
+    public Number getDistanceToUser(){
         if(getNumber(KEY_DISTANCE_TO_USER) == null) return 0.0;
-        return (double) getNumber(KEY_DISTANCE_TO_USER);
+        return getNumber(KEY_DISTANCE_TO_USER);
     }
 
     public void setDistanceToUser(Double distance){
         put(KEY_DISTANCE_TO_USER, distance);
+        saveInBackground();
     }
 
     public void setLocation(Address address) {

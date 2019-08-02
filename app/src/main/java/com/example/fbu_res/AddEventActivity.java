@@ -14,9 +14,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.fbu_res.models.Address;
@@ -42,6 +45,8 @@ public class AddEventActivity extends AppCompatActivity {
     // date regex
     private static final Pattern date =
             Pattern.compile("^((0|1)\\d{1})/((0|1|2)\\d{1})/((19|20)\\d{2})");
+    public static final Pattern zipcode =
+            Pattern.compile("^\\d{5}$");
 
     // fields that are required by user when creating an event
     EditText etName;
@@ -50,7 +55,7 @@ public class AddEventActivity extends AppCompatActivity {
     EditText etAddressLine2;
     EditText etZipcode;
     EditText etCity;
-    EditText etState;
+    String state;
     EditText etCountry;
     EditText etDate;
     EditText etDescription;
@@ -77,11 +82,6 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        // clear cache before loading image into preview
-        // deleteCache(this);
-
-        // TODO -- possible to create a single text watcher that validates emptiness on inputs
-
         etName = (EditText) findViewById(R.id.etName);
         etName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -96,7 +96,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (isInputEmpty(etName)) setTextError(etName);
+                setTextError(etName);
                 validateNextButton();
             }
         });
@@ -114,7 +114,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etLocationName)) setTextError(etLocationName);
+                setTextError(etLocationName);
                 validateNextButton();
             }
         });
@@ -132,7 +132,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etAddressLine1)) setTextError(etAddressLine1);
+                setTextError(etAddressLine1);
                 validateNextButton();
             }
         });
@@ -150,8 +150,8 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etAddressLine2)) setTextError(etAddressLine2);
-                validateNextButton();
+                // setTextError(etAddressLine2);
+                // validateNextButton();
             }
         });
         etZipcode = (EditText) findViewById(R.id.etZipcode);
@@ -168,7 +168,8 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etZipcode)) setTextError(etZipcode);
+                setTextError(etZipcode);
+                setZipcodeError(etZipcode);
                 validateNextButton();
             }
         });
@@ -186,28 +187,31 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etCity)) setTextError(etCity);
+                setTextError(etCity);
                 validateNextButton();
             }
         });
-        etState = (EditText)findViewById(R.id.etState);
-        etState.addTextChangedListener(new TextWatcher() {
+        // setting up sorting by spinner input here
+        Spinner spinner = (Spinner) findViewById(R.id.spinnerState);
+
+        // creating adapter for the spinner
+        ArrayAdapter<CharSequence> spinnerAdapter =
+                ArrayAdapter.createFromResource(this, R.array.state_arrays, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etState)) setTextError(etState);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                state = parent.getItemAtPosition(position).toString();
                 validateNextButton();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                state = "Select state";
+            }
         });
+
         etCountry = (EditText) findViewById(R.id.etCountry);
         etCountry.addTextChangedListener(new TextWatcher() {
             @Override
@@ -222,7 +226,7 @@ public class AddEventActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(isInputEmpty(etCountry)) setTextError(etCountry);
+                setTextError(etCountry);
                 validateNextButton();
             }
         });
@@ -253,7 +257,7 @@ public class AddEventActivity extends AppCompatActivity {
                     @Override
                     public void afterTextChanged(Editable s) {
                         if(isInputEmpty(etDate)) setTextError(etDate);
-                        if(!isCorrectDate(etDate)) setDateError(etDate);
+                        setDateError(etDate);
                         validateCreateButton();
                     }
                 });
@@ -302,7 +306,7 @@ public class AddEventActivity extends AppCompatActivity {
                         address.setAddressline1(etAddressLine1.getText().toString());
                         address.setAddressline2(etAddressLine2.getText().toString());
                         address.setCity(etCity.getText().toString());
-                        address.setState(etState.getText().toString());
+                        address.setState(state);
                         address.setZipcode(etZipcode.getText().toString());
                         address.setCountry(etCountry.getText().toString());
 
@@ -317,12 +321,6 @@ public class AddEventActivity extends AppCompatActivity {
                                 event.setDescription(etDescription.getText().toString());
                                 event.setLocation(address);
                                 event.setOwner(user);
-                                // checking to see if the user uploaded a file
-                                if(photoFile == null || ivPreview.getDrawable() == null){
-                                    Log.e(APP_TAG, "No photo to submit");
-                                    Toast.makeText(getApplicationContext(), "There is no photo!", Toast.LENGTH_LONG).show();
-                                }
-                                // event.setImage(new ParseFile(photoFile));
                                 event.setImage(pf);
                                 event.setOwner(ParseUser.getCurrentUser());
                                 event.saveInBackground(new SaveCallback() {
@@ -342,6 +340,7 @@ public class AddEventActivity extends AppCompatActivity {
                                             addresses = geocoder.getFromLocationName(strAddresss, 5);
                                             android.location.Address loc = addresses.get(0);
                                             address.setPin(new ParseGeoPoint(loc.getLatitude(), loc.getLongitude()));
+                                            event.setDistanceToUser(user.getLocation().distanceInMilesTo(address.getParseGeoPoint(Address.KEY_PIN)));
                                         }catch (Exception eo){
                                             eo.printStackTrace();
                                         }
@@ -353,8 +352,6 @@ public class AddEventActivity extends AppCompatActivity {
 
                     }
                 });
-
-
             }
         });
 
@@ -380,10 +377,24 @@ public class AddEventActivity extends AppCompatActivity {
         et.setError(null);
     }
 
+    // setting zipcode error
+    public void setZipcodeError(EditText et){
+        if(!isCorrectZipcde(et)){
+            et.setError("Please format valid zipcode as: xxxxx");
+            return;
+        }
+        et.setError(null);
+    }
+
     // does the input text match the correct date format
     public boolean isCorrectDate(EditText et){
         return date.matcher(et.getText().toString()).matches() &&
                 Integer.parseInt(et.getText().toString().substring(6)) >= Calendar.getInstance().get(Calendar.YEAR);
+    }
+
+    // is this a correct zipcode format
+    public boolean isCorrectZipcde(EditText et){
+        return zipcode.matcher(et.getText().toString()).matches();
     }
 
     public void validateCreateButton(){
@@ -399,8 +410,8 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void validateNextButton(){
         if(!isInputEmpty(etName) && !isInputEmpty(etLocationName) && !isInputEmpty(etAddressLine1) &&
-        !isInputEmpty(etAddressLine2) && !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
-        !isInputEmpty(etState) && !isInputEmpty(etCountry)){
+                !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
+                !state.equals("Select state") && !isInputEmpty(etCountry)){
             btnNext.setClickable(true);
             btnNext.setEnabled(true);
         } else{
@@ -434,62 +445,16 @@ public class AddEventActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // Load the selected image into a preview
 
-            // compression
+            // compressing image
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
             final byte[] d = stream.toByteArray();
 
             pf = new ParseFile(d);
             pf.saveInBackground();
-
             ivPreview.setImageBitmap(selectedImage);
-            photoFileName = getRealPathFromURI(getApplicationContext(), photoUri);
-            photoFile = new File(photoFileName);
             validateCreateButton();
-        }
-    }
-
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    // deleting cache functions
-    public static void deleteCache(Context context){
-        try{
-            File dir = context.getCacheDir();
-            deleteDir(dir);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean deleteDir(File dir){
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-            return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
         }
     }
 
