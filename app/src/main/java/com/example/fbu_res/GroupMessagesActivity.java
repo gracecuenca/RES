@@ -81,12 +81,16 @@ public class GroupMessagesActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Group>() {
             @Override
             public void done(List<Group> objects, ParseException e) {
-                currentGroup = objects.get(0);
+                if(objects.size() != 0) {
+                    currentGroup = objects.get(0);
 
-                groupName.setText(currentGroup.getName());
-                Glide.with(getApplicationContext())
-                        .load(currentGroup.getImage().getUrl())
-                        .into(groupPic);
+                    groupName.setText(currentGroup.getName());
+                    Glide.with(getApplicationContext())
+                            .load(currentGroup.getImage().getUrl())
+                            .into(groupPic);
+                } else {
+                    groupName.setText(getIntent().getStringExtra("dm_name"));
+                }
             }
         });
 

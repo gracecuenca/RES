@@ -67,9 +67,6 @@ public class BusinessGroupsFragment extends Fragment {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-        FloatingActionButton fabBtn = view.findViewById(R.id.fabNewGroup);
-        ((ViewGroup) fabBtn.getParent()).removeView(fabBtn);
     }
 
 

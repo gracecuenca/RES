@@ -182,6 +182,7 @@ public class GroupFragment extends Fragment {
         ParseUser user = ParseUser.getCurrentUser();
         newGroup.addMember(user);
         newGroup.setType("Interests");
+        newGroup.setOfficial(false);
         newGroup.setOwner(ParseUser.getCurrentUser());
         newGroup.setChannelName(groupName.replaceAll("[^a-zA-Z0-9]", ""));
         newGroup.saveInBackground(new SaveCallback() {

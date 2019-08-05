@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     private RecyclerView rvInterestedEvents;
     private ArrayList<Event> events;
     private EventAdapter adapter;
+    Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         // setting up the current user
-        String userId = getIntent().getStringExtra("objectId");
+        final String userId = getIntent().getStringExtra("objectId");
         ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
         query.whereEqualTo("objectId", userId);
 
@@ -76,7 +78,6 @@ public class ProfileActivity extends AppCompatActivity {
                     message.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
                             currentUser.addDMUser(user);
 
                             Intent i = new Intent(ProfileActivity.this, GroupMessagesActivity.class);
@@ -88,12 +89,41 @@ public class ProfileActivity extends AppCompatActivity {
                             startActivity(i);
                         }
                     });
+
+                    Button button = findViewById(R.id.btnFriend);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            currentUser.addFriend(user);
+                        }
+                    });
                 }
+
+                ParseQuery<Consumer> query2 = currentUser.getFriends().getQuery();
+                query2.whereEqualTo("objectId", userId);
+                query2.findInBackground(new FindCallback<Consumer>() {
+                    @Override
+                    public void done(List<Consumer> objects, ParseException e) {
+                        if(objects.size() > 0) {
+                            ParseQuery<Consumer> query3 = currentUser.getFriends().getQuery();
+                            query3.whereEqualTo("objectId", currentUser.getObjectId());
+                            query3.findInBackground(new FindCallback<Consumer>() {
+                                @Override
+                                public void done(List<Consumer> objects, ParseException e) {
+                                    Button button = findViewById(R.id.btnFriend);
+                                    if(objects.size() > 0){
+                                        ((ViewGroup) button.getParent()).removeView(button);
+                                    } else {
+                                        button.setText("Friend Request sent");
+                                        button.setClickable(false);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
-
-
-
     }
 
     private void loadEvents(){

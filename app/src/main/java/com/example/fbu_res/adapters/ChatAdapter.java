@@ -1,6 +1,8 @@
 package com.example.fbu_res.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.GroupMessagesActivity;
+import com.example.fbu_res.ProfileActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Message;
@@ -98,7 +101,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
             profileImage = (ImageView) itemView.findViewById(R.id.image_message_profile);
         }
 
-        void bind(Message message) {
+        @SuppressLint("StaticFieldLeak")
+        private void bind(Message message) {
             messageText.setText(message.getMessage());
 
             // Format the stored timestamp into a readable String using method.
@@ -114,7 +118,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     query.findInBackground(new FindCallback<ParseUser>() {
                         @Override
                         public void done(List<ParseUser> objects, ParseException e) {
-                            ParseUser user = objects.get(0);
+                            final ParseUser user = objects.get(0);
                             try {
                                 Glide.with(mContext)
                                         .load(((Consumer) user).getProfileImg().getFile().getAbsolutePath())
@@ -123,11 +127,19 @@ public class ChatAdapter extends RecyclerView.Adapter {
                             } catch (ParseException e1) {
                                 e1.printStackTrace();
                             }
-                        }
+                            profileImage.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent i = new Intent(profileImage.getContext(), ProfileActivity.class);
+                                    i.putExtra("objectId", user.getObjectId());
+                                    v.getContext().startActivity(i);
+                                }
+                            });                        }
                     });
                     return null;
                 }
-            }.execute();        }
+            }.execute();
+        }
     }
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {

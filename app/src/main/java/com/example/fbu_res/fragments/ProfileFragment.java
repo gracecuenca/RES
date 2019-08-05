@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.AddEventActivity;
+import com.example.fbu_res.FriendsActivity;
 import com.example.fbu_res.LoginActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
@@ -93,6 +94,15 @@ public class ProfileFragment extends Fragment {
         rvInterestedEvents.setLayoutManager(staggeredGridLayoutManager);
 
         loadEvents();
+
+        Button btnFriends = view.findViewById(R.id.btnFriends);
+        btnFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FriendsActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

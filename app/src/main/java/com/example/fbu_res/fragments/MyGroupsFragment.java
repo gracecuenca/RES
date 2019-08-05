@@ -82,7 +82,7 @@ public class MyGroupsFragment extends Fragment {
 
 
         // Create adapter passing in the sample user data
-        adapter = new MyGroupsAdapter(groups);
+        adapter = new MyGroupsAdapter(groups, false);
         // Attach the adapter to the recyclerview to populate items
 
         rvGroups.setAdapter(adapter);

@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.fbu_res.AddEventActivity;
+import com.example.fbu_res.DirectMessageActivity;
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.HomeActivity;
 import com.example.fbu_res.R;
@@ -164,17 +165,19 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         spinner.setOnItemSelectedListener(this);
 
-        // make the add event button visible only if the current user is a business
+        /*// make the add event button visible only if the current user is a business
         if(user != null) {
             if (user.getType().equals("Business")) setHasOptionsMenu(true);
             else if(user.getType().equals("Consumer")) setHasOptionsMenu(false);
-        }
+        }*/
+        setHasOptionsMenu(true);
     }
 
     // Menu things
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         activity.getMenuInflater().inflate(R.menu.menu_home, menu);
+        inflater.inflate(R.menu.menu_toolbar, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -184,6 +187,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             case R.id.action_add_event:
                 Intent intent = new Intent(getContext(), AddEventActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.directMessage:
+                Intent intent2 = new Intent(getContext(), DirectMessageActivity.class);
+                startActivity(intent2);
                 break;
             default:
                 super.onOptionsItemSelected(item);

@@ -62,4 +62,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvUpcoming" />
 
+    <Button
+        android:id="@+id/btnFriends"
+        android:layout_width="92dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:padding="0dp"
+        android:text="View Friends"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,9 +27,11 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
 
     public ArrayList<Group> groups;
     Context context;
+    private boolean publicGroup;
 
-    public MyGroupsAdapter(ArrayList<Group> groups){
+    public MyGroupsAdapter(ArrayList<Group> groups, boolean publicGroup){
         this.groups = groups;
+        this.publicGroup = publicGroup;
     }
 
     @NonNull
@@ -71,15 +73,30 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
             }
         });
 
-        holder.leave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                group.setNumMembs(group.getNumMembs() - 1);
-                group.removeMember(ParseUser.getCurrentUser());
-                groups.remove(group);
-                notifyDataSetChanged();
-            }
-        });
+        if(publicGroup){
+            holder.leave.setText("Join");
+            holder.leave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    group.setNumMembs(group.getNumMembs() + 1);
+                    group.addMember(ParseUser.getCurrentUser());
+                    groups.remove(group);
+                    notifyDataSetChanged();
+                }
+            });
+        } else {
+            holder.leave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    group.setNumMembs(group.getNumMembs() - 1);
+                    group.removeMember(ParseUser.getCurrentUser());
+                    groups.remove(group);
+                    notifyDataSetChanged();
+                }
+            });
+        }
+
+
         if(!group.getOfficial() && holder.verified.getParent() != null) {
             ((ViewGroup) holder.verified.getParent()).removeView(holder.verified);
         }
