@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -63,10 +64,13 @@ public class AddEventActivity extends AppCompatActivity {
 
     // next button
     Button btnNext;
+
     // PICK_PHOTO_CODE is a constant integer
     public final static int PICK_PHOTO_CODE = 1046;
-    public String photoFileName;
-    File photoFile;
+    // public String photoFileName;
+    // File photoFile;
+    ParseFile pf; // photo
+    Bitmap selectedImage = null; // bitmap
 
     // button to launch gallery and select image
     Button btnSelectImage;
@@ -74,13 +78,15 @@ public class AddEventActivity extends AppCompatActivity {
     // button to officially create the event and add to relation
     Button btnCreateEvent;
 
-    // photo
-    ParseFile pf;
+
+    // for the loading screen
+    ViewDialog viewDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+        viewDialog = new ViewDialog(this);
 
         etName = (EditText) findViewById(R.id.etName);
         etName.addTextChangedListener(new TextWatcher() {
@@ -137,23 +143,6 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
         etAddressLine2 = (EditText) findViewById(R.id.etAddressline2);
-        etAddressLine2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // setTextError(etAddressLine2);
-                // validateNextButton();
-            }
-        });
         etZipcode = (EditText) findViewById(R.id.etZipcode);
         etZipcode.addTextChangedListener(new TextWatcher() {
             @Override
@@ -240,7 +229,6 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setContentView(R.layout.activity_add_event_next);
-
                 // setting up the rest of the attributes
                 etDate = (EditText) findViewById(R.id.etDate);
                 etDate.addTextChangedListener(new TextWatcher() {
@@ -299,6 +287,8 @@ public class AddEventActivity extends AppCompatActivity {
                 btnCreateEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        viewDialog.showDialog();
+
                         final Consumer user = (Consumer) ParseUser.getCurrentUser();
 
                         final Address address = new Address();
@@ -321,35 +311,46 @@ public class AddEventActivity extends AppCompatActivity {
                                 event.setDescription(etDescription.getText().toString());
                                 event.setLocation(address);
                                 event.setOwner(user);
-                                event.setImage(pf);
-                                event.setOwner(ParseUser.getCurrentUser());
-                                event.saveInBackground(new SaveCallback() {
+                                // compressing image
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                final byte[] d = stream.toByteArray();
+                                pf = new ParseFile("image.png",d);
+                                pf.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
-                                        user.addCreatedEvents(event);
-                                        Toast.makeText(getApplicationContext(), "successfully created the event", Toast.LENGTH_SHORT).show();
-                                        setContentView(R.layout.activity_add_event);
-                                        String strAddresss = address.getAddressline1() + " "+
-                                                address.getAddressline2() + ", " +
-                                                address.getCity() + ", " + address.getState()+ " "+
-                                                address.getZipcode() + ", "+
-                                                address.getCountry()+ " ";
-                                        Geocoder geocoder = new Geocoder(getApplicationContext());
-                                        List<android.location.Address> addresses;
-                                        try{
-                                            addresses = geocoder.getFromLocationName(strAddresss, 5);
-                                            android.location.Address loc = addresses.get(0);
-                                            address.setPin(new ParseGeoPoint(loc.getLatitude(), loc.getLongitude()));
-                                            event.setDistanceToUser(user.getLocation().distanceInMilesTo(address.getParseGeoPoint(Address.KEY_PIN)));
-                                        }catch (Exception eo){
-                                            eo.printStackTrace();
-                                        }
-
+                                        event.setImage(pf);
+                                        event.setOwner(ParseUser.getCurrentUser());
+                                        event.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                user.addCreatedEvents(event);
+                                                String strAddresss = address.getAddressline1() + " "+
+                                                        address.getAddressline2() + ", " +
+                                                        address.getCity() + ", " + address.getState()+ " "+
+                                                        address.getZipcode() + ", "+
+                                                        address.getCountry()+ " ";
+                                                Geocoder geocoder = new Geocoder(getApplicationContext());
+                                                List<android.location.Address> addresses;
+                                                try{
+                                                    addresses = geocoder.getFromLocationName(strAddresss, 5);
+                                                    android.location.Address loc = addresses.get(0);
+                                                    address.setPin(new ParseGeoPoint(loc.getLatitude(), loc.getLongitude()));
+                                                    event.setDistanceToUser(user.getLocation().distanceInMilesTo(address.getParseGeoPoint(Address.KEY_PIN)));
+                                                }catch (Exception eo){
+                                                    eo.printStackTrace();
+                                                }
+                                                Toast.makeText(getApplicationContext(),
+                                                        "successfully created the event", Toast.LENGTH_SHORT).show();
+                                                Intent i = new Intent(AddEventActivity.this, HomeActivity.class);
+                                                startActivity(i);
+                                                viewDialog.hideDialog();
+                                            }
+                                        });
                                     }
                                 });
                             }
                         });
-
                     }
                 });
             }
@@ -397,6 +398,7 @@ public class AddEventActivity extends AppCompatActivity {
         return zipcode.matcher(et.getText().toString()).matches();
     }
 
+    // create button only clickable if all fields are valid
     public void validateCreateButton(){
         if(!isInputEmpty(etDate) && isCorrectDate(etDate) && !isInputEmpty(etDescription) &&
         ivPreview.getDrawable() != null){
@@ -408,6 +410,7 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
+    // next button only clickable if all fields are valid
     public void validateNextButton(){
         if(!isInputEmpty(etName) && !isInputEmpty(etLocationName) && !isInputEmpty(etAddressLine1) &&
                 !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
@@ -425,9 +428,6 @@ public class AddEventActivity extends AppCompatActivity {
         // Create intent for picking a photo from the gallery
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
         if (intent.resolveActivity(getPackageManager()) != null) {
             // Bring up gallery to select a photo
             startActivityForResult(intent, PICK_PHOTO_CODE);
@@ -438,21 +438,12 @@ public class AddEventActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             Uri photoUri = data.getData();
-            // Do something with the photo based on Uri
-            Bitmap selectedImage = null;
             try {
                 selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            // compressing image
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            final byte[] d = stream.toByteArray();
-
-            pf = new ParseFile(d);
-            pf.saveInBackground();
             ivPreview.setImageBitmap(selectedImage);
             validateCreateButton();
         }

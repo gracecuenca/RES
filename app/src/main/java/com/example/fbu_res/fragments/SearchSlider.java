@@ -53,23 +53,5 @@ public class SearchSlider extends Fragment{
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    /*The main list holding the event names and business name will be
-    * be stored in this fragment. Whenever someone types in a letter, the array
-    * will be filtered and sorted accordingly and sent to the correct slider function. In
-    * events search fragment, the updated array will be delivered and the adapter will be notified.
-    * Currently, we are only working with dummy data. There will be a conditional to determine
-    * which fragment the data should go to.*/
-
-    //public void filter(String charText) {
-        //charText = charText.toLowerCase(Locale.getDefault());
-        //ArrayList<String> filteredEvent = new ArrayList<>();
-        //for(int i =0; i < events.size(); i++){
-            //if(events.get(i).toLowerCase(Locale.getDefault()).contains(charText)){
-                //filteredEvent.add(events.get(i));
-            //}
-        //}
-
-    //}
-
 
 }

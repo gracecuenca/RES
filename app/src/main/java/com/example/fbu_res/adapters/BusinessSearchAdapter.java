@@ -1,6 +1,7 @@
 package com.example.fbu_res.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.fbu_res.R;
 import com.example.fbu_res.fragments.BusinessSliderSearch;
+import com.example.fbu_res.fragments.CategoryFragment;
+import com.example.fbu_res.fragments.SingleBusinessResultFragment;
+import com.example.fbu_res.fragments.YelpCatergoriesFragment;
+import com.example.fbu_res.fragments.YelpCatergoriesFragment;
 import com.example.fbu_res.models.Business;
 import com.example.fbu_res.models.BusinessSearch;
 import com.example.fbu_res.models.Event;
@@ -115,6 +123,23 @@ public class BusinessSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public ViewHolder1(View v1) {
             super(v1);
             categoryName = v1.findViewById(R.id.search_itemtv);
+            v1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BusinessSearch search = businesses.get(getAdapterPosition());
+                    YelpCatergoriesFragment fragment = new YelpCatergoriesFragment();
+                    FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.flContainer, fragment);
+                    Bundle args = new Bundle();
+                    args.putString("businessName", search.getName());
+                    args.putString("Lat", search.getLat());
+                    args.putString("Long", search.getLongi());
+                    fragment.setArguments(args);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
         }
     }
 
@@ -127,6 +152,24 @@ public class BusinessSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             super(v2);
             businessName = v2.findViewById(R.id.businessNameTextView);
             businessImage = v2.findViewById(R.id.businessNameProfileImage);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BusinessSearch search = businesses.get(getAdapterPosition());
+                    SingleBusinessResultFragment fragment = new SingleBusinessResultFragment();
+                    FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.flContainer, fragment);
+                    Bundle args = new Bundle();
+                    args.putString("businessName", search.getName());
+                    args.putString("Lat", search.getLat());
+                    args.putString("Long", search.getLongi());
+                    fragment.setArguments(args);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+            });
         }
 
     }
