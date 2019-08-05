@@ -25,8 +25,7 @@ import java.util.Random;
 
 public class PushNotificationServices extends FirebaseMessagingService {
 
-    public static final String ADMIN_CHANNEL_ID = "admin_channel";
-
+    private static final String ADMIN_CHANNEL_ID = "admin_channel";
 
     public PushNotificationServices() {
     }

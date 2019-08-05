@@ -6,4 +6,9 @@
         android:icon="@drawable/plus_circle_outline"
         android:title="add event"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_ar"
+        android:icon="@drawable/map"
+        android:title="activate ar"
+        app:showAsAction="always"  />
 </menu>
