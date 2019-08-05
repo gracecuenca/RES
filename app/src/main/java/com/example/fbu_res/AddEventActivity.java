@@ -67,8 +67,10 @@ public class AddEventActivity extends AppCompatActivity {
 
     // PICK_PHOTO_CODE is a constant integer
     public final static int PICK_PHOTO_CODE = 1046;
-    public String photoFileName;
-    File photoFile;
+    // public String photoFileName;
+    // File photoFile;
+    ParseFile pf; // photo
+    Bitmap selectedImage = null; // bitmap
 
     // button to launch gallery and select image
     Button btnSelectImage;
@@ -76,8 +78,6 @@ public class AddEventActivity extends AppCompatActivity {
     // button to officially create the event and add to relation
     Button btnCreateEvent;
 
-    // photo
-    ParseFile pf;
 
     // for the loading screen
     ViewDialog viewDialog;
@@ -311,32 +311,42 @@ public class AddEventActivity extends AppCompatActivity {
                                 event.setDescription(etDescription.getText().toString());
                                 event.setLocation(address);
                                 event.setOwner(user);
-                                event.setImage(pf);
-                                event.setOwner(ParseUser.getCurrentUser());
-                                event.saveInBackground(new SaveCallback() {
+                                // compressing image
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                final byte[] d = stream.toByteArray();
+                                pf = new ParseFile("image.png",d);
+                                pf.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
-                                        user.addCreatedEvents(event);
-                                        String strAddresss = address.getAddressline1() + " "+
-                                                address.getAddressline2() + ", " +
-                                                address.getCity() + ", " + address.getState()+ " "+
-                                                address.getZipcode() + ", "+
-                                                address.getCountry()+ " ";
-                                        Geocoder geocoder = new Geocoder(getApplicationContext());
-                                        List<android.location.Address> addresses;
-                                        try{
-                                            addresses = geocoder.getFromLocationName(strAddresss, 5);
-                                            android.location.Address loc = addresses.get(0);
-                                            address.setPin(new ParseGeoPoint(loc.getLatitude(), loc.getLongitude()));
-                                            event.setDistanceToUser(user.getLocation().distanceInMilesTo(address.getParseGeoPoint(Address.KEY_PIN)));
-                                        }catch (Exception eo){
-                                            eo.printStackTrace();
-                                        }
-                                        Toast.makeText(getApplicationContext(),
-                                                "successfully created the event", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(AddEventActivity.this, HomeActivity.class);
-                                        startActivity(i);
-                                        viewDialog.hideDialog();
+                                        event.setImage(pf);
+                                        event.setOwner(ParseUser.getCurrentUser());
+                                        event.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                user.addCreatedEvents(event);
+                                                String strAddresss = address.getAddressline1() + " "+
+                                                        address.getAddressline2() + ", " +
+                                                        address.getCity() + ", " + address.getState()+ " "+
+                                                        address.getZipcode() + ", "+
+                                                        address.getCountry()+ " ";
+                                                Geocoder geocoder = new Geocoder(getApplicationContext());
+                                                List<android.location.Address> addresses;
+                                                try{
+                                                    addresses = geocoder.getFromLocationName(strAddresss, 5);
+                                                    android.location.Address loc = addresses.get(0);
+                                                    address.setPin(new ParseGeoPoint(loc.getLatitude(), loc.getLongitude()));
+                                                    event.setDistanceToUser(user.getLocation().distanceInMilesTo(address.getParseGeoPoint(Address.KEY_PIN)));
+                                                }catch (Exception eo){
+                                                    eo.printStackTrace();
+                                                }
+                                                Toast.makeText(getApplicationContext(),
+                                                        "successfully created the event", Toast.LENGTH_SHORT).show();
+                                                Intent i = new Intent(AddEventActivity.this, HomeActivity.class);
+                                                startActivity(i);
+                                                viewDialog.hideDialog();
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -388,6 +398,7 @@ public class AddEventActivity extends AppCompatActivity {
         return zipcode.matcher(et.getText().toString()).matches();
     }
 
+    // create button only clickable if all fields are valid
     public void validateCreateButton(){
         if(!isInputEmpty(etDate) && isCorrectDate(etDate) && !isInputEmpty(etDescription) &&
         ivPreview.getDrawable() != null){
@@ -399,6 +410,7 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
+    // next button only clickable if all fields are valid
     public void validateNextButton(){
         if(!isInputEmpty(etName) && !isInputEmpty(etLocationName) && !isInputEmpty(etAddressLine1) &&
                 !isInputEmpty(etZipcode) && !isInputEmpty(etCity) &&
@@ -426,21 +438,12 @@ public class AddEventActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             Uri photoUri = data.getData();
-            // Do something with the photo based on Uri
-            Bitmap selectedImage = null;
             try {
                 selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            // compressing image
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            final byte[] d = stream.toByteArray();
-
-            pf = new ParseFile(d);
-            pf.saveInBackground();
             ivPreview.setImageBitmap(selectedImage);
             validateCreateButton();
         }
