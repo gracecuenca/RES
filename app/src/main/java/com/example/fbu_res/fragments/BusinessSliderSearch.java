@@ -73,7 +73,7 @@ public class BusinessSliderSearch extends Fragment {
     String searchText;
     ArrayList<BusinessSearch> locations;
     BusinessSearchAdapter adapterLocations;
-    SearchView locationSearchView;
+    public static SearchView locationSearchView;
     RecyclerView locationSearchRecyclerView;
     Geocoder geocoder;
     String currentLat;
@@ -93,6 +93,8 @@ public class BusinessSliderSearch extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        lat = "40.7128";
+        longi = "74.0060";
         getCurrentLocation();
         businessRv = view.findViewById(R.id.businessRv);
         businessSearches = new ArrayList<>();
@@ -108,6 +110,8 @@ public class BusinessSliderSearch extends Fragment {
         locationSearchRecyclerView.setAdapter(adapterLocations);
         businessRv.setLayoutManager(manager);
         businessSearchView = view.findViewById(R.id.businessSearchView);
+        getCurrentLocation();
+
         businessSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -121,6 +125,9 @@ public class BusinessSliderSearch extends Fragment {
                 businessSearches.clear();
                 adapter.notifyDataSetChanged();
                 searchText = newText;
+                if(locationSearchView.getQuery().toString().isEmpty()){
+                    getCurrentLocation();
+                }
                 new FetchData().execute();
                 return false;
             }
@@ -196,7 +203,6 @@ public class BusinessSliderSearch extends Fragment {
         protected String doInBackground(String... strings) {
             params.put("term", searchText);
             params.put("categories", searchText);
-            //TODO: initially, there will be search by current location, then user can searchjjljg
             params.put("latitude", lat);
             params.put("longitude", longi);
             Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
@@ -215,6 +221,8 @@ public class BusinessSliderSearch extends Fragment {
                     String URL = business.getImageUrl();
                     BusinessSearch search = new BusinessSearch(name, 2);
                     search.setURL(URL);
+                    search.setLat(Double.toString(business.getCoordinates().getLatitude()));
+                    search.setLongi(Double.toString(business.getCoordinates().getLongitude()));
                     businessSearches.add(search);
                     ArrayList<Category> category = business.getCategories();
                         for(int x =0; x < category.size(); x++){

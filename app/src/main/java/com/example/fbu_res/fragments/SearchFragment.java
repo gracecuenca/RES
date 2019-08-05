@@ -104,7 +104,6 @@ public class SearchFragment extends Fragment{
         activity.setSupportActionBar(toolbar);
         toolbar.setTitle("");
         setHasOptionsMenu(true);
-        Toast.makeText(getContext(), "In Search Tab", Toast.LENGTH_LONG);
         eventsRv = view.findViewById(R.id.eventsSearchrv);
         events = new ArrayList<>();
         adapter = new EventAdapter(events);
@@ -118,7 +117,6 @@ public class SearchFragment extends Fragment{
         categoriesRV.setAdapter(adapterCat);
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         categoriesRV.setLayoutManager(manager);
-
         queryEvents();
         queryCategories();
 
