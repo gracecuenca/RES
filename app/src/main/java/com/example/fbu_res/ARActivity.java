@@ -52,7 +52,7 @@ public class ARActivity extends AppCompatActivity {
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
         ModelRenderable.builder()
-                .setSource(this, Uri.parse("CobbleStones.sfb"))
+                .setSource(this, Uri.parse("bear.sfb"))
                 .build()
                 .thenAccept(renderable -> lampPostRenderable = renderable)
                 .exceptionally(throwable -> {
