@@ -210,7 +210,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 String topic = "/topics/event_alert";
 
                 try{
-                    notificationBody.put("title","Enter_title");
+                    notificationBody.put("title","yo");
                     notificationBody.put("message", "testing");
                     notification.put("to", topic);
                     notification.put("data", notificationBody);

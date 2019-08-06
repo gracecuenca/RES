@@ -45,13 +45,13 @@ public class PushNotificationServices extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.home_account); // temp pic
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.plus_one); // temp pic
         Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
-                .setSmallIcon(R.drawable.home_account)
+                .setSmallIcon(R.drawable.plus_one)
                 .setLargeIcon(largeIcon)
-                .setContentTitle("title")
-                .setContentText("message")
+                .setContentTitle("New Event!")
+                .setContentText("A new event is in your area.")
                 .setAutoCancel(true)
                 .setSound(notificationSoundUri)
                 .setContentIntent(pendingIntent);
