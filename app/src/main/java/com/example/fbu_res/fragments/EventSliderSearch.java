@@ -37,6 +37,7 @@ public class EventSliderSearch extends Fragment {
     RecyclerView eventsRv2;
     SearchAdapter adapter;
     public static SearchView eventsSv;
+    public static String searchString;
     public static SearchView locationSv;
     ArrayList<String> eventsWithoutRepeats;
     public static ArrayList<String> locations;
@@ -56,8 +57,8 @@ public class EventSliderSearch extends Fragment {
         eventLocationRecyclerView.setVisibility(View.INVISIBLE);
         events = new ArrayList<String>();
         locations = new ArrayList<String>();
-        queryEventsArray();
         queryLocationArray();
+        queryEventsArray();
         adapter = new SearchAdapter(new EventSliderSearch());
         locationSearchAdapater = new LocationSearchAdapater(getContext(), new EventSliderSearch());
         eventsRv2.setAdapter(adapter);
@@ -119,16 +120,19 @@ public class EventSliderSearch extends Fragment {
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 }
-
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 eventsRv2.setVisibility(View.INVISIBLE);
+                queryLocationArray();
                 eventLocationRecyclerView.setVisibility(View.VISIBLE);
-                locationSearchAdapater.filter(newText);
+                if(locations.size() != 0){
+                    locationSearchAdapater.filter(newText);
+                } else{
+
+                }
                 return false;
             }
 
@@ -160,6 +164,7 @@ public class EventSliderSearch extends Fragment {
 
     public void queryLocationArray(){
         ParseQuery<Address> parseQuery = ParseQuery.getQuery("Address");
+
         parseQuery.findInBackground(new FindCallback<Address>() {
             @Override
             public void done(List<Address> objects, ParseException e) {

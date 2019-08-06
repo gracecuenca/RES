@@ -1,11 +1,10 @@
 package com.example.fbu_res;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +12,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.ar.core.Anchor;
 import com.google.ar.core.HitResult;
@@ -37,6 +41,12 @@ public class ARActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ar);
+
+        if (ContextCompat.checkSelfPermission(ARActivity.this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ARActivity.this,
+                    new String[]{Manifest.permission.CAMERA}, 1);
+        }
 
         if (!checkIsSupportedDeviceOrFinish(this)) { return; }
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);

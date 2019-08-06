@@ -1,6 +1,7 @@
 package com.example.fbu_res.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,11 @@ public class LocationSearchAdapater extends RecyclerView.Adapter<LocationSearchA
             }
         } else {
             for(int i = 0; i<titles.size(); i++){
-                if(titles.get(i).toLowerCase().contains(charText)) {
+                if (titles.get(i) == null) {
+                    Log.d("Null", "position: " + i);
+                }
+
+                if(titles.get(i).contains(charText)){
                     if(fragment instanceof EventSliderSearch){
                         EventSliderSearch.locations.add(titles.get(i));
                         notifyDataSetChanged();

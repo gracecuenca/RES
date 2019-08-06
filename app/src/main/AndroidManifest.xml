@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera.ar" />
 
     <application
         android:name=".ParseApplication"
@@ -25,7 +28,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".ARActivity"></activity>
         <activity android:name=".FriendsActivity" />
-
+        <meta-data android:name="com.google.ar.core" android:value="optional"></meta-data>
         <service
             android:name=".PushNotificationServices"
             android:enabled="true"
