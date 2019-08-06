@@ -15,6 +15,13 @@ import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fbu_res.fragments.BusinessGroupsFragment;
 import com.example.fbu_res.fragments.GroupFragment;
 import com.example.fbu_res.fragments.HomeFragment;
@@ -29,15 +36,14 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.parse.ParseUser;
 
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
-
-    // push notification logic
-    private static final String FCM_API = "https://fcm.googleapis.com/fcm/send";
-    private static final String serverKey = "key=" + "Enter your Key";
-    private static final String contentType = "application/json";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +84,6 @@ public class HomeActivity extends AppCompatActivity {
         });
         // Set default selection to home
         bottomNavigationView.setSelectedItemId(R.id.action_home);
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/Enter_your_topic_name");
     }
 
     // Menu icons are inflated just as they were with actionbar

@@ -120,9 +120,9 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         // businesses can't add events to their calendars/ itineraries
         if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Business")){
             vh1.btnAddToCalendar.setClickable(false);
-            vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+            vh1.btnAddToCalendar.setEnabled(false);
             vh1.btnRemoveFromCalendar.setClickable(false);
-            vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+            vh1.btnRemoveFromCalendar.setEnabled(false);
         }
         // but consumers can
         else if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Consumer")){
@@ -133,9 +133,11 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     currentUser.addInterestedEvent(event);
                     Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary " +
                             "under profile", Toast.LENGTH_SHORT).show();
-                    vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    // vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    vh1.btnAddToCalendar.setClickable(false);
+                    vh1.btnAddToCalendar.setEnabled(false);
                     vh1.btnRemoveFromCalendar.setClickable(true);
-                    vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                    // vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
                 }
             });
 
@@ -145,9 +147,11 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     currentUser.removeInterestedEvent(event);
                     Toast.makeText(v.getContext(), event.getName()+ " has been removed from itinerary " +
                             "under profile", Toast.LENGTH_SHORT).show();
-                    vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    // vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                    vh1.btnRemoveFromCalendar.setClickable(false);
+                    vh1.btnRemoveFromCalendar.setEnabled(false);
                     vh1.btnAddToCalendar.setClickable(true);
-                    vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                    // vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
 
 
                 }
@@ -161,15 +165,19 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void done(List items, ParseException e) {
                     if(items.size() == 1) {
                         vh1.btnAddToCalendar.setClickable(false);
-                        vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                        vh1.btnAddToCalendar.setEnabled(false);
+                        // vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
                         vh1.btnRemoveFromCalendar.setClickable(true);
-                        vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                        vh1.btnRemoveFromCalendar.setEnabled(true);
+                        // vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
                     }
                     else if(items.size() == 0) {
                         vh1.btnAddToCalendar.setClickable(true);
-                        vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
+                        vh1.btnAddToCalendar.setEnabled(true);
+                        // vh1.btnAddToCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.turquoise));
                         vh1.btnRemoveFromCalendar.setClickable(false);
-                        vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                        vh1.btnRemoveFromCalendar.setEnabled(true);
+                        // vh1.btnRemoveFromCalendar.setBackgroundColor(ContextCompat.getColor(context, R.color.grey));
                     }
                 }
             });
