@@ -2,13 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_add_event"
-        android:icon="@drawable/plus_circle_outline"
-        android:title="add event"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_ar"
         android:icon="@drawable/map"
         android:title="activate ar"
-        app:showAsAction="always"  />
+        app:showAsAction="always"
+        android:iconTint="@color/turquoise"/>
+
+    <item
+        android:id="@+id/action_add_event"
+        android:icon="@drawable/plus_circle_outline"
+        android:title="add event"
+        app:showAsAction="always"
+        android:iconTint="@color/turquoise"/>
 </menu>

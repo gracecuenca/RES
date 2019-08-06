@@ -1,6 +1,8 @@
 package com.example.fbu_res.fragments;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -110,6 +112,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         activity.getMenuInflater().inflate(R.menu.menu_profile, menu);
+
+        // setting up icon tinting
+        Drawable maps = menu.findItem(R.id.action_logout).getIcon();
+        maps.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 

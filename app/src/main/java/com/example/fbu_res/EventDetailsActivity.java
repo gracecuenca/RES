@@ -61,7 +61,6 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private void bindDataToAdapter() {
-        // TODO -- setup customized actionbar/ toolbar
 
         // unwrapping the event sent by the intent and initializing attributes
         event = (Event) Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));

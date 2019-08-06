@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -178,6 +180,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         activity.getMenuInflater().inflate(R.menu.menu_home, menu);
         inflater.inflate(R.menu.menu_toolbar, menu);
+
+        // setting up icon tinting
+        Drawable maps = menu.findItem(R.id.action_ar).getIcon();
+        maps.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
+
+        Drawable addEvent = menu.findItem(R.id.action_add_event).getIcon();
+        addEvent.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
+
+        Drawable chat = menu.findItem(R.id.directMessage).getIcon();
+        chat.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
