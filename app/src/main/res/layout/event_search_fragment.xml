@@ -12,8 +12,6 @@
             android:id="@+id/searchEventsRv"
             android:layout_width="match_parent"
             android:layout_height="616dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
             android:layout_marginTop="3dp"
             android:clickable="true"
             android:focusable="auto"
@@ -42,8 +40,6 @@
             android:id="@+id/locationEventRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="616dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
             android:layout_marginTop="3dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/eventLocationSearchView" />
