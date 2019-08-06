@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -31,6 +33,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fbu_res.AddEventActivity;
 import com.example.fbu_res.DirectMessageActivity;
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
@@ -45,14 +53,20 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 import static com.example.fbu_res.models.Event.KEY_DISTANCE_TO_USER;
@@ -90,6 +104,16 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     // the current location
     private ParseGeoPoint currentLocation;
 
+    // push notification logic
+    private static final String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    private static final String serverKey = "key=" +
+            "AAAATqE5Zos:APA91bHgAP71ezc4Ir2F042-RFZ19KOKMC3pSPyDFjtKom0kwR-vCCaZ7fMOv2P5T7BKoL--" +
+            "93g0qIAG1jdq0os6XCHAD_fnCDX2ln1qeoqD8v12sP3XIgO_O9I8C0_Q1DU1OuRKXWo6";
+    private static final String contentType = "application/json";
+
+    // request queue
+    private RequestQueue requestQueue;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -98,6 +122,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // setting up the request queue
+        requestQueue = Volley.newRequestQueue(view.getContext());
+
 
         // setting up personalized toolbar
         activity = (AppCompatActivity) getActivity();
@@ -171,6 +198,59 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             else if(user.getType().equals("Consumer")) setHasOptionsMenu(false);
         }*/
         setHasOptionsMenu(true);
+
+        Button btnPush = (Button) view.findViewById(R.id.btnPushNotif);
+        btnPush.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // the firebase push notification logic
+                FirebaseMessaging.getInstance().subscribeToTopic("/topics/event_alert");
+                JSONObject notification = new JSONObject();
+                JSONObject notificationBody = new JSONObject();
+                String topic = "/topics/event_alert";
+
+                try{
+                    notificationBody.put("title","yo");
+                    notificationBody.put("message", "testing");
+                    notification.put("to", topic);
+                    notification.put("data", notificationBody);
+                } catch (JSONException e) {
+                    Log.e("TAG", e.getMessage());
+                    e.printStackTrace();
+                }
+
+                sendNotification(notification);
+            }
+        });
+    }
+
+    // send notification method
+    private void sendNotification(JSONObject notification){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("TAG", "onResponse");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("TAG", "sendNotification");
+                        error.printStackTrace();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+
+        };
+        requestQueue.add(jsonObjectRequest);
     }
 
     // Menu things
@@ -178,6 +258,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         activity.getMenuInflater().inflate(R.menu.menu_home, menu);
         inflater.inflate(R.menu.menu_toolbar, menu);
+
+        // setting up icon tinting
+        Drawable maps = menu.findItem(R.id.action_ar).getIcon();
+        maps.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
+
+        Drawable addEvent = menu.findItem(R.id.action_add_event).getIcon();
+        addEvent.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
+
+        Drawable chat = menu.findItem(R.id.directMessage).getIcon();
+        chat.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
