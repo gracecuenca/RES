@@ -373,7 +373,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     // this method will query differently based on whether
     public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option) {
-
         // loading events for a consumer
         Consumer user = (Consumer) ParseUser.getCurrentUser();
 
