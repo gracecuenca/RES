@@ -100,7 +100,6 @@ public class AddEventActivity extends AppCompatActivity {
     // button to officially create the event and add to relation
     Button btnCreateEvent;
 
-
     // for the loading screen
     ViewDialog viewDialog;
 
@@ -515,7 +514,6 @@ public class AddEventActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             ivPreview.setImageBitmap(selectedImage);
             validateCreateButton();
         }

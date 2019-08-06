@@ -39,6 +39,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.fbu_res.ARActivity;
 import com.example.fbu_res.AddEventActivity;
 import com.example.fbu_res.DirectMessageActivity;
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
@@ -223,6 +224,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_ar:
+                Intent intent3 = new Intent(getContext(), ARActivity.class);
+                startActivity(intent3);
+                break;
             case R.id.action_add_event:
                 Intent intent = new Intent(getContext(), AddEventActivity.class);
                 startActivity(intent);
