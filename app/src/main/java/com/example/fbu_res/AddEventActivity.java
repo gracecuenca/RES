@@ -23,23 +23,45 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.fbu_res.models.Address;
 import com.example.fbu_res.models.Consumer;
 import com.example.fbu_res.models.Event;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class AddEventActivity extends AppCompatActivity {
+
+    // push notification logic
+    private static final String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    private static final String serverKey = "key=" +
+            "AAAATqE5Zos:APA91bHgAP71ezc4Ir2F042-RFZ19KOKMC3pSPyDFjtKom0kwR-vCCaZ7fMOv2P5T7BKoL--" +
+            "93g0qIAG1jdq0os6XCHAD_fnCDX2ln1qeoqD8v12sP3XIgO_O9I8C0_Q1DU1OuRKXWo6";
+    private static final String contentType = "application/json";
+
+    // request queue
+    private RequestQueue requestQueue;
 
     public static final String APP_TAG = "AddEventActivity";
 
@@ -86,6 +108,10 @@ public class AddEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+
+        // setting up the request queue
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
+
         viewDialog = new ViewDialog(this);
 
         etName = (EditText) findViewById(R.id.etName);
@@ -345,6 +371,23 @@ public class AddEventActivity extends AppCompatActivity {
                                                 Intent i = new Intent(AddEventActivity.this, HomeActivity.class);
                                                 startActivity(i);
                                                 viewDialog.hideDialog();
+                                                // the firebase push notification logic
+                                                FirebaseMessaging.getInstance().subscribeToTopic("/topics/event_alert");
+                                                JSONObject notification = new JSONObject();
+                                                JSONObject notificationBody = new JSONObject();
+                                                String topic = "/topics/event_alert";
+
+                                                try{
+                                                    notificationBody.put("title","yo");
+                                                    notificationBody.put("message", "testing");
+                                                    notification.put("to", topic);
+                                                    notification.put("data", notificationBody);
+                                                } catch (JSONException er) {
+                                                    Log.e("TAG", er.getMessage());
+                                                    e.printStackTrace();
+                                                }
+
+                                                sendNotification(notification);
                                             }
                                         });
                                     }
@@ -356,6 +399,35 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    // send notification method
+    private void sendNotification(JSONObject notification){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("TAG", "onResponse");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("TAG", "sendNotification");
+                        error.printStackTrace();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+
+        };
+        requestQueue.add(jsonObjectRequest);
     }
 
     // does the input text have anything in it

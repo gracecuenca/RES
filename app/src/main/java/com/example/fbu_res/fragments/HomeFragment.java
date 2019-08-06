@@ -199,58 +199,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }*/
         setHasOptionsMenu(true);
 
-        Button btnPush = (Button) view.findViewById(R.id.btnPushNotif);
-        btnPush.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // the firebase push notification logic
-                FirebaseMessaging.getInstance().subscribeToTopic("/topics/event_alert");
-                JSONObject notification = new JSONObject();
-                JSONObject notificationBody = new JSONObject();
-                String topic = "/topics/event_alert";
-
-                try{
-                    notificationBody.put("title","yo");
-                    notificationBody.put("message", "testing");
-                    notification.put("to", topic);
-                    notification.put("data", notificationBody);
-                } catch (JSONException e) {
-                    Log.e("TAG", e.getMessage());
-                    e.printStackTrace();
-                }
-
-                sendNotification(notification);
-            }
-        });
-    }
-
-    // send notification method
-    private void sendNotification(JSONObject notification){
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
-                new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("TAG", "onResponse");
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("TAG", "sendNotification");
-                        error.printStackTrace();
-                    }
-                }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<String, String>();
-                params.put("Authorization", serverKey);
-                params.put("Content-Type", contentType);
-                return params;
-            }
-
-        };
-        requestQueue.add(jsonObjectRequest);
     }
 
     // Menu things
