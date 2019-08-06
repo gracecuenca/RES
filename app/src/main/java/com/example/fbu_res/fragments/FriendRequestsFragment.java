@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.DMAdapter;
+import com.example.fbu_res.adapters.FriendsAndRequestAdapter;
 import com.example.fbu_res.models.Consumer;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -28,14 +29,14 @@ public class FriendRequestsFragment extends Fragment {
 
     private RecyclerView rvUsers;
     private List<Consumer> users;
-    DMAdapter adapter;
+    FriendsAndRequestAdapter adapter;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         rvUsers = view.findViewById(R.id.rvDM);
         users = new ArrayList<>();
-        adapter = new DMAdapter( users);
+        adapter = new FriendsAndRequestAdapter( users, true);
         rvUsers.setAdapter(adapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
         getUsers();
@@ -52,7 +53,10 @@ public class FriendRequestsFragment extends Fragment {
     private void getUsers(){
         // Define the class we would like to query
         Consumer user = (Consumer) ParseUser.getCurrentUser();
+        ParseRelation friends = user.getFriends();
+
         ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
+        query.whereDoesNotMatchKeyInQuery("objectId", "objectId" ,friends.getQuery());
         query.whereEqualTo("friends", user);
 
         query.findInBackground(new FindCallback<Consumer>() {

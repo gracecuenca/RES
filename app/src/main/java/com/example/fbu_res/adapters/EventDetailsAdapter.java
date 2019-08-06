@@ -59,7 +59,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 viewHolder = new ViewHolder1(v1);
                 break;
             case GROUPS:
-                View v2 = inflater.inflate(R.layout.item_event_group, viewGroup, false);
+                View v2 = inflater.inflate(R.layout.item_group, viewGroup, false);
                 viewHolder = new ViewHolder2(v2);
                 break;
             default:
@@ -186,21 +186,8 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Glide.with(context).load(group.getImage().getUrl()).into(vh1.groupImage);
         }
 
-        vh1.groupType.setText("Event: ");
-        vh1.groupType.append(event.getName());
-        vh1.numMembers.setText(group.getNumMembs() +
-                (group.getNumMembs() > 1 ? " members" : " member"));
-
-        ParseUser owner = group.getOwner();
-        owner.fetchIfNeededInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject object, ParseException e) {
-                String username = group.getOfficial() ? (String) object.get("username")
-                        : (String) object.get(Consumer.KEY_DISPLAYNAME);
-                vh1.owner.setText("Owned by: " + username);
-
-            }
-        });
+        vh1.groupType.setText("");
+        vh1.join.setText("Join");
         vh1.join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,18 +220,14 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class ViewHolder2 extends RecyclerView.ViewHolder{
         ImageView groupImage;
         TextView groupName;
-        TextView numMembers;
         TextView groupType;
-        TextView owner;
         Button join;
         ImageView verified;
         public ViewHolder2(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivNewGroup);
             groupName = view.findViewById(R.id.tvDisplayname);
-            numMembers = view.findViewById(R.id.tvNumMembs);
             groupType = view.findViewById(R.id.tvEventName);
-            owner = view.findViewById(R.id.tvOwnedBy);
             join = view.findViewById(R.id.btnJoin);
             verified = view.findViewById(R.id.ivVerified);
         }

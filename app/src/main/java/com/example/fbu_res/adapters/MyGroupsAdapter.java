@@ -17,6 +17,7 @@ import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -50,7 +51,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
 
         holder.groupName.setText(group.getName());
         if(group.getImage()!=null){
-            Glide.with(context).load(group.getImage().getUrl()).into(holder.groupImage);
+            Glide.with(context).load(group.getImage().getUrl()).circleCrop().into(holder.groupImage);
         }
         if(group.getType().equals("Interests")){
             holder.groupType.setText(group.getType());
@@ -108,7 +109,7 @@ public class MyGroupsAdapter extends RecyclerView.Adapter<MyGroupsAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView groupImage;
+        RoundedImageView groupImage;
         TextView groupName;
         TextView groupType;
         TextView owner;

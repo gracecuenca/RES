@@ -36,8 +36,8 @@ public class FriendsAndRequestAdapter extends RecyclerView.Adapter<FriendsAndReq
     @Override
     public FriendsAndRequestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View user = requests ? inflater.inflate(R.layout.item_dm, parent, false)
-                        : inflater.inflate(R.layout.item_friend_requests, parent);
+        View user = requests ? inflater.inflate(R.layout.item_friend_requests, parent, false)
+                        : inflater.inflate(R.layout.item_dm, parent, false);
         return new ViewHolder(user);
 
     }

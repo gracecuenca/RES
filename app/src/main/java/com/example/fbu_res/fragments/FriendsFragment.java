@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.DMAdapter;
+import com.example.fbu_res.adapters.FriendsAndRequestAdapter;
 import com.example.fbu_res.models.Consumer;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -28,14 +29,14 @@ public class FriendsFragment extends Fragment {
 
     RecyclerView rvUsers;
     List<Consumer> users;
-    DMAdapter adapter;
+    FriendsAndRequestAdapter adapter;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         rvUsers = view.findViewById(R.id.rvDM);
         users = new ArrayList<>();
-        adapter = new DMAdapter( users);
+        adapter = new FriendsAndRequestAdapter( users, false);
         rvUsers.setAdapter(adapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
         getUsers();
