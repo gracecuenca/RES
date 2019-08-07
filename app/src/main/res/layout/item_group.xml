@@ -30,7 +30,7 @@
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:text="TextView"
-        android:textColor="@color/black"
+        android:textColor="#A8272D2D"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/ivNewGroup"
         app:layout_constraintTop_toTopOf="parent" />

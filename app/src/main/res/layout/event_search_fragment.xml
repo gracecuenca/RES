@@ -25,7 +25,8 @@
             android:background="#F4E05C"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryHint="Search by event categories, name..." />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/eventLocationSearchView"
@@ -34,7 +35,9 @@
             android:background="#F4E05C"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/eventSearchView" />
+            app:layout_constraintTop_toBottomOf="@+id/eventSearchView"
+            app:queryBackground="@color/black"
+            app:queryHint="Search by location name, city, zipcode..." />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/locationEventRecyclerView"
