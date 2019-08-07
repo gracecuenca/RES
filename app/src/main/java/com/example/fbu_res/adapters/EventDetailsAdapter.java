@@ -115,8 +115,6 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             Glide.with(vh1.itemView.getContext()).load(image.getUrl()).into(vh1.ivImage);
         }
 
-        
-
         // businesses can't add events to their calendars/ itineraries
         if(((Consumer)ParseUser.getCurrentUser()).getType().equals("Business")){
             vh1.btnAddToCalendar.setClickable(false);
