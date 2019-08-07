@@ -74,7 +74,8 @@ public class GroupFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         Toolbar toolbar = view.findViewById(R.id.searchToolbar);
         activity.setSupportActionBar(toolbar);
-        toolbar.setTitle("");
+        activity.setTitle("Groups");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.turquoise));
         setHasOptionsMenu(true);
 
 // Get the ViewPager and set it's PagerAdapter so that it can display items
