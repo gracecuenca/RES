@@ -5,21 +5,21 @@
     <item
         android:id="@+id/action_home"
         android:icon="@drawable/home_account"
-        android:title="Home"
+        android:title=""
         app:showAsAction="always" />
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/magnify"
-        android:title="Search"
+        android:title=""
         app:showAsAction="always" />
     <item
         android:id="@+id/action_groups"
         android:icon="@drawable/account_supervisor"
-        android:title="Group"
+        android:title=""
         app:showAsAction="always" />
     <item
         android:id="@+id/action_profile"
         android:icon="@drawable/account"
-        android:title="Profile"
+        android:title=""
         app:showAsAction="always" />
 </menu>

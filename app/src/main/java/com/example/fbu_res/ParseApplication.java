@@ -3,13 +3,11 @@ package com.example.fbu_res;
 import android.app.Application;
 
 import com.example.fbu_res.models.Address;
-import com.example.fbu_res.models.Business;
 import com.example.fbu_res.models.Categories;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
 import com.parse.Parse;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import okhttp3.OkHttpClient;
@@ -29,7 +27,7 @@ public class ParseApplication extends Application {
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.networkInterceptors().add(httpLoggingInterceptor);
 
-        ParseUser.registerSubclass(Consumer.class);
+        ParseUser.registerSubclass(User.class);
         // ParseUser.registerSubclass(Business.class);
         ParseUser.registerSubclass(Event.class);
         ParseUser.registerSubclass(Group.class);

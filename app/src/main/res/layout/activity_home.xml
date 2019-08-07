@@ -23,13 +23,12 @@
         android:layout_height="wrap_content"
         app:itemBackground="@color/white"
         app:itemHorizontalTranslationEnabled="true"
-        app:itemIconTint="@color/turquoise"
-        app:itemTextColor="@color/turquoise"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_bottom_navigation" />
+        app:menu="@menu/menu_bottom_navigation"
+        app:itemIconTint="@drawable/menu_background"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

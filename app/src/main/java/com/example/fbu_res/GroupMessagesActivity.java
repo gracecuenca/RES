@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.adapters.ChatAdapter;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Group;
 import com.example.fbu_res.models.Message;
 import com.firebase.client.Firebase;
@@ -96,7 +96,7 @@ public class GroupMessagesActivity extends AppCompatActivity {
 
 
         currentUsername = ParseUser.getCurrentUser().getUsername();
-        profileImg = ((Consumer) ParseUser.getCurrentUser()).getProfileImg();
+        profileImg = ((User) ParseUser.getCurrentUser()).getProfileImg();
 
         currentGroupName = getIntent().getStringExtra("channel_name");
         GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Groups")
@@ -159,7 +159,7 @@ public class GroupMessagesActivity extends AppCompatActivity {
 
         if(!messageText.equals("")){
             Calendar calForDate = Calendar.getInstance();
-            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, YYYY");
+            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MM/dd/YYYY");
             currentDate = currentDateFormat.format(calForDate.getTime());
 
             Calendar calForTime = Calendar.getInstance();
@@ -193,15 +193,15 @@ public class GroupMessagesActivity extends AppCompatActivity {
         new AsyncTask<Object, Object, Object>(){
             @Override
             protected Object doInBackground(Object[] objects) {
-                ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
+                ParseQuery<User> query = ParseQuery.getQuery(User.class);
                 query.whereEqualTo("username", chatName);
-                query.findInBackground(new FindCallback<Consumer>() {
+                query.findInBackground(new FindCallback<User>() {
                     @Override
-                    public void done(List<Consumer> objects, ParseException e) {
+                    public void done(List<User> objects, ParseException e) {
                         ParseUser user = objects.get(0);
                         try {
                             Glide.with(GroupMessagesActivity.this)
-                                    .load(((Consumer) user).getProfileImg().getFile().getAbsolutePath())
+                                    .load(((User) user).getProfileImg().getFile().getAbsolutePath())
                                     .override(100, 100)
                                     .into(ivProfile);
                         } catch (ParseException e1) {

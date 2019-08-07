@@ -15,10 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fbu_res.models.Address;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
@@ -71,7 +70,7 @@ public class BusinessSignUp extends AppCompatActivity {
 
     private void signUp(String name, String username, String password, String email, String phoneNum
                     , Address address) {
-        Consumer user = new Consumer();
+        User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);

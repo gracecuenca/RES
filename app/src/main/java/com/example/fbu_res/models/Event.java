@@ -73,7 +73,7 @@ public class Event extends ParseObject {
 
     public void setDate(String date){
         try {
-            put(KEY_DATE, new SimpleDateFormat("MM/dd/yyyy").parse(date));
+            put(KEY_DATE, new SimpleDateFormat("MM/dd/yyyy h:mm a").parse(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.fbu_res.adapters.EventDetailsAdapter;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -87,7 +87,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        if(((Consumer) ParseUser.getCurrentUser()).getType().equals("Consumer")) {
+        if(((User) ParseUser.getCurrentUser()).getType().equals("User")) {
             ((ViewGroup) create.getParent()).removeView(create);
         }
     }

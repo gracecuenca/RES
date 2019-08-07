@@ -2,9 +2,7 @@ package com.example.fbu_res;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -19,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,7 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.fbu_res.models.Address;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.parse.ParseException;
@@ -43,7 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -314,7 +310,7 @@ public class AddEventActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         viewDialog.showDialog();
 
-                        final Consumer user = (Consumer) ParseUser.getCurrentUser();
+                        final User user = (User) ParseUser.getCurrentUser();
 
                         final Address address = new Address();
                         address.setName(etLocationName.getText().toString());

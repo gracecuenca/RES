@@ -14,10 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.ProfileActivity;
 import com.example.fbu_res.R;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Message;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -25,8 +24,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.internal.Utils;
 
 public class ChatAdapter extends RecyclerView.Adapter {
     private Context mContext;
@@ -121,7 +118,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
                             final ParseUser user = objects.get(0);
                             try {
                                 Glide.with(mContext)
-                                        .load(((Consumer) user).getProfileImg().getFile().getAbsolutePath())
+                                        .load(((User) user).getProfileImg().getFile().getAbsolutePath())
                                         .override(100, 100)
                                         .into(profileImage);
                             } catch (ParseException e1) {
