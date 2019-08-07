@@ -46,6 +46,7 @@ public class ARActivity extends AppCompatActivity {
     private static final double MIN_OPENGL_VERSION = 3.0;
     ArFragment arFragment;
     ArSceneView arSceneView;
+
     ModelRenderable lampPostRenderable;
     private LocationScene locationScene;
 
@@ -66,7 +67,8 @@ public class ARActivity extends AppCompatActivity {
         }
 
         if (!checkIsSupportedDeviceOrFinish(this)) { return; }
-        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+        // arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+        arSceneView = findViewById(R.id.ux_fragment);
 
         CompletableFuture<ModelRenderable> andy = ModelRenderable.builder()
                 .setSource(this, Uri.parse("bear.sfb"))
@@ -98,7 +100,7 @@ public class ARActivity extends AppCompatActivity {
                     toast.show();
                     return null;
                 });*/
-        arFragment.setOnTapArPlaneListener((HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
+        /*arFragment.setOnTapArPlaneListener((HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
             if (lampPostRenderable == null){ return;}
             Anchor anchor = hitresult.createAnchor();
             AnchorNode anchorNode = new AnchorNode(anchor);
@@ -107,7 +109,7 @@ public class ARActivity extends AppCompatActivity {
             cobble.setParent(anchorNode);
             cobble.setRenderable(lampPostRenderable);
             cobble.select();
-        });
+        });*/
 
         arSceneView
                 .getScene().addOnUpdateListener(
