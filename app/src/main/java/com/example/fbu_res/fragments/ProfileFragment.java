@@ -71,7 +71,8 @@ public class ProfileFragment extends Fragment {
         activity = (AppCompatActivity) getActivity();
         toolbar = (Toolbar) view.findViewById(R.id.profileToolbar);
         activity.setSupportActionBar(toolbar);
-        activity.setTitle("");
+        activity.setTitle("Profile");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.turquoise));
         setHasOptionsMenu(true);
 
         // setting up the current user

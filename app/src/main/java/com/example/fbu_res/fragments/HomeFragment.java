@@ -126,12 +126,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // setting up the request queue
         requestQueue = Volley.newRequestQueue(view.getContext());
 
-
         // setting up personalized toolbar
         activity = (AppCompatActivity) getActivity();
         toolbar = (Toolbar) view.findViewById(R.id.homeToolbar);
         activity.setSupportActionBar(toolbar);
-        activity.setTitle("");
+        activity.setTitle("Ventertain");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.turquoise));
 
         // set up current user location
         user = (Consumer) ParseUser.getCurrentUser();
