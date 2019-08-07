@@ -26,12 +26,16 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
+import uk.co.appoly.arcorelocation.LocationScene;
+
 public class ARActivity extends AppCompatActivity {
 
     private static final String TAG = ARActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
     ArFragment arFragment;
     ModelRenderable lampPostRenderable;
+    private LocationScene locationScene;
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
