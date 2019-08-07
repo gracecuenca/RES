@@ -101,3 +101,8 @@ sceneform.asset('sampledata/cobble/CobbleStones.obj',
         'default',
         'sampledata/cobble/CobbleStones.sfa',
         'src/main/assets/CobbleStones')
+
+sceneform.asset('sampledata/bear.fbx',
+        'default',
+        'sampledata/bear.sfa',
+        'src/main/assets/bear')
