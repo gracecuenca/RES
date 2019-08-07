@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
@@ -25,18 +24,13 @@ import com.google.ar.core.Plane;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.ArSceneView;
+import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
-import com.google.ar.sceneform.Node;
-
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
-
-import uk.co.appoly.arcorelocation.LocationMarker;
-import uk.co.appoly.arcorelocation.LocationScene;
 
 
 
@@ -47,7 +41,6 @@ public class ARActivity extends AppCompatActivity {
     ArFragment arFragment;
     ArSceneView arSceneView;
     ModelRenderable lampPostRenderable;
-    private LocationScene locationScene;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -123,9 +116,6 @@ public class ARActivity extends AppCompatActivity {
                             }
 
 
-                            if (locationScene != null) {
-                                locationScene.processFrame(frame);
-                            }
 
                         });
     }
