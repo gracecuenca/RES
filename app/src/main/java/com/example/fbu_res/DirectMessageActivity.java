@@ -7,16 +7,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.fbu_res.adapters.ChatAdapter;
 import com.example.fbu_res.adapters.DMAdapter;
-import com.example.fbu_res.models.Consumer;
-import com.example.fbu_res.models.Group;
+import com.example.fbu_res.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
-import com.yelp.fusion.client.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,7 @@ public class DirectMessageActivity extends AppCompatActivity {
 
     DMAdapter adapter;
     RecyclerView rvUsers;
-    List<Consumer> users;
+    List<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +39,13 @@ public class DirectMessageActivity extends AppCompatActivity {
 
     private void getUsers(){
         // Define the class we would like to query
-        Consumer user = (Consumer) ParseUser.getCurrentUser();
+        User user = (User) ParseUser.getCurrentUser();
         ParseRelation relation = user.getDMUsers();
         ParseQuery query = relation.getQuery();
 
-        query.findInBackground(new FindCallback<Consumer>() {
+        query.findInBackground(new FindCallback<User>() {
             @Override
-            public void done(List<Consumer> objects, ParseException e) {
+            public void done(List<User> objects, ParseException e) {
                 if (e == null) {
                     for(int i = 0; i < objects.size(); ++i) {
                         users.add(objects.get(i));

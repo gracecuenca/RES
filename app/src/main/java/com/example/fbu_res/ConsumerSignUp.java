@@ -14,7 +14,7 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.SignUpCallback;
@@ -46,13 +46,13 @@ public class ConsumerSignUp extends AppCompatActivity {
     }
 
     private void signUp(String name, String username, String password, String email, String phoneNum) {
-        Consumer user = new Consumer();
+        User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user.setEmail(email);
         user.setDisplayname(name);
         user.setPhonenumber(phoneNum);
-        user.setType("Consumer");
+        user.setType("User");
         user.setProfileImg(conversionBitmapParseFile(drawableToBitmap(getResources().getDrawable(R.drawable.ic_defaultprofilepic))));
         user.saveInBackground();
         user.signUpInBackground(new SignUpCallback() {

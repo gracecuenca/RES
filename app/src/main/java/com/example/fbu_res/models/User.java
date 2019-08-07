@@ -2,7 +2,6 @@ package com.example.fbu_res.models;
 
 import android.util.Log;
 
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -14,10 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @ParseClassName("_User")
-public class Consumer extends ParseUser {
+public class User extends ParseUser {
     public static final String KEY_DISPLAYNAME = "displayName";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_INTERESTS = "interests";
@@ -92,12 +90,12 @@ public class Consumer extends ParseUser {
                 list.add(arr.getJSONObject(i).getString("name"));
             }
         } catch (JSONException e) {
-            Log.d("Consumer Intrests", "Couldn't retrieve list of interests");
+            Log.d("User Intrests", "Couldn't retrieve list of interests");
         }
         return list;
     }
 
-    public Consumer() {
+    public User() {
     }
 
     public ParseObject getAddress() {
@@ -138,7 +136,7 @@ public class Consumer extends ParseUser {
         return relation;
     }
 
-    public void addDMUser(Consumer user){
+    public void addDMUser(User user){
         ParseRelation relation = getRelation(KEY_DM_USERS);
         relation.add(user);
         saveInBackground();
@@ -149,7 +147,7 @@ public class Consumer extends ParseUser {
         return relation;
     }
 
-    public void addFriend(Consumer user){
+    public void addFriend(User user){
         ParseRelation relation = getRelation(KEY_FRIENDS);
         relation.add(user);
         saveInBackground();

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,19 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.fbu_res.DirectMessageActivity;
 import com.example.fbu_res.GroupMessagesActivity;
 import com.example.fbu_res.R;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.parse.ParseUser;
 
 import java.util.List;
 
 public class DMAdapter extends RecyclerView.Adapter<DMAdapter.ViewHolder>{
 
-    List<Consumer> users;
+    List<User> users;
 
-    public DMAdapter(List<Consumer> users){
+    public DMAdapter(List<User> users){
         this.users = users;
     }
 
@@ -40,7 +38,7 @@ public class DMAdapter extends RecyclerView.Adapter<DMAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final Consumer user = users.get(position);
+        final User user = users.get(position);
 
         Glide.with(holder.itemView.getContext())
                 .load(user.getProfileImg().getUrl())
@@ -49,14 +47,14 @@ public class DMAdapter extends RecyclerView.Adapter<DMAdapter.ViewHolder>{
 
         holder.name.setText(user.getDisplayname());
 
-        if(user.getType().equals("Consumer") && holder.verified.getParent() != null){
+        if(user.getType().equals("User") && holder.verified.getParent() != null){
             ((ViewGroup) holder.verified.getParent()).removeView(holder.verified);
         }
 
         holder.profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user1 = ((Consumer) ParseUser.getCurrentUser()).getUsername();
+                String user1 = ((User) ParseUser.getCurrentUser()).getUsername();
                 String user2 = user.getUsername();
                 Intent i = new Intent(holder.itemView.getContext(), GroupMessagesActivity.class);
                 i.putExtra("dm_name", user2);
