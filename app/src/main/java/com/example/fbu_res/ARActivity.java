@@ -19,20 +19,33 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.ar.core.Anchor;
+import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
+import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.ArSceneView;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+import com.google.ar.sceneform.Node;
 
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+
+import uk.co.appoly.arcorelocation.LocationMarker;
 import uk.co.appoly.arcorelocation.LocationScene;
+
+
 
 public class ARActivity extends AppCompatActivity {
 
     private static final String TAG = ARActivity.class.getSimpleName();
     private static final double MIN_OPENGL_VERSION = 3.0;
     ArFragment arFragment;
+    ArSceneView arSceneView;
     ModelRenderable lampPostRenderable;
     private LocationScene locationScene;
 
@@ -55,16 +68,36 @@ public class ARActivity extends AppCompatActivity {
         if (!checkIsSupportedDeviceOrFinish(this)) { return; }
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
-        ModelRenderable.builder()
+        CompletableFuture<ModelRenderable> andy = ModelRenderable.builder()
                 .setSource(this, Uri.parse("bear.sfb"))
-                .build()
+                .build();
+
+        CompletableFuture.allOf(andy)
+                .handle(
+                        (notUsed, throwable) ->
+                        {
+                            if (throwable != null) {
+                                DemoUtils.displayError(this, "Unable to load renderables", throwable);
+                                return null;
+                            }
+
+                            try {
+                                lampPostRenderable = andy.get();
+
+                            } catch (InterruptedException | ExecutionException ex) {
+                                DemoUtils.displayError(this, "Unable to load renderables", ex);
+                            }
+                            return null;
+                        });
+
+                /*
                 .thenAccept(renderable -> lampPostRenderable = renderable)
                 .exceptionally(throwable -> {
                     Toast toast = Toast.makeText(this, "Unable to load andy renderable", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                     return null;
-                });
+                });*/
         arFragment.setOnTapArPlaneListener((HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
             if (lampPostRenderable == null){ return;}
             Anchor anchor = hitresult.createAnchor();
@@ -76,6 +109,25 @@ public class ARActivity extends AppCompatActivity {
             cobble.select();
         });
 
+        arSceneView
+                .getScene().addOnUpdateListener(
+                        frameTime -> {
+
+                            Frame frame = arSceneView.getArFrame();
+                            if (frame == null) {
+                                return;
+                            }
+
+                            if (frame.getCamera().getTrackingState() != TrackingState.TRACKING) {
+                                return;
+                            }
+
+
+                            if (locationScene != null) {
+                                locationScene.processFrame(frame);
+                            }
+
+                        });
     }
 
     public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
@@ -95,6 +147,18 @@ public class ARActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private Node getAndy() {
+        Node base = new Node();
+        base.setRenderable(lampPostRenderable);
+        Context c = this;
+        base.setOnTapListener((v, event) -> {
+            Toast.makeText(
+                    c, "Andy touched.", Toast.LENGTH_LONG)
+                    .show();
+        });
+        return base;
     }
 
 }
