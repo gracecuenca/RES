@@ -32,6 +32,7 @@ import com.google.ar.sceneform.ux.TransformableNode;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import uk.co.appoly.arcorelocation.LocationScene;
 
 
 public class ARActivity extends AppCompatActivity {
@@ -42,6 +43,8 @@ public class ARActivity extends AppCompatActivity {
     ArSceneView arSceneView;
 
     ModelRenderable lampPostRenderable;
+
+    LocationScene locationScene;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
