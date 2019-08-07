@@ -29,7 +29,13 @@ public class Address extends ParseObject {
     }
 
     public String getAddressline1() {
-        return getString(KEY_ADDRESSLINE1);
+        String address = "";
+        try{
+            address = fetchIfNeeded().getString(KEY_ADDRESSLINE1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 
     public void setAddressline1(String address) {
@@ -37,7 +43,13 @@ public class Address extends ParseObject {
     }
 
     public String getAddressline2() {
-        return getString(KEY_ADDRESSLINE2);
+        String address = "";
+        try{
+            address = fetchIfNeeded().getString(KEY_ADDRESSLINE2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 
     public void setAddressline2(String address) {
@@ -45,7 +57,13 @@ public class Address extends ParseObject {
     }
 
     public String getCity() {
-        return getString(KEY_CITY);
+        String address = "";
+        try{
+            address = fetchIfNeeded().getString(KEY_CITY);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 
     public void setCity(String city) {
@@ -53,7 +71,13 @@ public class Address extends ParseObject {
     }
 
     public String getState() {
-        return getString(KEY_STATE);
+        String address = "";
+        try{
+            address = fetchIfNeeded().getString(KEY_STATE);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 
     public void setState(String state) {
@@ -61,7 +85,13 @@ public class Address extends ParseObject {
     }
 
     public String getZipcode() {
-        return getString(KEY_ZIPCODE);
+        String address = "";
+        try{
+            address = fetchIfNeeded().getString(KEY_ZIPCODE);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 
     public void setZipcode(String address) {
@@ -69,7 +99,13 @@ public class Address extends ParseObject {
     }
 
     public String getCountry() {
-        return getString(KEY_COUNTRY);
+        String address = "";
+        try{
+            address = fetchIfNeeded().getString(KEY_COUNTRY);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return address;
     }
 
     public void setCountry(String country) {

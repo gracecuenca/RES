@@ -41,7 +41,7 @@ public class SingleBusinessEventsAdapter extends RecyclerView.Adapter<SingleBusi
         holder.eventName.setText(event.getName());
         DateFormat dateFormat1 = new SimpleDateFormat("MM/dd/yyyy");
         holder.eventDate.setText(dateFormat1.format(event.getDate()));
-        DateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
+        DateFormat dateFormat2 = new SimpleDateFormat("h:mm a");
         holder.eventTime.setText(dateFormat2.format(event.getDate()));
         if(event.getImage()!=null){
             Glide.with(context).load(event.getImage().getUrl()).into(holder.eventImage);

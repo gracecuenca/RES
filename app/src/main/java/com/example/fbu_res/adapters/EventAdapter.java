@@ -43,7 +43,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Event event = events.get(position);
         holder.location.setText(event.getLocationString());
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy h:mm a");
         holder.date.setText(dateFormat.format(event.getDate()));
         holder.title.setText(event.getName());
         holder.title.setText(event.getName());

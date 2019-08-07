@@ -159,7 +159,7 @@ public class GroupMessagesActivity extends AppCompatActivity {
 
         if(!messageText.equals("")){
             Calendar calForDate = Calendar.getInstance();
-            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, YYYY");
+            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MM/dd/YYYY");
             currentDate = currentDateFormat.format(calForDate.getTime());
 
             Calendar calForTime = Calendar.getInstance();
