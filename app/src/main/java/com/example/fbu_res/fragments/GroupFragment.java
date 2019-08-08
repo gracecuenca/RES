@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -270,6 +271,10 @@ public class GroupFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_group, menu);
+
+        Drawable chat = menu.findItem(R.id.newGroup).getIcon();
+        chat.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 

@@ -3,6 +3,7 @@
         <item name="android:textViewStyle">@style/AirBnbTextViewStyle</item>
         <item name="buttonStyle">@style/AirBnbButtonStyle</item>
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+        <item name="android:itemBackground">@color/turquoise</item>
     </style>
 
     <style name="AirBnbTextViewStyle" parent="android:Widget.TextView">
