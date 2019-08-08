@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -40,9 +41,8 @@ public class CategoryFragment extends Fragment {
         eventsSearchRv = view.findViewById(R.id.eventsSearch);
         events = new ArrayList<>();
         adapter = new EventAdapter(events);
-        StaggeredGridLayoutManager staggeredGridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        eventsSearchRv.setLayoutManager(staggeredGridLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        eventsSearchRv.setLayoutManager(gridLayoutManager);
         eventsSearchRv.setAdapter(adapter);
         getEvents();
     }
