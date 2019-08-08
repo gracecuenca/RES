@@ -169,10 +169,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         if(((User) ParseUser.getCurrentUser()).getType().equals("Consumer")){
             menu.removeItem(R.id.action_add_event);
-        } else {
-            menu.removeItem(R.id.action_ar);
         }
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
