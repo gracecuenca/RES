@@ -3,7 +3,6 @@
     <string-array name="sort_arrays">
         <item>Date</item>
         <item>Distance</item>
-        <item>Interest</item>
     </string-array>
     <string-array name="state_arrays">
         <item>Select state</item>
