@@ -188,7 +188,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         vh1.groupName.setText(group.getName());
         if(group.getImage()!=null){
-            Glide.with(context).load(group.getImage().getUrl()).into(vh1.groupImage);
+            Glide.with(context).load(group.getImage().getUrl()).circleCrop().into(vh1.groupImage);
         }
 
         vh1.groupType.setText("");
