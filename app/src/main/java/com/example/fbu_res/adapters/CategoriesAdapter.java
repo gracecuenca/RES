@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.fbu_res.R;
 import com.example.fbu_res.fragments.CategoryFragment;
 import com.example.fbu_res.models.Categories;
@@ -47,7 +48,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         Categories cat = categories.get(position);
         holder.categoryName.setText(cat.getName());
         if(cat.getImage() != null){
-            Glide.with(context).load(cat.getImage().getUrl()).into(holder.categoryImage);
+            Glide.with(context).load(cat.getImage().getUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.categoryImage);
         }
 
     }
