@@ -76,8 +76,6 @@ public class BusinessSliderSearch extends Fragment {
     public static SearchView locationSearchView;
     RecyclerView locationSearchRecyclerView;
     Geocoder geocoder;
-    String currentLat;
-    String currentLong;
     String lat;
     String longi;
     private FusedLocationProviderClient fusedLocationClient;
