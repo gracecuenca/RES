@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -108,9 +109,8 @@ public class SearchFragment extends Fragment{
         events = new ArrayList<>();
         adapter = new EventAdapter(events);
         eventsRv.setAdapter(adapter);
-        StaggeredGridLayoutManager staggeredGridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        eventsRv.setLayoutManager(staggeredGridLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        eventsRv.setLayoutManager(gridLayoutManager);
         categoriesRV = view.findViewById(R.id.categoriesrv);
         categoriesArrayList = new ArrayList<>();
         adapterCat = new CategoriesAdapter(categoriesArrayList);

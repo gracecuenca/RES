@@ -1,6 +1,7 @@
 package com.example.fbu_res;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -58,9 +59,8 @@ public class ProfileActivity extends AppCompatActivity {
         adapter = new EventAdapter(events);
         rvInterestedEvents.setAdapter(adapter);
         // set the layout manager on the recycler view
-        StaggeredGridLayoutManager staggeredGridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        rvInterestedEvents.setLayoutManager(staggeredGridLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        rvInterestedEvents.setLayoutManager(gridLayoutManager);
 
 
         query.findInBackground(new FindCallback<User>() {
