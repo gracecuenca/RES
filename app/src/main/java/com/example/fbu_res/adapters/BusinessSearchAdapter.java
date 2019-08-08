@@ -132,9 +132,9 @@ public class BusinessSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.flContainer, fragment);
                     Bundle args = new Bundle();
-                    args.putString("businessName", search.getName());
-                    args.putString("Lat", search.getLat());
-                    args.putString("Long", search.getLongi());
+                    args.putString("categoryName", search.getName());
+                    args.putString("lat", search.getLat());
+                    args.putString("long", search.getLongi());
                     fragment.setArguments(args);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();

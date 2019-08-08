@@ -170,9 +170,16 @@ public class EventSliderSearch extends Fragment {
             public void done(List<Address> objects, ParseException e) {
                 if(e==null){
                     for(int i = 0; i<objects.size(); i++){
-                        locations.add(objects.get(i).getString("city"));
-                        locations.add(objects.get(i).getString("zipcode"));
-                        locations.add(objects.get(i).getString("name"));
+                        if(objects.get(i).getString("city") != null){
+                            locations.add(objects.get(i).getString("city"));
+                        }
+
+                        if(objects.get(i).getString("zipcode") != null){
+                            locations.add(objects.get(i).getString("zipcode"));
+                        }
+                        if(objects.get(i).getString("name") != null){
+                            locations.add(objects.get(i).getString("name"));
+                        }
                     }
                     withoutRepeats(locations);
                     locationSearchAdapater.update(locations);
