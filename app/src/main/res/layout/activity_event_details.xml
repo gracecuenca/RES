@@ -8,13 +8,12 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDetails"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="406dp"
+        android:layout_height="626dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.473" />
+        app:layout_constraintTop_toBottomOf="@+id/ivBack" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEventGroup"
@@ -27,4 +26,12 @@
         app:backgroundTint="#00FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/arrow_left"
+        tools:layout_editor_absoluteX="2dp"
+        tools:layout_editor_absoluteY="2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

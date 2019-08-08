@@ -14,15 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.R;
-import com.example.fbu_res.adapters.EventGroupsAdapter;
-import com.example.fbu_res.adapters.InterestGroupAdapter;
 import com.example.fbu_res.adapters.MyGroupsAdapter;
 import com.example.fbu_res.models.Group;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 
 import java.util.ArrayList;
