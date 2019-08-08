@@ -167,6 +167,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         Drawable chat = menu.findItem(R.id.directMessage).getIcon();
         chat.setColorFilter(getResources().getColor(R.color.turquoise), PorterDuff.Mode.SRC_IN);
 
+        if(((User) ParseUser.getCurrentUser()).getType().equals("Consumer")){
+            menu.removeItem(R.id.action_add_event);
+        } else {
+            menu.removeItem(R.id.action_ar);
+        }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 

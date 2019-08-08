@@ -66,11 +66,12 @@
         android:layout_width="92dp"
         android:layout_height="30dp"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_button"
         android:padding="0dp"
         android:text="View Friends"
         android:textAllCaps="false"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/tvDisplayname" />
 

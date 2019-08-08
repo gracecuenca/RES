@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.fbu_res.adapters.DMAdapter;
 import com.example.fbu_res.models.User;
@@ -35,6 +37,14 @@ public class DirectMessageActivity extends AppCompatActivity {
         rvUsers.setAdapter(adapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
         getUsers();
+
+        ImageView back = findViewById(R.id.ivBack);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getUsers(){
