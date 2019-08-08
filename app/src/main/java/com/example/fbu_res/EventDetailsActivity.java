@@ -11,14 +11,17 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.fbu_res.adapters.EventDetailsAdapter;
 import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
@@ -52,11 +55,13 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     // event attributes
     EventDetailsAdapter adapter;
+    ImageView businessImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_details);
+        setContentView(R.layout.main_event_details_activity);
+        businessImage = findViewById(R.id.event_details_image);
         bindDataToAdapter();
     }
 
@@ -64,7 +69,9 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         // unwrapping the event sent by the intent and initializing attributes
         event = (Event) Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
-
+        Glide.with(this)
+                .load(event.getImage().getUrl())
+                .into(businessImage);
         RecyclerView rvDetails = (RecyclerView) findViewById(R.id.rvDetails);
 
         groups = new ArrayList<>();
@@ -74,6 +81,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         rvDetails.setAdapter(adapter);
         // Set layout manager to position the items
         rvDetails.setLayoutManager(new LinearLayoutManager(this));
+
 
         RootRef = FirebaseDatabase.getInstance().getReference();
 
