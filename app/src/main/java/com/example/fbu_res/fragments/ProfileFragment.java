@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,12 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.example.fbu_res.AddEventActivity;
 import com.example.fbu_res.FriendsActivity;
 import com.example.fbu_res.LoginActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -41,7 +39,7 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
-    private Consumer user;
+    private User user;
     private ImageView ivProfileImage;
     private TextView tvDisplayname;
     private RecyclerView rvInterestedEvents;
@@ -76,7 +74,7 @@ public class ProfileFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // setting up the current user
-        user = (Consumer) ParseUser.getCurrentUser();
+        user = (User) ParseUser.getCurrentUser();
 
         // showing the profile of the user
         ivProfileImage = (ImageView) view.findViewById(R.id.ivProfileImage);
@@ -135,7 +133,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadEvents(){
-        if(user.getType().equals("Consumer")){
+        if(user.getType().equals("User")){
             ParseRelation interestedEvents = user.getInterestedEvents();
             ParseQuery<Event> eventsQuery = interestedEvents.getQuery();
             eventsQuery.addAscendingOrder(Event.KEY_DATE);

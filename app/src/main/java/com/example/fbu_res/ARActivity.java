@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+<<<<<<< HEAD
 import retrofit2.Call;
 import retrofit2.Response;
 import uk.co.appoly.arcorelocation.LocationMarker;
@@ -55,6 +56,9 @@ import uk.co.appoly.arcorelocation.LocationScene;
 import uk.co.appoly.arcorelocation.rendering.LocationNode;
 import uk.co.appoly.arcorelocation.rendering.LocationNodeRender;
 import uk.co.appoly.arcorelocation.utils.ARLocationPermissionHelper;
+=======
+import uk.co.appoly.arcorelocation.LocationScene;
+>>>>>>> 6234b739ed100d5bb64cb46abca7c7636882c6f6
 
 
 import static com.example.fbu_res.DemoUtils.createArSession;
@@ -70,6 +74,8 @@ public class ARActivity extends AppCompatActivity {
     // Renderables for this example
     private ModelRenderable andyRenderable;
     private ViewRenderable exampleLayoutRenderable;
+    LocationScene locationScene;
+
 
     // Our ARCore-Location scene
     private LocationScene locationScene;

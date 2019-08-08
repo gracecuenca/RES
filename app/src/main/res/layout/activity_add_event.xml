@@ -17,7 +17,7 @@
         android:layout_marginRight="80dp"
         android:backgroundTint="@color/yellow"
         android:ems="10"
-        android:hint="Country"
+        android:hint="USA"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.388"
@@ -34,7 +34,7 @@
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
         android:ems="10"
-        android:hint="Zipcode"
+        android:hint="98109"
         android:backgroundTint="@color/yellow"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,7 @@
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
         android:ems="10"
-        android:hint="Address Line 2"
+        android:hint="Floor 2"
         android:backgroundTint="@color/yellow"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +71,7 @@
         android:layout_marginRight="80dp"
         android:ems="10"
         android:backgroundTint="@color/yellow"
-        android:hint="City"
+        android:hint="Seattle"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.388"
@@ -106,14 +106,18 @@
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
         android:ems="10"
-        android:hint="Event Name"
+        android:hint="FBU SEA Demo Day"
         android:backgroundTint="@color/yellow"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.371"
         app:layout_constraintStart_toStartOf="parent"
+<<<<<<< HEAD
         app:layout_constraintTop_toBottomOf="@+id/ARtextView" />
 
+=======
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+>>>>>>> 6234b739ed100d5bb64cb46abca7c7636882c6f6
     <EditText
         android:id="@+id/etAdressline1"
         android:layout_width="0dp"
@@ -124,7 +128,7 @@
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
         android:ems="10"
-        android:hint="Address Line 1"
+        android:hint="1101 Dexter Ave N"
         android:backgroundTint="@color/yellow"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -180,7 +184,7 @@
         android:layout_marginEnd="80dp"
         android:layout_marginRight="80dp"
         android:ems="10"
-        android:hint="Location Name"
+        android:hint="Facebook Dexter"
         android:backgroundTint="@color/yellow"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"

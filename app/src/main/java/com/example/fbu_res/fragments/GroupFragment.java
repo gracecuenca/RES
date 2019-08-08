@@ -81,9 +81,9 @@ public class GroupFragment extends Fragment {
 // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.Viewpager);
         GroupFragmentPagerAdapter pagerAdapter = new GroupFragmentPagerAdapter(getFragmentManager());
-        pagerAdapter.addFragment(new MyGroupsFragment(), "My Groups");
-        pagerAdapter.addFragment(new InterestGroupFragment(), "Interest Groups");
-        pagerAdapter.addFragment(new EventGroupFragment(), "Event Groups");
+        pagerAdapter.addFragment(new MyGroupsFragment(), "Personal");
+        pagerAdapter.addFragment(new InterestGroupFragment(), "Interests");
+        pagerAdapter.addFragment(new EventGroupFragment(), "Events");
 
         LayoutInflater factory = LayoutInflater.from(GroupFragment.this.getContext());
         viewCreate = factory.inflate(R.layout.fragment_creategroup, null);

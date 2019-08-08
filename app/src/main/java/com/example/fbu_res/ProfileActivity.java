@@ -14,10 +14,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.adapters.EventAdapter;
-import com.example.fbu_res.models.Consumer;
+import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -29,13 +28,13 @@ import java.util.List;
 public class ProfileActivity extends AppCompatActivity {
 
     private Button btnLogout;
-    private Consumer user;
+    private User user;
     private ImageView ivProfileImage;
     private TextView tvDisplayname;
     private RecyclerView rvInterestedEvents;
     private ArrayList<Event> events;
     private EventAdapter adapter;
-    Consumer currentUser = (Consumer) ParseUser.getCurrentUser();
+    User currentUser = (User) ParseUser.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // setting up the current user
         final String userId = getIntent().getStringExtra("objectId");
-        ParseQuery<Consumer> query = ParseQuery.getQuery(Consumer.class);
+        ParseQuery<User> query = ParseQuery.getQuery(User.class);
         query.whereEqualTo("objectId", userId);
 
         // showing the profile of the user
@@ -64,9 +63,9 @@ public class ProfileActivity extends AppCompatActivity {
         rvInterestedEvents.setLayoutManager(staggeredGridLayoutManager);
 
 
-        query.findInBackground(new FindCallback<Consumer>() {
+        query.findInBackground(new FindCallback<User>() {
             @Override
-            public void done(List<Consumer> objects, ParseException e) {
+            public void done(List<User> objects, ParseException e) {
                 if(objects != null && objects.size() > 0) {
                     user = objects.get(0);
                     if (user.getProfileImg() != null) {
@@ -99,17 +98,17 @@ public class ProfileActivity extends AppCompatActivity {
                     });
                 }
 
-                ParseQuery<Consumer> query2 = currentUser.getFriends().getQuery();
+                ParseQuery<User> query2 = currentUser.getFriends().getQuery();
                 query2.whereEqualTo("objectId", userId);
-                query2.findInBackground(new FindCallback<Consumer>() {
+                query2.findInBackground(new FindCallback<User>() {
                     @Override
-                    public void done(List<Consumer> objects, ParseException e) {
+                    public void done(List<User> objects, ParseException e) {
                         if(objects.size() > 0) {
-                            ParseQuery<Consumer> query3 = currentUser.getFriends().getQuery();
+                            ParseQuery<User> query3 = currentUser.getFriends().getQuery();
                             query3.whereEqualTo("objectId", currentUser.getObjectId());
-                            query3.findInBackground(new FindCallback<Consumer>() {
+                            query3.findInBackground(new FindCallback<User>() {
                                 @Override
-                                public void done(List<Consumer> objects, ParseException e) {
+                                public void done(List<User> objects, ParseException e) {
                                     Button button = findViewById(R.id.btnFriend);
                                     if(objects.size() > 0){
                                         ((ViewGroup) button.getParent()).removeView(button);
@@ -127,7 +126,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadEvents(){
-        if(user.getType().equals("Consumer")){
+        if(user.getType().equals("User")){
             ParseRelation interestedEvents = user.getInterestedEvents();
             ParseQuery<Event> eventsQuery = interestedEvents.getQuery();
             eventsQuery.addAscendingOrder(Event.KEY_DATE);
