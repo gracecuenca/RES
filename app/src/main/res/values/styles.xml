@@ -1,13 +1,23 @@
 <resources>
 
 <!-- Base application theme. -->
-<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <!-- Customize your theme here. -->
-</style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textViewStyle">@style/AirBnbTextViewStyle</item>
+        <item name="buttonStyle">@style/AirBnbButtonStyle</item>
+    </style>
 
-<style name="AlertDialog" parent="Base.Theme.AppCompat.Light.Dialog">
+    <style name="AirBnbTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/airbnbcereallight</item>
+    </style>
 
-</style>
+    <style name="AirBnbButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/airbnbcereallight</item>
+    </style>
+
+    <style name="AlertDialog" parent="Base.Theme.AppCompat.Light.Dialog"/>
+
+
+
 
     <style name="MyCustomTheme" parent="@android:style/Theme.Panel">
         <item name="android:windowAnimationStyle">@style/MyAnimation.Window</item>
