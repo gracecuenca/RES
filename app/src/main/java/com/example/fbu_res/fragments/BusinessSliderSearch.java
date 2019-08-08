@@ -226,6 +226,8 @@ public class BusinessSliderSearch extends Fragment {
                         for(int x =0; x < category.size(); x++){
                         String categoryName = category.get(x).getTitle();
                         BusinessSearch categorySearch = new BusinessSearch(categoryName, 1);
+                        categorySearch.setLat(Double.toString(business.getCoordinates().getLatitude()));
+                        categorySearch.setLongi(Double.toString(business.getCoordinates().getLongitude()));
                         businessSearches.add(categorySearch);
                     }
                 }

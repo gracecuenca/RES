@@ -112,12 +112,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.371"
         app:layout_constraintStart_toStartOf="parent"
-<<<<<<< HEAD
         app:layout_constraintTop_toBottomOf="@+id/ARtextView" />
-
-=======
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
->>>>>>> 6234b739ed100d5bb64cb46abca7c7636882c6f6
     <EditText
         android:id="@+id/etAdressline1"
         android:layout_width="0dp"
