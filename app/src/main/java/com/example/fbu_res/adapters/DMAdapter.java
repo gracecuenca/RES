@@ -47,7 +47,7 @@ public class DMAdapter extends RecyclerView.Adapter<DMAdapter.ViewHolder>{
 
         holder.name.setText(user.getDisplayname());
 
-        if(user.getType().equals("User") && holder.verified.getParent() != null){
+        if(user.getType().equals("Consumer") && holder.verified.getParent() != null){
             ((ViewGroup) holder.verified.getParent()).removeView(holder.verified);
         }
 

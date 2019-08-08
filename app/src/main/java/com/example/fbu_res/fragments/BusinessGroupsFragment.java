@@ -34,9 +34,9 @@ public class BusinessGroupsFragment extends Fragment {
 // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.Viewpager);
         GroupFragmentPagerAdapter pagerAdapter = new GroupFragmentPagerAdapter(getFragmentManager());
-        pagerAdapter.addFragment(new OwnedGroupsFragment(), "Owned Groups");
-        pagerAdapter.addFragment(new MyGroupsFragment(), "Groups You're In");
-        pagerAdapter.addFragment(new EventGroupFragment(), "Event Groups");
+        pagerAdapter.addFragment(new OwnedGroupsFragment(), "Owned");
+        pagerAdapter.addFragment(new MyGroupsFragment(), "Personal");
+        pagerAdapter.addFragment(new EventGroupFragment(), "Events");
 
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(pagerAdapter);

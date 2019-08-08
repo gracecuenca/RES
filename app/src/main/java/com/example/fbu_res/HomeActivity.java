@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
                         fragment = new SearchFragment();
                         break;
                     case R.id.action_groups:
-                        if (ParseUser.getCurrentUser().get("type").equals("User")) {
+                        if (ParseUser.getCurrentUser().get("type").equals("Consumer")) {
                             fragment = new GroupFragment();
                         } else {
                             fragment = new BusinessGroupsFragment();
