@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -63,6 +64,14 @@ public class EventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.main_event_details_activity);
         businessImage = findViewById(R.id.event_details_image);
         bindDataToAdapter();
+
+        ImageView back = findViewById(R.id.ivBack);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void bindDataToAdapter() {
