@@ -73,7 +73,6 @@ public class ProfileFragment extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.turquoise));
         setHasOptionsMenu(true);
 
-        // setting up the current user
         user = (User) ParseUser.getCurrentUser();
 
         // showing the profile of the user
@@ -83,13 +82,10 @@ public class ProfileFragment extends Fragment {
             Glide.with(getContext()).load(user.getProfileImg().getUrl()).into(ivProfileImage);
         }
         tvDisplayname.setText(user.getDisplayname());
-
-        // setting up the array and display of interested events
         rvInterestedEvents = (RecyclerView) view.findViewById(R.id.rvInterestedEvents);
         events = new ArrayList<>();
         adapter = new EventAdapter(events);
         rvInterestedEvents.setAdapter(adapter);
-        // set the layout manager on the recycler view
         StaggeredGridLayoutManager staggeredGridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvInterestedEvents.setLayoutManager(staggeredGridLayoutManager);

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -26,7 +27,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -39,8 +39,8 @@ import com.example.fbu_res.DirectMessageActivity;
 import com.example.fbu_res.EndlessRecyclerViewScrollListener;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
-import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
+import com.example.fbu_res.models.User;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -78,9 +78,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    // the current user
     private User user;
-    // the current location
     private ParseGeoPoint currentLocation;
 
     // push notification logic
@@ -325,6 +323,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         clear();
         option = parent.getItemAtPosition(position).toString();
+        ((TextView)parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.turquoise));
+        ((TextView)parent.getChildAt(0)).setTextSize(18);
         loadEvents(false, false, option);
     }
 
