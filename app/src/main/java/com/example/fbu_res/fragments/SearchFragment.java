@@ -108,8 +108,6 @@ public class SearchFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         toolbar = view.findViewById(R.id.searchToolbar);
-        ImageView searchButton = (ImageView) toolbar.findViewById (androidx.appcompat.R.id.search_button);
-        searchButton.setColorFilter (Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
         activity.setSupportActionBar(toolbar);
         toolbar.setTitle("");
         setHasOptionsMenu(true);
