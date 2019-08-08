@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -101,7 +102,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
         requestQueue = Volley.newRequestQueue(view.getContext());
 
-        // personalized toolbar
+        // customzied toolbar
         activity = (AppCompatActivity) getActivity();
         toolbar = (Toolbar) view.findViewById(R.id.homeToolbar);
         activity.setSupportActionBar(toolbar);
@@ -111,7 +112,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         user = (User) ParseUser.getCurrentUser();
         if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED && checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){ // if permissions not granted
+                != PackageManager.PERMISSION_GRANTED){
             requestPermissions();
         } else{
             startLocationUpdates();
@@ -149,10 +150,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 ArrayAdapter.createFromResource(getContext(), R.array.sort_arrays, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-
         spinner.setOnItemSelectedListener(this);
         setHasOptionsMenu(true);
-
     }
 
     @Override
