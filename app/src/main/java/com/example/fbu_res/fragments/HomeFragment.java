@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -104,8 +106,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         activity = (AppCompatActivity) getActivity();
         toolbar = (Toolbar) view.findViewById(R.id.homeToolbar);
         activity.setSupportActionBar(toolbar);
-        activity.setTitle("Ventertain");
-        toolbar.setTitleTextColor(getResources().getColor(R.color.turquoise));
 
         user = (User) ParseUser.getCurrentUser();
         if (checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -120,10 +120,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         mEvents = new ArrayList<>();
         adapter = new EventAdapter(mEvents);
         rvEvents.setAdapter(adapter);
-        StaggeredGridLayoutManager staggeredGridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        rvEvents.setLayoutManager(staggeredGridLayoutManager);
-        scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        rvEvents.setLayoutManager(gridLayoutManager);
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 loadEvents(false, true, option);
@@ -242,7 +241,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 Looper.myLooper());
     }
 
-    // requesting permissions
     public void requestPermissions(){
         new AlertDialog.Builder(getContext())
                 .setTitle("Location Permissions needed")
@@ -276,7 +274,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
     }
 
-    // this method will query differently based on whether
     public void loadEvents(final boolean isRefresh, final boolean isPaginating, String option) {
         User user = (User) ParseUser.getCurrentUser();
 
@@ -321,21 +318,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         clear();
         option = parent.getItemAtPosition(position).toString();
         ((TextView)parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.turquoise));
-        ((TextView)parent.getChildAt(0)).setTextSize(18);
+        ((TextView)parent.getChildAt(0)).setTextSize(16);
         loadEvents(false, false, option);
     }
 
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent) {}
 
-    }
-
-    // Clean all elements of the recycler
     public void clear() {
         mEvents.clear();
         adapter.notifyDataSetChanged();
     }
 
-    // Add a list of items
     public void addAll(List<Event> list) {
         mEvents.addAll(list);
         adapter.notifyDataSetChanged();

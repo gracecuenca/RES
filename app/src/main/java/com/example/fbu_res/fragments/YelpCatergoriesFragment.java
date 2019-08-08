@@ -10,6 +10,7 @@ import android.widget.Adapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -56,10 +57,9 @@ public class YelpCatergoriesFragment extends Fragment {
         searches = new ArrayList<>();
         adapter = new YelpCategoriesAdapter(searches);
         categoryBusinessSearchResults = view.findViewById(R.id.businessSearchCategoryResults);
-        StaggeredGridLayoutManager staggeredGridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         categoryBusinessSearchResults.setAdapter(adapter);
-        categoryBusinessSearchResults.setLayoutManager(staggeredGridLayoutManager);
+        categoryBusinessSearchResults.setLayoutManager(gridLayoutManager);
 
         lat = bundle.getString("lat");
         longi = bundle.getString("long");

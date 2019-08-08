@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -86,9 +87,8 @@ public class ProfileFragment extends Fragment {
         events = new ArrayList<>();
         adapter = new EventAdapter(events);
         rvInterestedEvents.setAdapter(adapter);
-        StaggeredGridLayoutManager staggeredGridLayoutManager =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        rvInterestedEvents.setLayoutManager(staggeredGridLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        rvInterestedEvents.setLayoutManager(gridLayoutManager);
 
         loadEvents();
 
