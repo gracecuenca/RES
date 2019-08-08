@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBack"
+        app:layout_constraintTop_toBottomOf="@+id/ivBack"
         app:tabMode="fixed" />
 
     <androidx.viewpager.widget.ViewPager
@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/btnBack"
+        android:id="@+id/ivBack"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:background="@drawable/arrow_left"

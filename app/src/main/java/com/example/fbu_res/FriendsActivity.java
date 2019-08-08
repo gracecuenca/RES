@@ -43,7 +43,7 @@ public class FriendsActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        Button back = findViewById(R.id.btnBack);
+        Button back = findViewById(R.id.ivBack);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

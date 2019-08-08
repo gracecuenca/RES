@@ -36,12 +36,11 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvName"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.178"
-        app:srcCompat="@drawable/ic_verified" />
+        app:srcCompat="@drawable/checkmark" />
 
     <Button
         android:id="@+id/btnAccept"

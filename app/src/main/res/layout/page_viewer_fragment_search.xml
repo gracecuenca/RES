@@ -22,7 +22,8 @@
         app:layout_constraintBottom_toTopOf="@+id/searchViewPager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabIndicatorColor="#0CBABA">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
