@@ -21,13 +21,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.fbu_res.adapters.EventDetailsAdapter;
-import com.example.fbu_res.fragments.GroupFragment;
 import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.models.Group;
@@ -68,11 +67,13 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     // event attributes
     EventDetailsAdapter adapter;
+    ImageView businessImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_details);
+        setContentView(R.layout.main_event_details_activity);
+        businessImage = findViewById(R.id.event_details_image);
         bindDataToAdapter();
 
         ImageView back = findViewById(R.id.ivBack);
@@ -88,7 +89,9 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         // unwrapping the event sent by the intent and initializing attributes
         event = (Event) Parcels.unwrap(getIntent().getParcelableExtra(Event.class.getSimpleName()));
-
+        Glide.with(this)
+                .load(event.getImage().getUrl())
+                .into(businessImage);
         RecyclerView rvDetails = (RecyclerView) findViewById(R.id.rvDetails);
 
         groups = new ArrayList<>();
@@ -98,6 +101,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         rvDetails.setAdapter(adapter);
         // Set layout manager to position the items
         rvDetails.setLayoutManager(new LinearLayoutManager(this));
+
 
         RootRef = FirebaseDatabase.getInstance().getReference();
 

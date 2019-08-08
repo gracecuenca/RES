@@ -19,15 +19,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.FriendsActivity;
 import com.example.fbu_res.LoginActivity;
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
-import com.example.fbu_res.models.User;
 import com.example.fbu_res.models.Event;
+import com.example.fbu_res.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
