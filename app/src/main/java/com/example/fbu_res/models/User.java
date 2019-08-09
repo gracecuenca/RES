@@ -13,6 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 @ParseClassName("_User")
 public class User extends ParseUser {
@@ -28,6 +31,45 @@ public class User extends ParseUser {
     public static final String KEY_CREATED_EVENTS = "createdEvents";
     public static final String KEY_DM_USERS = "dm_users";
     public static final String KEY_FRIENDS = "friends";
+    public static final String KEY_INTERESTED_MAP = "interestedEventsHashmap";
+    public static final String KEY_CREATED_MAP = "createdEventsHashmap";
+
+    public void addInterestedMap(Date date, Event event){
+        DatedEvent datedEvent;
+        ArrayList<Event> events;
+        TreeMap<Date, DatedEvent> treeMap;
+        if(getInterestedMap() == null){ // tree does not exist yet
+            datedEvent = new DatedEvent();
+            datedEvent.setDate(date);
+            events = new ArrayList<Event>();
+            events.add(event);
+            datedEvent.setEvents(events);
+            treeMap = new TreeMap<Date, DatedEvent>();
+            treeMap.put(date, datedEvent);
+        }
+        else if(getInterestedMap().containsKey(date)){ // tree exists and key already in
+            treeMap = getInterestedMap();
+            datedEvent = treeMap.get(date);
+            events = datedEvent.getEvents();
+            events.add(event);
+            datedEvent.setEvents(events);
+            treeMap.put(date, datedEvent);
+        } else { // tree exists but key not in
+            treeMap = getInterestedMap();
+            datedEvent = new DatedEvent();
+            datedEvent.setDate(date);
+            events = new ArrayList<Event>();
+            events.add(event);
+            datedEvent.setEvents(events);
+            treeMap.put(date, datedEvent);
+        }
+        put(KEY_INTERESTED_MAP, treeMap);
+        saveInBackground();
+    }
+
+    public TreeMap<Date, DatedEvent> getInterestedMap(){
+        return (TreeMap) get(KEY_INTERESTED_MAP);
+    }
 
     public void addInterestedEvent(Event event){
         ParseRelation relation = getRelation(KEY_INTERESTED_EVENTS);

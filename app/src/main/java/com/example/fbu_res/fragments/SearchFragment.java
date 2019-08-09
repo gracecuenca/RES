@@ -1,38 +1,18 @@
 package com.example.fbu_res.fragments;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.R.*;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -40,50 +20,35 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.CategoriesAdapter;
 import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Categories;
-import com.example.fbu_res.models.Categories;
 import com.example.fbu_res.models.Event;
 import com.example.fbu_res.util.EqualSpacingItemDecoration;
 import com.example.fbu_res.util.YelpClient;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.SearchResponse;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchFragment extends Fragment{
     RecyclerView eventsRv;
     ArrayList<Event> events;
+    ArrayList<Event> events2;
     EventAdapter adapter;
-
+    EventAdapter adapter2;
+    RecyclerView foodEventRecyclerView;
     CategoriesAdapter adapterCat;
     ArrayList<Categories> categoriesArrayList;
     RecyclerView categoriesRV;
@@ -113,11 +78,18 @@ public class SearchFragment extends Fragment{
         toolbar.setTitle("");
         setHasOptionsMenu(true);
         eventsRv = view.findViewById(R.id.eventsSearchrv);
+        foodEventRecyclerView = view.findViewById(R.id.foodEventRecyclerView);
         events = new ArrayList<>();
+        events2 = new ArrayList<>();
         adapter = new EventAdapter(events);
+        adapter2 = new EventAdapter(events2);
         eventsRv.setAdapter(adapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        eventsRv.setLayoutManager(gridLayoutManager);
+        foodEventRecyclerView.setAdapter(adapter2);
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        eventsRv.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        foodEventRecyclerView.setLayoutManager(linearLayoutManager2);
         categoriesRV = view.findViewById(R.id.categoriesrv);
         categoriesRV.addItemDecoration(new EqualSpacingItemDecoration(10));
         categoriesArrayList = new ArrayList<>();
@@ -125,8 +97,9 @@ public class SearchFragment extends Fragment{
         categoriesRV.setAdapter(adapterCat);
         LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         categoriesRV.setLayoutManager(manager);
-        queryEvents();
+        queryPopularEvents();
         queryCategories();
+        queryFoodEvents();
 
         /*
         mMapView = view.findViewById(R.id.mapView2);
@@ -137,8 +110,31 @@ public class SearchFragment extends Fragment{
         }*/
     }
 
-    public void queryEvents() {
+    public void queryFoodEvents() {
         ParseQuery<Event> query = ParseQuery.getQuery("Event");
+        query.whereEqualTo("generalType", "food");
+        query.setLimit(5);
+        query.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        Event event;
+                        event = objects.get(i);
+                        events2.add(event);
+                        adapter2.notifyDataSetChanged();
+                    }
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void queryPopularEvents() {
+        ParseQuery<Event> query = ParseQuery.getQuery("Event");
+        query.whereEqualTo("generalType", "popular");
+        query.setLimit(5);
         query.findInBackground(new FindCallback<Event>() {
             @Override
             public void done(List<Event> objects, ParseException e) {
