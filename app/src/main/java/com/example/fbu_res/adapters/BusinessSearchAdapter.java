@@ -1,6 +1,7 @@
 package com.example.fbu_res.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.fbu_res.R;
-import com.example.fbu_res.fragments.BusinessSliderSearch;
-import com.example.fbu_res.fragments.CategoryFragment;
-import com.example.fbu_res.fragments.SingleBusinessResultFragment;
+import com.example.fbu_res.SingleBusinessResultFragment;
+import com.example.fbu_res.fragments.BusinessGroupsFragment;
 import com.example.fbu_res.fragments.YelpCatergoriesFragment;
-import com.example.fbu_res.fragments.YelpCatergoriesFragment;
-import com.example.fbu_res.models.Business;
 import com.example.fbu_res.models.BusinessSearch;
-import com.example.fbu_res.models.Event;
-import com.example.fbu_res.models.Group;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -157,17 +151,14 @@ public class BusinessSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 @Override
                 public void onClick(View v) {
                     BusinessSearch search = businesses.get(getAdapterPosition());
-                    SingleBusinessResultFragment fragment = new SingleBusinessResultFragment();
-                    FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.flContainer, fragment);
-                    Bundle args = new Bundle();
-                    args.putString("businessName", search.getName());
-                    args.putString("Lat", search.getLat());
-                    args.putString("Long", search.getLongi());
-                    fragment.setArguments(args);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                    // create intent for the new activity
+                    Intent intent = new Intent(context, SingleBusinessResultFragment.class);
+                    // serialize the movie using parceler, use its short name as a key
+                    intent.putExtra("businessName", search.getName());
+                    intent.putExtra("Lat", search.getLat());
+                    intent.putExtra("Long", search.getLongi());
+                    // show the activity
+                    context.startActivity(intent);
                 }
             });
         }
