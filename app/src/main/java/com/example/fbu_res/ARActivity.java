@@ -93,8 +93,8 @@ public class ARActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ar);
         arSceneView = findViewById(R.id.ux_fragment);
-        lat = "122.3321";
-        longi = "47.6062";
+        lat = "79.3832";
+        longi = "43.6532";
         businessSearches = new ArrayList<>();
         {
             try {
@@ -358,8 +358,10 @@ public class ARActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            params.put("latitude", lat);
-            params.put("longitude", longi);
+            params.put("term", "coffee");
+            params.put("location", "Seattle"); 
+            //params.put("latitude", lat);
+            //params.put("longitude", longi);
             Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
             Response<SearchResponse> response = null;
             try {
