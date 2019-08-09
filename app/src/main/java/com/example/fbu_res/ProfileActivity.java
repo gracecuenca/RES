@@ -1,5 +1,6 @@
 package com.example.fbu_res;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,11 +23,15 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrInterface;
+import com.r0adkll.slidr.model.SlidrPosition;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends Activity {
 
     private Button btnLogout;
     private User user;
@@ -36,11 +42,16 @@ public class ProfileActivity extends AppCompatActivity {
     private EventAdapter adapter;
     User currentUser = (User) ParseUser.getCurrentUser();
 
+    // This interface is needed to see if the fragment
+    // is resuming after creation (Slidr to be attached) or
+    // simply from the background (app was paused before).
+    SlidrInterface slidrInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        Slidr.attach(this);
 
         // setting up the current user
         final String userId = getIntent().getStringExtra("objectId");

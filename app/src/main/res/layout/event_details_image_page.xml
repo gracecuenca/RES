@@ -10,6 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="452dp"
         android:scaleType="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:transitionName="eventImage"
         app:srcCompat="@color/colorAccent" />
 
     <ImageView

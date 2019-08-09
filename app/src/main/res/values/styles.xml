@@ -4,6 +4,19 @@
         <item name="buttonStyle">@style/AirBnbButtonStyle</item>
         <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
         <item name="android:itemBackground">@color/turquoise</item>
+        <item name="android:windowContentTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <!-- options are: explode, slide, fade -->
+        <item name="android:windowEnterTransition">@transition/change_image_transform</item>
+        <item name="android:windowExitTransition">@transition/change_image_transform</item>
+
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/change_image_transform</item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/change_image_transform</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="AirBnbTextViewStyle" parent="android:Widget.TextView">
@@ -45,4 +58,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
+    <style name="Theme.Slidr.Slidable" parent="AppTheme">
+        <!-- These values must be set for this mechanism to work -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 </resources>

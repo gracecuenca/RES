@@ -1,5 +1,6 @@
 package com.example.fbu_res.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -86,8 +88,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                         Intent intent = new Intent(context, EventDetailsActivity.class);
                         // serialize the movie using parceler, use its short name as a key
                         intent.putExtra(Event.class.getSimpleName(), Parcels.wrap(event));
+
+                        // Set animation
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation((Activity) view.getContext(),
+                                        v.findViewById(R.id.mainEventImage), "eventImage");
                         // show the activity
-                        context.startActivity(intent);
+                        context.startActivity(intent, options.toBundle());
                     }
                 }
             });

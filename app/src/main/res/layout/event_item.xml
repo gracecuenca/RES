@@ -23,6 +23,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:transitionName="eventImage"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

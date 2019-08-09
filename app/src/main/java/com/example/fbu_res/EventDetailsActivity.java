@@ -43,6 +43,7 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.r0adkll.slidr.Slidr;
 
 import org.parceler.Parcels;
 
@@ -73,6 +74,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_event_details_activity);
+        Slidr.attach(this);
         businessImage = findViewById(R.id.event_details_image);
         bindDataToAdapter();
 
@@ -80,7 +82,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+               supportFinishAfterTransition();
             }
         });
     }
@@ -115,7 +117,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        if(((User) ParseUser.getCurrentUser()).getType().equals("User")) {
+        if(((User) ParseUser.getCurrentUser()).getType().equals("Consumer")) {
             ((ViewGroup) create.getParent()).removeView(create);
         }
     }
