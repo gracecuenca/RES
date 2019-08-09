@@ -52,6 +52,10 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrInterface;
+import com.r0adkll.slidr.model.SlidrPosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +84,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     private User user;
     private ParseGeoPoint currentLocation;
+
+    // This interface is needed to see if the fragment
+    // is resuming after creation (Slidr to be attached) or
+    // simply from the background (app was paused before).
+    SlidrInterface slidrInterface;
 
     // push notification logic
     private static final String FCM_API = "https://fcm.googleapis.com/fcm/send";
@@ -339,5 +348,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             event.setDistanceToUser(distance);
         }
     }
+
 
 }
