@@ -8,19 +8,34 @@
     android:orientation="vertical"
     android:outlineProvider="bounds"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="250dp"
+    app:behavior_peekHeight="275dp"
     app:layout_behavior="@string/bottom_sheet_behavior"
     tools:context=".EventDetailsActivity">
 
+    <View
+        android:id="@+id/view2"
+        style="@style/Divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#0CBABA"
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"></View>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDetails"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="1dp"
         android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivBack" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabEventGroup"
@@ -35,11 +50,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:rippleColor="#00FFFFFF" />
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/arrow_left"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

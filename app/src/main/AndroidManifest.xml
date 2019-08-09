@@ -28,6 +28,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".ARActivity"></activity>
         <activity android:name=".FriendsActivity" />
+        <activity android:name=".SingleBusinessResultFragment"></activity>
         <meta-data android:name="com.google.ar.core" android:value="optional"></meta-data>
         <service
             android:name=".PushNotificationServices"

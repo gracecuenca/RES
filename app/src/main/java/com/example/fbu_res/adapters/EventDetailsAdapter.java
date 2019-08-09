@@ -120,9 +120,6 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
 
         ParseFile image = event.getImage();
-        if(image != null){
-            Glide.with(vh1.itemView.getContext()).load(image.getUrl()).into(vh1.ivImage);
-        }
 
         // businesses can't add events to their calendars/ itineraries
         if(((User)ParseUser.getCurrentUser()).getType().equals("Business")){
@@ -240,7 +237,6 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class ViewHolder1 extends RecyclerView.ViewHolder {
 
-        private ImageView ivImage;
         private TextView tvDate;
         private TextView tvTitle;
         private TextView tvDescription;
@@ -251,7 +247,6 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         public ViewHolder1(View v) {
             super(v);
-            ivImage = (ImageView) v.findViewById(R.id.ivImage);
             tvDate = (TextView) v.findViewById(R.id.tvDate);
             tvTitle = (TextView) v.findViewById(R.id.tvTitle);
             tvDescription = (TextView) v.findViewById(R.id.tvDescription);

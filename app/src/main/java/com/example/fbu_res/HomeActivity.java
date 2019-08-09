@@ -25,8 +25,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = findViewById(R.id.backToolbar1);
+        //setSupportActionBar(toolbar);
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 

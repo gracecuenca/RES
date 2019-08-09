@@ -1,4 +1,4 @@
-package com.example.fbu_res.fragments;
+package com.example.fbu_res;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,26 +7,27 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.SingleBusinessEventsAdapter;
+import com.example.fbu_res.fragments.SearchSlider;
+import com.example.fbu_res.fragments.YelpCatergoriesFragment;
 import com.example.fbu_res.models.BusinessSearch;
 import com.example.fbu_res.models.Event;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -49,7 +50,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class SingleBusinessResultFragment extends Fragment {
+public class SingleBusinessResultFragment extends AppCompatActivity {
     public static final String TAG = SingleBusinessResultFragment.class.getSimpleName();
     ConstraintLayout bottomSheet;
     BottomSheetBehavior sheetBehavior;
@@ -73,22 +74,17 @@ public class SingleBusinessResultFragment extends Fragment {
     ArrayList<Event> events;
     SingleBusinessEventsAdapter adapter;
     ImageView largeImage;
+    ImageView backButton;
     private static final int REQUEST_CALL = 1;
     @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        inflater.inflate(R.layout.single_business_view_bottom_sheet, container, false);
-        return inflater.inflate(R.layout.main_business_search_fragment, container, false);
-    }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        super.onViewCreated(view, savedInstanceState);
-        Bundle bundle = getArguments();
-        businessName = bundle.getString("businessName");
-        lat = bundle.getString("Lat");
-        longi = bundle.getString("Long");
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_business_search_fragment);
+        businessName = getIntent().getStringExtra("businessName");
+        lat = getIntent().getStringExtra("Lat");
+        longi = getIntent().getStringExtra("Long");
         {
             try {
                 yelpFusionApi = apiFactory.createAPI(KEY);
@@ -101,24 +97,32 @@ public class SingleBusinessResultFragment extends Fragment {
         new FetchData().execute();
         events = new ArrayList<>();
         adapter = new SingleBusinessEventsAdapter(events);
-        bottomSheet = view.findViewById(R.id.bottomSheetConstraintLayout);
+        bottomSheet = findViewById(R.id.bottomSheetConstraintLayout);
         sheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        businessProfileImage = view.findViewById(R.id.businessImageProfile);
-        name = view.findViewById(R.id.businessNametextView);
-        restaurantOpen = view.findViewById(R.id.openNowTextView);
-        priceTextView = view.findViewById(R.id.pricetextView);
-        ratingTextView = view.findViewById(R.id.ratingtextView);
-        callButton = view.findViewById(R.id.callButton);
-        largeImage = view.findViewById(R.id.largeBusinessImageView);
-        address = view.findViewById(R.id.addresstextView);
-        businessEventsRecyclerView = view.findViewById(R.id.businessEventsRecyclerView);
+        businessProfileImage = findViewById(R.id.businessImageProfile);
+        name = findViewById(R.id.businessNametextView);
+        restaurantOpen = findViewById(R.id.openNowTextView);
+        priceTextView = findViewById(R.id.pricetextView);
+        ratingTextView = findViewById(R.id.ratingtextView);
+        callButton = findViewById(R.id.callButton);
+        largeImage = findViewById(R.id.largeBusinessImageView);
+        address = findViewById(R.id.addresstextView);
+        businessEventsRecyclerView = findViewById(R.id.businessEventsRecyclerView);
         businessEventsRecyclerView.setAdapter(adapter);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         businessEventsRecyclerView.setLayoutManager(manager);
-        callButton = view.findViewById(R.id.callButton);
-        if (ContextCompat.checkSelfPermission(getActivity(),
+        callButton = findViewById(R.id.callButton);
+        backButton = findViewById(R.id.backButton2);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchSlider fragment = new SearchSlider();
+                finish();
+            }
+        });
+        if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
+            ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
         }
         callButton.setOnClickListener(new View.OnClickListener() {
@@ -128,8 +132,10 @@ public class SingleBusinessResultFragment extends Fragment {
             }
         });
         loadEvents();
-
     }
+
+
+
 
     private void makeCall(){
         String phoneNumber = business.getPhone();
@@ -186,11 +192,11 @@ public class SingleBusinessResultFragment extends Fragment {
             ratingTextView.setText(business.getRating());
             address.setText(business.getLocation());
             if (business.getURL() != null) {
-                Glide.with(getContext())
+                Glide.with(SingleBusinessResultFragment.this)
                         .load(business.getURL())
                         .apply(RequestOptions.circleCropTransform())
                         .into(businessProfileImage);
-                Glide.with(getContext())
+                Glide.with(SingleBusinessResultFragment.this)
                         .load(business.getURL())
                         .into(largeImage);
             }

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.R;
-import com.example.fbu_res.fragments.SingleBusinessResultFragment;
 import com.example.fbu_res.models.Event;
 
 import java.text.DateFormat;
