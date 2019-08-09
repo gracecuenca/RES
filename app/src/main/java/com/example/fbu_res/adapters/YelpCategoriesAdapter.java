@@ -1,7 +1,7 @@
 package com.example.fbu_res.adapters;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.fbu_res.R;
-import com.example.fbu_res.fragments.SingleBusinessResultFragment;
-import com.example.fbu_res.fragments.YelpCatergoriesFragment;
+import com.example.fbu_res.SingleBusinessResultFragment;
 import com.example.fbu_res.models.BusinessSearch;
-import com.example.fbu_res.models.Event;
 
 import java.util.ArrayList;
 
@@ -70,17 +65,15 @@ public class YelpCategoriesAdapter extends RecyclerView.Adapter<YelpCategoriesAd
                 @Override
                 public void onClick(View v) {
                     BusinessSearch search = businessSearches.get(getAdapterPosition());
-                    SingleBusinessResultFragment fragment = new SingleBusinessResultFragment();
-                    FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.flContainer, fragment);
-                    Bundle args = new Bundle();
-                    args.putString("businessName", search.getName());
-                    args.putString("Lat", search.getLat());
-                    args.putString("Long", search.getLongi());
-                    fragment.setArguments(args);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+                    // create intent for the new activity
+                    Intent intent = new Intent(context, SingleBusinessResultFragment.class);
+                    // serialize the movie using parceler, use its short name as a key
+                    intent.putExtra("businessName", search.getName());
+                    intent.putExtra("Lat", search.getLat());
+                    intent.putExtra("Long", search.getLongi());
+                    intent.putExtra("URL", search.getURL());
+                    // show the activity
+                    context.startActivity(intent);
                 }
             });
         }

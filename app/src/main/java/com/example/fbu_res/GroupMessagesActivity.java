@@ -76,23 +76,43 @@ public class GroupMessagesActivity extends AppCompatActivity {
         final TextView groupName = findViewById(R.id.tvGroupName);
         final ImageView groupPic = findViewById(R.id.ivNewGroup);
 
-        ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
-        query.whereEqualTo("objectId", getIntent().getStringExtra("objectId"));
-        query.findInBackground(new FindCallback<Group>() {
-            @Override
-            public void done(List<Group> objects, ParseException e) {
-                if(objects.size() != 0) {
-                    currentGroup = objects.get(0);
+        String objectId = getIntent().getStringExtra("objectId");
+        if(objectId != null) {
+            ParseQuery<Group> query = ParseQuery.getQuery(Group.class);
+            query.whereEqualTo("objectId", objectId);
+            query.findInBackground(new FindCallback<Group>() {
+                @Override
+                public void done(List<Group> objects, ParseException e) {
+                    if (objects.size() != 0) {
+                        currentGroup = objects.get(0);
 
-                    groupName.setText(currentGroup.getName());
-                    Glide.with(getApplicationContext())
-                            .load(currentGroup.getImage().getUrl())
-                            .into(groupPic);
-                } else {
-                    groupName.setText(getIntent().getStringExtra("dm_name"));
+                        groupName.setText(currentGroup.getName());
+                        Glide.with(getApplicationContext())
+                                .load(currentGroup.getImage().getUrl())
+                                .circleCrop()
+                                .into(groupPic);
+                    } else {
+                        groupName.setText(getIntent().getStringExtra("dm_name"));
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            ParseQuery<User> query = ParseQuery.getQuery(User.class);
+            query.whereEqualTo("username", getIntent().getStringExtra("dm_name"));
+            query.findInBackground(new FindCallback<User>() {
+                @Override
+                public void done(List<User> objects, ParseException e) {
+                    if (objects.size() != 0) {
+                        ParseUser user = objects.get(0);
+                        groupName.setText(((User) user).getDisplayname());
+                        Glide.with(getApplicationContext())
+                                .load(((User) user).getProfileImg().getUrl())
+                                .circleCrop()
+                                .into(groupPic);
+                    }
+                }
+            });
+        }
 
 
         currentUsername = ParseUser.getCurrentUser().getUsername();
@@ -239,16 +259,6 @@ public class GroupMessagesActivity extends AppCompatActivity {
 
        messages.add(message);
        adapter.notifyItemInserted(messages.size()-1);
-
-
-/*
-        if(chatName.equals(ParseUser.getCurrentUser().getUsername())){
-            addMessageBox("You:-\n" + chatMessage, 1, chatName);
-        }
-        else{
-            addMessageBox(chatName + ":-\n" + chatMessage, 2, chatName);
-        }*/
-
 
 
     }

@@ -2,18 +2,26 @@ package com.example.fbu_res.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fbu_res.R;
 import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Address;
+import com.example.fbu_res.models.BusinessSearch;
 import com.example.fbu_res.models.Event;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -29,6 +37,7 @@ public class SearchResultsFragment extends Fragment {
     ArrayList<String> tags;
     String queryEvent;
     String queryLocation;
+    Toolbar backToolbar;
 
 
     @Nullable
@@ -44,13 +53,32 @@ public class SearchResultsFragment extends Fragment {
         queryEvent = bundle.getString("event");
         queryLocation = bundle.getString("location");
         searchedEventsRecycleView = view.findViewById(R.id.eventSearchedRecyclerView);
+        backToolbar = view.findViewById(R.id.backToolbar1);
+        backToolbar.inflateMenu(R.menu.back_menu);
+        Menu menu = backToolbar.getMenu();
         events = new ArrayList<>();
         adapter = new EventAdapter(events);
         searchedEventsRecycleView.setAdapter(adapter);
         GridLayoutManager manager = new GridLayoutManager(getContext(), 2);
         searchedEventsRecycleView.setLayoutManager(manager);
         queryResults();
+        backToolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_bueblue_24dp));
+        backToolbar.setTitle(queryEvent);
+        backToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "clicked", Toast.LENGTH_LONG);
+                SearchSlider fragment = new SearchSlider();
+                FragmentManager fragmentManager = ((FragmentActivity) getContext()).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.flContainer, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
     }
+
+
 
     public void queryResults(){
         final ParseQuery<Event> query = ParseQuery.getQuery("Event");

@@ -3,13 +3,19 @@ package com.example.fbu_res.fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -44,6 +50,7 @@ public class YelpCatergoriesFragment extends Fragment {
     YelpFusionApi yelpFusionApi;
     ArrayList<Business> businessArrayList;
     RecyclerView categoryBusinessSearchResults;
+    Toolbar backToolbar2;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,10 +67,26 @@ public class YelpCatergoriesFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         categoryBusinessSearchResults.setAdapter(adapter);
         categoryBusinessSearchResults.setLayoutManager(gridLayoutManager);
-
+        backToolbar2 = view.findViewById(R.id.backToolbar2);
+        backToolbar2.inflateMenu(R.menu.back_menu);
+        Menu menu = backToolbar2.getMenu();
+        backToolbar2.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_bueblue_24dp));
+        backToolbar2.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "clicked", Toast.LENGTH_LONG);
+                SearchSlider fragment = new SearchSlider();
+                FragmentManager fragmentManager = ((FragmentActivity) getContext()).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.flContainer, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         lat = bundle.getString("lat");
         longi = bundle.getString("long");
         categoryName = bundle.getString("categoryName");
+        backToolbar2.setTitle(categoryName);
         {
             try {
                 yelpFusionApi = apiFactory.createAPI(KEY);

@@ -79,19 +79,24 @@ public class GroupFragment extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.turquoise));
         setHasOptionsMenu(true);
 
-// Get the ViewPager and set it's PagerAdapter so that it can display items
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.Viewpager);
         GroupFragmentPagerAdapter pagerAdapter = new GroupFragmentPagerAdapter(getFragmentManager());
+        // Add separate fragments and fragment titles
         pagerAdapter.addFragment(new MyGroupsFragment(), "Personal");
         pagerAdapter.addFragment(new InterestGroupFragment(), "Interests");
         pagerAdapter.addFragment(new EventGroupFragment(), "Events");
 
+        // Creates a view from the GroupFragment
         LayoutInflater factory = LayoutInflater.from(GroupFragment.this.getContext());
         viewCreate = factory.inflate(R.layout.fragment_creategroup, null);
 
+        // Limit how how many pages are in the background at a time to 3 and set adapter to
+        // viewpager
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(pagerAdapter);
 
+        // Get Firebase Reference for making a new group
         RootRef = FirebaseDatabase.getInstance().getReference();
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
@@ -126,19 +131,6 @@ public class GroupFragment extends Fragment {
 
             }
         });
-
-        // ivGetPicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_defaultprofilepic));
-        //ivGetPicture.setLayoutParams(new LinearLayout.LayoutParams(200, 400));
-        // builder.setView(ivGetPicture);
-        // ivGetPicture.setId(R.id.ivProfileImg);
-
-
-        // ivGetPicture.setCornerRadius((float) 30);
-        // ivGetPicture.setBorderWidth((float) 2);
-
-
-        /*ivGetPicture.setOnClickListener(new View.OnClickListener() {
-        });*/
 
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
@@ -220,7 +212,7 @@ public class GroupFragment extends Fragment {
 
     public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+        imageBitmap.compress(Bitmap.CompressFormat.PNG,100, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
         ParseFile parseFile = new ParseFile("image_file.png",imageByte);
         return parseFile;
@@ -230,7 +222,7 @@ public class GroupFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(data != null){
             Uri photoUri = data.getData();
-            // Do something with the photo based on Uri
+            // Get selectedImage and store in a bitmap
             Bitmap selectedImage = null;
             try {
                 selectedImage = MediaStore.Images.Media.getBitmap(this.getContext().getContentResolver(), photoUri);
@@ -253,6 +245,8 @@ public class GroupFragment extends Fragment {
         }
     }
 
+
+    // Gets the Real path for an image file and in the given context
     public String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
