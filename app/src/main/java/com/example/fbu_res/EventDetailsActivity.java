@@ -6,18 +6,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -43,6 +47,8 @@ import com.parse.SaveCallback;
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +59,11 @@ public class EventDetailsActivity extends AppCompatActivity {
     Event event;
     List<Object> groups;
     DatabaseReference RootRef;
+
+
+    final int PICK_PHOTO_CODE = 1046;
+    File photoFileName;
+    ParseFile pf;
 
     // event attributes
     EventDetailsAdapter adapter;
@@ -110,13 +121,31 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     public void requestNewGroup(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this
-                , R.style.AlertDialog);
-        builder.setTitle("Enter Group Name :");
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext(), R.style.MyCustomTheme);
 
-        final EditText groupNameField = new EditText(this);
-        groupNameField.setHint("e.g. Ayyo's Group?");
-        builder.setView(groupNameField);
+        View viewCreate = view.getRootView();
+        builder.setView(viewCreate);
+
+        final EditText groupNameField = viewCreate.findViewById(R.id.etGroupName);
+
+
+        RoundedImageView ivGetPicture = viewCreate.findViewById(R.id.ivGroupImage);
+        ivGetPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create intent for picking a photo from the gallery
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+                // So as long as the result is not null, it's safe to use the intent.
+                if (intent.resolveActivity(EventDetailsActivity.this.getPackageManager()) != null) {
+                    // Bring up gallery to select a photo
+                    startActivityForResult(intent, PICK_PHOTO_CODE);
+                }
+
+            }
+        });
 
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
@@ -232,5 +261,47 @@ public class EventDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data != null){
+            Uri photoUri = data.getData();
+            // Do something with the photo based on Uri
+            Bitmap selectedImage = null;
+            try {
+                selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Load the selected image into a preview
+
+            // compression
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            final byte[] d = stream.toByteArray();
+
+            pf = new ParseFile(d);
+            pf.saveInBackground();
+
+            ImageView ivPreview = findViewById(R.id.ivGroupImage);
+            ivPreview.setImageBitmap(selectedImage);
+            photoFileName = new File(getRealPathFromURI(this.getApplicationContext(), photoUri));
+        }
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 }

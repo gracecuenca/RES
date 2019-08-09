@@ -52,16 +52,16 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         switch (viewType) {
             case DETAILS:
-                View v1 = inflater.inflate(R.layout.item_details, viewGroup, false);
-                viewHolder = new ViewHolder1(v1);
+                View viewDetails = inflater.inflate(R.layout.item_details, viewGroup, false);
+                viewHolder = new ViewHolderEventDetails(viewDetails);
                 break;
             case GROUPS:
-                View v2 = inflater.inflate(R.layout.item_group, viewGroup, false);
-                viewHolder = new ViewHolder2(v2);
+                View viewGroups = inflater.inflate(R.layout.item_group, viewGroup, false);
+                viewHolder = new ViewHolderGroups(viewGroups);
                 break;
             default:
                 View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
-                viewHolder = new ViewHolder2(v);
+                viewHolder = new ViewHolderGroups(v);
                 break;
         }
         return viewHolder;
@@ -71,24 +71,24 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         switch (viewHolder.getItemViewType()) {
             case DETAILS:
-                ViewHolder1 vh1 = (ViewHolder1) viewHolder;
-                configureViewHolder1(vh1, position);
+                ViewHolderEventDetails vhEventDetails = (ViewHolderEventDetails) viewHolder;
+                configureViewHolderEventDetails(vhEventDetails, position);
                 break;
             case GROUPS:
-                ViewHolder2 vh2 = (ViewHolder2) viewHolder;
-                configureViewHolder2(vh2, position);
+                ViewHolderGroups vhGroups = (ViewHolderGroups) viewHolder;
+                configureViewHolder2(vhGroups, position);
                 break;
             default:
-                ViewHolder2 vh = (ViewHolder2) viewHolder;
+                ViewHolderGroups vh = (ViewHolderGroups) viewHolder;
                 configureViewHolder2(vh, position);
                 break;
         }    }
 
-    private void configureViewHolder1(final ViewHolder1 vh1, int position) {
+    private void configureViewHolderEventDetails(final ViewHolderEventDetails vhEventDetails, int position) {
         // loading the information from the Event object into the view
-        vh1.tvTitle.setText(event.getName());
+        vhEventDetails.tvTitle.setText(event.getName());
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy h:mm a");
-        vh1.tvDate.setText(dateFormat.format(event.getDate()));
+        vhEventDetails.tvDate.setText(dateFormat.format(event.getDate()));
         String add1, add2, city, state, zipcode, country;
         add1 = event.getLocation().getAddressline1() + "\n";
         if(!event.getLocation().getAddressline2().equals("")){
@@ -101,57 +101,56 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         zipcode = event.getLocation().getZipcode() + "\n";
         country = event.getLocation().getCountry();
         String add = add1 + add2 + city + state + zipcode + country;
-        vh1.tvLocation.setText(add);
-        vh1.tvDescription.setText(event.getDescription());
+        vhEventDetails.tvLocation.setText(add);
+        vhEventDetails.tvDescription.setText(event.getDescription());
         final User user = (User) event.getOwner();
         try {
             user.fetchIfNeeded();
-            vh1.tvBusinessName.setText(user.getDisplayname());
+            vhEventDetails.tvBusinessName.setText(user.getDisplayname());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        vh1.tvBusinessName.setOnClickListener(new View.OnClickListener() {
+        vhEventDetails.tvBusinessName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(vh1.itemView.getContext(), ProfileActivity.class);
+                Intent i = new Intent(vhEventDetails.itemView.getContext(), ProfileActivity.class);
                 i.putExtra("objectId", user.getObjectId());
                 v.getContext().startActivity(i);
             }
         });
 
-        ParseFile image = event.getImage();
 
         // businesses can't add events to their calendars/ itineraries
         if(((User)ParseUser.getCurrentUser()).getType().equals("Business")){
-            vh1.btnAddToCalendar.setClickable(false);
-            vh1.btnAddToCalendar.setEnabled(false);
-            vh1.btnRemoveFromCalendar.setClickable(false);
-            vh1.btnRemoveFromCalendar.setEnabled(false);
+            vhEventDetails.btnAddToCalendar.setClickable(false);
+            vhEventDetails.btnAddToCalendar.setEnabled(false);
+            vhEventDetails.btnRemoveFromCalendar.setClickable(false);
+            vhEventDetails.btnRemoveFromCalendar.setEnabled(false);
         }
         // but consumers can
-        else if(((User)ParseUser.getCurrentUser()).getType().equals("User")){
+        else if(((User)ParseUser.getCurrentUser()).getType().equals("Consumer")){
             final User currentUser = (User) ParseUser.getCurrentUser();
-            vh1.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
+            vhEventDetails.btnAddToCalendar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     currentUser.addInterestedEvent(event);
                     Toast.makeText(v.getContext(), event.getName()+ " has been added to itinerary " +
                             "under profile", Toast.LENGTH_SHORT).show();
-                    vh1.btnAddToCalendar.setClickable(false);
-                    vh1.btnAddToCalendar.setEnabled(false);
-                    vh1.btnRemoveFromCalendar.setClickable(true);
+                    vhEventDetails.btnAddToCalendar.setClickable(false);
+                    vhEventDetails.btnAddToCalendar.setEnabled(false);
+                    vhEventDetails.btnRemoveFromCalendar.setClickable(true);
                 }
             });
 
-            vh1.btnRemoveFromCalendar.setOnClickListener(new View.OnClickListener() {
+            vhEventDetails.btnRemoveFromCalendar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     currentUser.removeInterestedEvent(event);
                     Toast.makeText(v.getContext(), event.getName()+ " has been removed from itinerary " +
                             "under profile", Toast.LENGTH_SHORT).show();
-                    vh1.btnRemoveFromCalendar.setClickable(false);
-                    vh1.btnRemoveFromCalendar.setEnabled(false);
-                    vh1.btnAddToCalendar.setClickable(true);
+                    vhEventDetails.btnRemoveFromCalendar.setClickable(false);
+                    vhEventDetails.btnRemoveFromCalendar.setEnabled(false);
+                    vhEventDetails.btnAddToCalendar.setClickable(true);
                 }
             });
 
@@ -162,16 +161,16 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void done(List items, ParseException e) {
                     if(items.size() == 1) {
-                        vh1.btnAddToCalendar.setClickable(false);
-                        vh1.btnAddToCalendar.setEnabled(false);
-                        vh1.btnRemoveFromCalendar.setClickable(true);
-                        vh1.btnRemoveFromCalendar.setEnabled(true);
+                        vhEventDetails.btnAddToCalendar.setClickable(false);
+                        vhEventDetails.btnAddToCalendar.setEnabled(false);
+                        vhEventDetails.btnRemoveFromCalendar.setClickable(true);
+                        vhEventDetails.btnRemoveFromCalendar.setEnabled(true);
                     }
                     else if(items.size() == 0) {
-                        vh1.btnAddToCalendar.setClickable(true);
-                        vh1.btnAddToCalendar.setEnabled(true);
-                        vh1.btnRemoveFromCalendar.setClickable(false);
-                        vh1.btnRemoveFromCalendar.setEnabled(true);
+                        vhEventDetails.btnAddToCalendar.setClickable(true);
+                        vhEventDetails.btnAddToCalendar.setEnabled(true);
+                        vhEventDetails.btnRemoveFromCalendar.setClickable(false);
+                        vhEventDetails.btnRemoveFromCalendar.setEnabled(true);
                     }
                 }
             });
@@ -180,30 +179,30 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
-    private void configureViewHolder2(final ViewHolder2 vh1, int position) {
+    private void configureViewHolder2(final ViewHolderGroups vhGroups, int position) {
         final Group group = (Group) objects.get(position);
 
-        vh1.groupName.setText(group.getName());
+        vhGroups.groupName.setText(group.getName());
         if(group.getImage()!=null){
-            Glide.with(context).load(group.getImage().getUrl()).into(vh1.groupImage);
+            Glide.with(context).load(group.getImage().getUrl()).into(vhGroups.groupImage);
         }
 
-        vh1.groupType.setText("");
-        vh1.join.setText("Join");
-        vh1.join.setOnClickListener(new View.OnClickListener() {
+        vhGroups.groupType.setText("");
+        vhGroups.join.setText("Join");
+        vhGroups.join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 group.setNumMembs(group.getNumMembs() + 1);
                 group.addMember(ParseUser.getCurrentUser());
-                Intent intent = new Intent(vh1.itemView.getContext(), GroupMessagesActivity.class);
+                Intent intent = new Intent(vhGroups.itemView.getContext(), GroupMessagesActivity.class);
                 intent.putExtra("channel_name", group.getChannelName());
-                ((Activity) vh1.itemView.getContext()).startActivityForResult(intent, REQUEST_CODE);
+                ((Activity) vhGroups.itemView.getContext()).startActivityForResult(intent, REQUEST_CODE);
                 objects.remove(group);
                 notifyDataSetChanged();
             }
         });
-        if(!group.getOfficial() && vh1.verified.getParent() != null) {
-            ((ViewGroup) vh1.verified.getParent()).removeView(vh1.verified);
+        if(!group.getOfficial() && vhGroups.verified.getParent() != null) {
+            ((ViewGroup) vhGroups.verified.getParent()).removeView(vhGroups.verified);
         }
     }
 
@@ -219,13 +218,13 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return objects.size();
     }
 
-    public class ViewHolder2 extends RecyclerView.ViewHolder{
+    public class ViewHolderGroups extends RecyclerView.ViewHolder{
         ImageView groupImage;
         TextView groupName;
         TextView groupType;
         Button join;
         ImageView verified;
-        public ViewHolder2(View view){
+        public ViewHolderGroups(View view){
             super(view);
             groupImage = view.findViewById(R.id.ivNewGroup);
             groupName = view.findViewById(R.id.tvDisplayname);
@@ -235,7 +234,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public class ViewHolder1 extends RecyclerView.ViewHolder {
+    public class ViewHolderEventDetails extends RecyclerView.ViewHolder {
 
         private TextView tvDate;
         private TextView tvTitle;
@@ -245,7 +244,7 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private Button btnRemoveFromCalendar;
         private TextView tvBusinessName;
 
-        public ViewHolder1(View v) {
+        public ViewHolderEventDetails(View v) {
             super(v);
             tvDate = (TextView) v.findViewById(R.id.tvDate);
             tvTitle = (TextView) v.findViewById(R.id.tvTitle);
