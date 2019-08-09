@@ -3,11 +3,13 @@ package com.example.fbu_res.models;
 import android.util.Log;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +66,11 @@ public class User extends ParseUser {
             treeMap.put(date, datedEvent);
         }
         put(KEY_INTERESTED_MAP, treeMap);
+        saveInBackground();
+    }
+
+    public void removeInterestedMap(Date date,Event event){
+        getInterestedMap().get(date).getEvents().remove(event);
         saveInBackground();
     }
 

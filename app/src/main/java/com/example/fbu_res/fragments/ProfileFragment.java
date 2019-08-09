@@ -52,9 +52,6 @@ public class ProfileFragment extends Fragment {
     private User user;
     private ImageView ivProfileImage;
     private TextView tvDisplayname;
-    // private RecyclerView rvInterestedEvents;
-    // private ArrayList<Event> events;
-    // private EventAdapter adapter;
     AppCompatActivity activity;
     Toolbar toolbar;
 
@@ -98,26 +95,17 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // rvInterestedEvents = (RecyclerView) view.findViewById(R.id.rvInterestedEvents);
-        // events = new ArrayList<>();
-        // adapter = new EventAdapter(events);
-        // rvInterestedEvents.setAdapter(adapter);
-        // GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        // rvInterestedEvents.setLayoutManager(gridLayoutManager);
-
-        // nested
         datedEvents = new ArrayList<>();
         verticalRecyclerView = (RecyclerView)view.findViewById(R.id.rvInterestedEvents);
         verticalRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         verticalRecyclerViewAdapter = new VerticalRecyclerViewAdapter(getContext(), datedEvents);
         verticalRecyclerView.setAdapter(verticalRecyclerViewAdapter);
 
-        // loadEvents();
+        treeMap = new TreeMap<>();
 
-        // setData();
-
+        clear();
         loadData();
-
+        Log.d("yur", Integer.toString(treeMap.size()));
     }
 
     // Menu icons are inflated just as they were with actionbar
@@ -174,47 +162,13 @@ public class ProfileFragment extends Fragment {
             });
         }
     }
-    /*
-    // nested recycler view functions
-    public void setDatedEvent(Date date){
-
-        DatedEvent datedEvent = new DatedEvent();
-
-        if(user.getType().equals("Consumer")){
-            ParseRelation interestedEvents = user.getInterestedEvents();
-            ParseQuery<Event> eventsQuery = interestedEvents.getQuery();
-            eventsQuery.whereEqualTo(Event.KEY_DATE, date);
-            eventsQuery.findInBackground(new FindCallback<Event>() {
-                @Override
-                public void done(List<Event> objects, ParseException e) {
-                    if(e != null){
-                        e.printStackTrace();
-                        return;
-                    }
-                    datedEvent.setEvents((ArrayList<Event>) objects);
-                    datedEvents.add(datedEvent);
-                    verticalRecyclerViewAdapter.notifyDataSetChanged();
-                }
-            });
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void setDatedEvents(Date startDate, Date endDate){
-        String currentDateStr = startDate.toString();
-        Date currentDate = startDate;
-        while(currentDate.before(endDate)){ // while there are still events to add
-            setDatedEvent(currentDate);
-            currentDateStr = LocalDate.parse(currentDateStr).plusDays(1).toString();
-            currentDate = new Date(currentDateStr);
-        }
-    }
-    */
 
     public void clear() {
-       //  events.clear();
-        // adapter.notifyDataSetChanged();
-        datedEvents.get(0).getEvents().clear();
+        for(Map.Entry<Date, DatedEvent> entry: treeMap.entrySet()){
+            entry.getValue().getEvents().clear();
+        }
+        datedEvents.clear();
+        treeMap.clear();
         verticalRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -247,10 +201,9 @@ public class ProfileFragment extends Fragment {
             public void done(List<Event> objects, ParseException e) {
                 for(Event event: objects){
                     user.addInterestedMap(event.getDate(), event);
-                    Log.d("yur", "added event: " + event.getName());
+                    user.saveInBackground();
                 }
                 treeMap = user.getInterestedMap();
-                // setting up the actual data and displaying it
                 for(Map.Entry<Date, DatedEvent> entry: treeMap.entrySet()){
                     datedEvents.add(entry.getValue());
                 }
@@ -258,8 +211,6 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
-
-
 
 
 }

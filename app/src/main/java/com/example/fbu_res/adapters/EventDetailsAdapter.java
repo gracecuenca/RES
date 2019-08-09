@@ -91,10 +91,10 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         vhEventDetails.tvDate.setText(dateFormat.format(event.getDate()));
         String add1, add2, city, state, zipcode, country;
         add1 = event.getLocation().getAddressline1() + "\n";
-        if(!event.getLocation().getAddressline2().equals("")){
-            add2 = event.getLocation().getAddressline2()+"\n";
-        }else{
+        if(event.getLocation().getAddressline2()==null || event.getLocation().getAddressline2().equals("")){
             add2 = "";
+        }else{
+            add2 = event.getLocation().getAddressline2()+"\n";
         }
         city = event.getLocation().getCity()+", ";
         state = event.getLocation().getState()+ " ";
@@ -139,6 +139,9 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     vhEventDetails.btnAddToCalendar.setClickable(false);
                     vhEventDetails.btnAddToCalendar.setEnabled(false);
                     vhEventDetails.btnRemoveFromCalendar.setClickable(true);
+                    user.addInterestedEvent(event);
+                    user.addInterestedMap(event.getDate(), event);
+                    user.saveInBackground();
                 }
             });
 
@@ -151,6 +154,9 @@ public class EventDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     vhEventDetails.btnRemoveFromCalendar.setClickable(false);
                     vhEventDetails.btnRemoveFromCalendar.setEnabled(false);
                     vhEventDetails.btnAddToCalendar.setClickable(true);
+                    user.removeInterestedEvent(event);
+                    user.removeInterestedMap(event.getDate(), event);
+                    user.saveInBackground();
                 }
             });
 

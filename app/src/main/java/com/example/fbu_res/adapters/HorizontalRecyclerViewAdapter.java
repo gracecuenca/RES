@@ -16,10 +16,8 @@ import com.example.fbu_res.models.Event;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-// HOLDS EVENTS WITH THE SAME DATE
 class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<HorizontalRecyclerViewAdapter.ViewHolder> {
 
     Context context;
