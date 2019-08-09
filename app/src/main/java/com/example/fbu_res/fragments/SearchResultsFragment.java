@@ -16,7 +16,6 @@ import com.example.fbu_res.adapters.EventAdapter;
 import com.example.fbu_res.models.Address;
 import com.example.fbu_res.models.Event;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 

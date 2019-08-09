@@ -103,6 +103,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:15.0.1'
 
     implementation "com.google.ar.sceneform:core:1.0.0"
+
+
 }
 
 sceneform.asset('sampledata/cobble/CobbleStones.obj',
