@@ -343,6 +343,8 @@ public class ARActivity extends AppCompatActivity{
                             // We know that here, the AR components have been initiated.
                             locationScene = new LocationScene(ARActivity.this, arSceneView);
                             locationScene.setOffsetOverlapping(true);
+                            //locationScene.shouldRemoveOverlapping();
+                            locationScene.minimalRefreshing();
                             //locationScene.setAnchorRefreshInterval(900);
                             // Now lets create our location markers.
                             // First, a layout
@@ -377,7 +379,7 @@ public class ARActivity extends AppCompatActivity{
             params.put("term", "coffee");
             params.put("sort_by", "distance");
             //params.put("location", "1219 E Marion St, Seattle, WA 98122");
-            params.put("limit", "5");
+            params.put("limit", "2");
             params.put("radius", "1200");
             params.put("latitude", BusinessSliderSearch.lat);
             params.put("longitude", BusinessSliderSearch.longi);
