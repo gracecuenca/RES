@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fbu_res.fragments.BusinessSliderSearch;
+import com.example.fbu_res.models.ARModel;
 import com.example.fbu_res.models.BusinessSearch;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -70,7 +71,9 @@ public class ARActivity extends AppCompatActivity {
 
     // Renderables for this example
     private ModelRenderable andyRenderable;
+    private ModelRenderable andyRenderable2;
     private ViewRenderable exampleLayoutRenderable;
+    private ViewRenderable exampleLayoutRenderable2;
     LocationScene locationScene;
 
 
@@ -253,113 +256,93 @@ public class ARActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            for(int i =0; i < businessSearches.size(); i++){
-                int finalI = i;
-                // Build a renderable from a 2D View.
-                CompletableFuture<ViewRenderable> exampleLayout =
-                        ViewRenderable.builder()
-                                .setView(ARActivity.this, R.layout.example_layout)
-                                .build();
+            // Build a renderable from a 2D View.
+            CompletableFuture<ViewRenderable> exampleLayout =
+                    ViewRenderable.builder()
+                            .setView(ARActivity.this, R.layout.example_layout)
+                            .build();
 
-                // When you build a Renderable, Sceneform loads its resources in the background while returning
-                // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
-                CompletableFuture<ModelRenderable> andy = ModelRenderable.builder()
-                        .setSource(ARActivity.this,Uri.parse("bear.sfb"))
-                        .build();
+            // When you build a Renderable, Sceneform loads its resources in the background while returning
+            // a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
+            CompletableFuture<ModelRenderable> andy = ModelRenderable.builder()
+                    .setSource(ARActivity.this,Uri.parse("bear.sfb"))
+                    .build();
 
 
-                CompletableFuture.allOf(
-                        exampleLayout,
-                        andy)
-                        .handle(
-                                (notUsed, throwable) -> {
-                                    // When you build a Renderable, Sceneform loads its resources in the background while
-                                    // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
-                                    // before calling get().
+            CompletableFuture.allOf(
+                    exampleLayout,
+                    andy)
+                    .handle(
+                            (notUsed, throwable) -> {
+                                // When you build a Renderable, Sceneform loads its resources in the background while
+                                // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
+                                // before calling get().
 
-                                    if (throwable != null) {
-                                        DemoUtils.displayError(ARActivity.this, "Unable to load renderables", throwable);
-                                        return null;
-                                    }
-
-                                    try {
-                                        exampleLayoutRenderable = exampleLayout.get();
-                                        andyRenderable = andy.get();
-                                        andyRenderable = andy.get();
-                                        hasFinishedLoading = true;
-
-                                    } catch (InterruptedException | ExecutionException ex) {
-                                        DemoUtils.displayError(ARActivity.this, "Unable to load renderables", ex);
-                                    }
-
+                                if (throwable != null) {
+                                    DemoUtils.displayError(ARActivity.this, "Unable to load renderables", throwable);
                                     return null;
-                                });
+                                }
+
+                                try {
+                                    exampleLayoutRenderable = exampleLayout.get();
+                                    andyRenderable = andy.get();
+                                    andyRenderable = andy.get();
+                                    hasFinishedLoading = true;
+
+                                } catch (InterruptedException | ExecutionException ex) {
+                                    DemoUtils.displayError(ARActivity.this, "Unable to load renderables", ex);
+                                }
+
+                                return null;
+                            });
 
 
-                // Set an update listener on the Scene that will hide the loading message once a Plane is
-                // detected.
-                arSceneView.getScene().addOnUpdateListener(
-                        frameTime -> {
-                            if (!hasFinishedLoading) {
-                                return;
+            // Set an update listener on the Scene that will hide the loading message once a Plane is
+            // detected.
+            arSceneView.getScene().addOnUpdateListener(
+                    frameTime -> {
+                        if (!hasFinishedLoading) {
+                            return;
+                        }
+
+                        if (locationScene == null) {
+                            // If our locationScene object hasn't been setup yet, this is a good time to do it
+                            // We know that here, the AR components have been initiated.
+                            locationScene = new LocationScene(ARActivity.this, arSceneView);
+
+                            // Now lets create our location markers.
+                            // First, a layout
+
+                            for(int i = 0; i< businessSearches.size(); i++){
+                                ARModel.render(ARActivity.this, businessSearches.get(i), locationScene);
                             }
 
-                            if (locationScene == null) {
-                                // If our locationScene object hasn't been setup yet, this is a good time to do it
-                                // We know that here, the AR components have been initiated.
-                                locationScene = new LocationScene(ARActivity.this, arSceneView);
+                        }
 
-                                // Now lets create our location markers.
-                                // First, a layout
-                                LocationMarker layoutLocationMarker = new LocationMarker(
-                                        Double.valueOf(businessSearches.get(finalI).getLongi()),
-                                        Double.valueOf(businessSearches.get(finalI).getLat()),
-                                        getExampleView()
-                                );
+                        Frame frame = arSceneView.getArFrame();
+                        if (frame == null) {
+                            return;
+                        }
 
+                        if (frame.getCamera().getTrackingState() != TrackingState.TRACKING) {
+                            return;
+                        }
 
+                        if (locationScene != null) {
+                            locationScene.processFrame(frame);
+                        }
 
-
-                                // An example "onRender" event, called every frame
-                                // Upnbgkidates the layout with the markers distance
-                                layoutLocationMarker.setRenderEvent(new LocationNodeRender() {
-                                    @Override
-                                    public void render(LocationNode node) {
-                                        View eView = exampleLayoutRenderable.getView();
-                                        TextView distanceTextView = eView.findViewById(R.id.ARtextView2);
-                                        distanceTextView.setText(businessSearches.get(finalI).getName());
-                                    }
-                                });
+                    });
 
 
-                                // Adding the marker
-                                locationScene.mLocationMarkers.add(layoutLocationMarker);
-
-                                // Adding a simple location marker of a 3D model
-
-                            }
-
-                            Frame frame = arSceneView.getArFrame();
-                            if (frame == null) {
-                                return;
-                            }
-
-                            if (frame.getCamera().getTrackingState() != TrackingState.TRACKING) {
-                                return;
-                            }
-
-                            if (locationScene != null) {
-                                locationScene.processFrame(frame);
-                            }
-
-                        });
-            }
         }
 
         @Override
         protected String doInBackground(String... strings) {
             params.put("term", "coffee");
-            params.put("location", "Seattle"); 
+            params.put("location", "Seattle");
+            params.put("limit", "2");
+            params.put("radius", "1200");
             //params.put("latitude", lat);
             //params.put("longitude", longi);
             Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
