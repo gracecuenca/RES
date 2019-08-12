@@ -38,20 +38,19 @@ public class ARModel {
                                 ViewRenderable vr = couponLayout.get();
                                 Node base = new Node();
                                 base.setRenderable(vr);
-                                TextView title = vr.getView().findViewById(R.id.ARtextView2);
-
+                                TextView title = vr.getView().findViewById(R.id.ARtextView);
                                 title.setText(couponInfo.getName());
 
 
                                 LocationMarker couponLocationMarker = new LocationMarker(
-                                        Double.valueOf(couponInfo.getLongi()),
                                         Double.valueOf(couponInfo.getLat()),
+                                        Double.valueOf(couponInfo.getLongi()),
                                         base
                                 );
 
                                 couponLocationMarker.setRenderEvent(node -> {
                                     View eView = vr.getView();
-                                    TextView distanceTextView = eView.findViewById(R.id.ARtextView);
+                                    TextView distanceTextView = eView.findViewById(R.id.ARtextView2);
                                     distanceTextView.setText(Math.round(node.getDistanceInAR()) + "M");
                                 });
 

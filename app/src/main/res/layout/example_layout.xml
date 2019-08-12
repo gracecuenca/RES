@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:alpha="0.93"
-    android:background="#a70a04"
+    android:background="#00A70A04"
     android:orientation="vertical"
     android:padding="30dp">
 
@@ -13,12 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="This is an example layout."
-        android:textColor="#fff" />
+        android:textColor="#0CBABA" />
 
     <TextView
         android:id="@+id/ARtextView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#fff"
+        android:textColor="#0CBABA"
         android:textSize="24sp" />
 </LinearLayout>
