@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -16,14 +17,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fbu_res.fragments.BusinessSliderSearch;
 import com.example.fbu_res.models.ARModel;
 import com.example.fbu_res.models.BusinessSearch;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.ar.core.Frame;
@@ -62,19 +71,40 @@ import uk.co.appoly.arcorelocation.LocationScene;
 import static com.example.fbu_res.DemoUtils.createArSession;
 
 
-public class ARActivity extends AppCompatActivity {
+public class ARActivity extends AppCompatActivity{
     private boolean installRequested;
     private boolean hasFinishedLoading = false;
     private FusedLocationProviderClient fusedLocationClient;
     public static final String KEY = "BnRIYh3GBQfo6tCRdTbCYr1JTxUcS2u3b4Z8nUswd_9ir2Cb27bL2wP-HzREH81wjrIaTEjOdfAF-wx4Zz9cD-2j0AhIZ966pDA8MDMmbaCl30hEAmLk_llJhj87XXYx";
     private ArSceneView arSceneView;
+    GoogleApiClient mGoogleApiClient;
 
     // Renderables for this example
     private ModelRenderable andyRenderable;
-    private ModelRenderable andyRenderable2;
     private ViewRenderable exampleLayoutRenderable;
-    private ViewRenderable exampleLayoutRenderable2;
     LocationScene locationScene;
+    protected LocationManager locationManager;
+    private Context mContext;
+    Location location;
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
+
+    // The minimum time between updates in milliseconds
+    private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
+
+    // Declaring a Location Manager
+
+
+
+    // flag for GPS status
+    public boolean isGPSEnabled = false;
+
+    // flag for network status
+    boolean isNetworkEnabled = false;
+
+    // flag for GPS status
+    boolean canGetLocation = false;
+
+
 
 
     // Our ARCore-Location scene
@@ -86,6 +116,7 @@ public class ARActivity extends AppCompatActivity {
     LocationScene locationScene2;
     String lat;
     String longi;
+    private Location mLastLocation;
 
 
     @SuppressLint("MissingPermission")
@@ -95,9 +126,9 @@ public class ARActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ar);
+        mContext = getApplicationContext();
         arSceneView = findViewById(R.id.ux_fragment);
-        lat = "79.3832";
-        longi = "43.6532";
+
         businessSearches = new ArrayList<>();
         {
             try {
@@ -113,6 +144,9 @@ public class ARActivity extends AppCompatActivity {
         // Lastly request CAMERA & fine location permission which is required by ARCore-Location.
         ARLocationPermissionHelper.requestPermission(this);
     }
+
+
+
 
     /**
      * Example node of a layout
@@ -246,7 +280,6 @@ public class ARActivity extends AppCompatActivity {
     }
 
 
-
     public class FetchData extends AsyncTask<String, String, String> {
         @Override
         protected void onProgressUpdate(String... values) {
@@ -309,7 +342,8 @@ public class ARActivity extends AppCompatActivity {
                             // If our locationScene object hasn't been setup yet, this is a good time to do it
                             // We know that here, the AR components have been initiated.
                             locationScene = new LocationScene(ARActivity.this, arSceneView);
-
+                            locationScene.setOffsetOverlapping(true);
+                            //locationScene.setAnchorRefreshInterval(900);
                             // Now lets create our location markers.
                             // First, a layout
 
@@ -337,14 +371,16 @@ public class ARActivity extends AppCompatActivity {
 
         }
 
+        @SuppressLint("MissingPermission")
         @Override
         protected String doInBackground(String... strings) {
             params.put("term", "coffee");
-            params.put("location", "Seattle");
-            params.put("limit", "2");
+            params.put("sort_by", "distance");
+            //params.put("location", "1219 E Marion St, Seattle, WA 98122");
+            params.put("limit", "5");
             params.put("radius", "1200");
-            //params.put("latitude", lat);
-            //params.put("longitude", longi);
+            params.put("latitude", BusinessSliderSearch.lat);
+            params.put("longitude", BusinessSliderSearch.longi);
             Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
             Response<SearchResponse> response = null;
             try {
@@ -371,20 +407,4 @@ public class ARActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("MissingPermission")
-    public void getCurrentLocation(){
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener((Activity) this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            lat = Double.toString(location.getLatitude());
-                            longi = Double.toString(location.getLongitude());
-                        }
-                    }
-                });
-
-    }
 }
